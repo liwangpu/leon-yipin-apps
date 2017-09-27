@@ -21,7 +21,7 @@ namespace OrderAllot
         private void Form1_Load(object sender, EventArgs e)
         {
             NtxtAmount.Value = 100;
-        } 
+        }
         #endregion
 
         private void btnUpload_Click(object sender, EventArgs e)
@@ -135,6 +135,7 @@ namespace OrderAllot
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
+            var buffer2 = new byte[0];
             using (ExcelPackage package = new ExcelPackage())
             {
                 var workbox = package.Workbook;
@@ -167,7 +168,7 @@ namespace OrderAllot
                     sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
                     sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
                     sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
-                    sheet1.Cells[rowIdx, 10].Value ="支付宝";
+                    sheet1.Cells[rowIdx, 10].Value = "支付宝";
                     sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
                     //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
                 }
@@ -175,6 +176,33 @@ namespace OrderAllot
 
 
                 buffer = package.GetAsByteArray();
+            }
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                var workbox = package.Workbook;
+                var sheet1 = workbox.Worksheets.Add("Sheet1");
+
+                #region 标题行
+                sheet1.Cells[1, 1].Value = "采购员";
+                sheet1.Cells[1, 2].Value = "订单量";
+                #endregion
+
+                #region 数据行
+                var buyers = new List<string>();
+                buyers = orders.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList();
+                for (int idx = 0, len = buyers.Count, rowIdx = 2; idx < len; idx++, rowIdx++)
+                {
+                    var curBuyerName = buyers[idx];
+                    var refOrders = orders.Where(m => m._采购员 == curBuyerName).ToList();
+                    var amount = refOrders.Select(m => m._供应商).Distinct().Count();
+
+                    sheet1.Cells[rowIdx, 1].Value = curBuyerName;
+                    sheet1.Cells[rowIdx, 2].Value = amount;
+                }
+                #endregion
+
+                buffer2 = package.GetAsByteArray();
             }
 
 
@@ -188,7 +216,12 @@ namespace OrderAllot
                 saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
                 if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
                 {
-                    string FileName = saveFile.FileName;//得到文件路径   
+                    var FileName = saveFile.FileName;//得到文件路径   
+                    var saveFilName = Path.GetFileNameWithoutExtension(FileName);
+                    var savePath = Path.GetDirectoryName(FileName);
+                    var FileName2 = Path.Combine(savePath, saveFilName+"工作量.xlsx");
+
+
                     txtExport.Text = FileName;
                     try
                     {
@@ -197,6 +230,13 @@ namespace OrderAllot
                         {
                             fs.Write(buffer, 0, len);
                         }
+
+                        var len2 = buffer2.Length;
+                        using (var fs = File.Create(FileName2, len2))
+                        {
+                            fs.Write(buffer2, 0, len2);
+                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -207,7 +247,7 @@ namespace OrderAllot
                     btnAnalyze.Enabled = false;
                 }
             }, null);
-        } 
+        }
         #endregion
 
         #region ShowMsg 消息提示
@@ -226,7 +266,7 @@ namespace OrderAllot
             {
                 this.lbMsg.Text = strMsg;
             }
-        } 
+        }
         #endregion
 
         #region ChangeLowerBuyer 采购员转换
@@ -268,7 +308,7 @@ namespace OrderAllot
                     break;
             }
             return newBuyerName;
-        } 
+        }
         #endregion
 
         #region InvokeMainForm 调用主线程
