@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using OrderAllot.Libs;
 
 namespace OrderAllot
 {
@@ -46,6 +47,7 @@ namespace OrderAllot
                 var diviAmount = Convert.ToDouble(NtxtAmount.Value);
                 var warningList = new List<Warning>();
                 var orderList = new List<Order>();
+                var devList = new List<Order>();//把开发单独分写成一个表格 
                 var providers = new List<string>();//供应商唯一队列
                 var excelPath = txtUpload.Text;
                 var actRead = new Action(() =>
@@ -136,6 +138,11 @@ namespace OrderAllot
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
             var buffer2 = new byte[0];
+            var buffer3 = new byte[0];
+            var devOrder = new List<Order>();
+
+
+            #region 订单分配
             using (ExcelPackage package = new ExcelPackage())
             {
                 var workbox = package.Workbook;
@@ -160,24 +167,36 @@ namespace OrderAllot
                 #endregion
 
                 #region 数据行
-                for (int idx = 0, rowIdx = 2, len = orders.Count; idx < len; idx++, rowIdx++)
+                for (int idx = 0, rowIdx = 2, len = orders.Count; idx < len; idx++)
                 {
                     var curOrder = orders[idx];
-                    sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
-                    sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
-                    sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
-                    sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
-                    sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
-                    sheet1.Cells[rowIdx, 10].Value = "支付宝";
-                    sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
-                    //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
+                    if (Helper.IsBuyer(curOrder._制单人))
+                    {
+
+                        sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
+                        sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
+                        sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
+                        sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
+                        sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
+                        sheet1.Cells[rowIdx, 10].Value = "支付宝";
+                        sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
+                        //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
+
+                        rowIdx++;
+                    }
+                    else
+                    {
+                        devOrder.Add(curOrder);
+                    }
                 }
                 #endregion
 
 
                 buffer = package.GetAsByteArray();
             }
+            #endregion
 
+            #region 工作量单独表
             using (ExcelPackage package = new ExcelPackage())
             {
                 var workbox = package.Workbook;
@@ -204,7 +223,52 @@ namespace OrderAllot
 
                 buffer2 = package.GetAsByteArray();
             }
+            #endregion
 
+            #region 订单分配(开发单独一张表,其实是从订单分配分出来的)
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                var workbox = package.Workbook;
+                var sheet1 = workbox.Worksheets.Add("Sheet1");
+
+                #region 标题行
+                sheet1.Cells[1, 1].Value = "供应商";
+                sheet1.Cells[1, 2].Value = "SKU";
+                sheet1.Cells[1, 3].Value = "Qty";
+                sheet1.Cells[1, 4].Value = "仓库";
+                sheet1.Cells[1, 5].Value = "备注";
+                sheet1.Cells[1, 6].Value = "合同号";
+                sheet1.Cells[1, 7].Value = "采购员";
+                sheet1.Cells[1, 8].Value = "含税单价";
+                sheet1.Cells[1, 9].Value = "物流费";
+                sheet1.Cells[1, 10].Value = "付款方式";
+                sheet1.Cells[1, 11].Value = "制单人";
+                sheet1.Cells[1, 12].Value = "到货日期";
+                sheet1.Cells[1, 13].Value = "1688单号";
+                sheet1.Cells[1, 14].Value = "预付款";
+                //sheet1.Cells[1, 15].Value = "对应供应商采购总金额";
+                #endregion
+
+                #region 数据行
+                for (int idx = 0, rowIdx = 2, len = devOrder.Count; idx < len; idx++, rowIdx++)
+                {
+                    var curOrder = devOrder[idx];
+                    sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
+                    sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
+                    sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
+                    sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
+                    sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
+                    sheet1.Cells[rowIdx, 10].Value = "支付宝";
+                    sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
+                    //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
+
+                }
+                #endregion
+
+
+                buffer3 = package.GetAsByteArray();
+            }
+            #endregion
 
             InvokeMainForm((obj) =>
             {
@@ -219,8 +283,8 @@ namespace OrderAllot
                     var FileName = saveFile.FileName;//得到文件路径   
                     var saveFilName = Path.GetFileNameWithoutExtension(FileName);
                     var savePath = Path.GetDirectoryName(FileName);
-                    var FileName2 = Path.Combine(savePath, saveFilName+"工作量.xlsx");
-
+                    var FileName2 = Path.Combine(savePath, saveFilName + "工作量.xlsx");
+                    var FileName3 = Path.Combine(savePath, saveFilName + "(开发订单).xlsx");
 
                     txtExport.Text = FileName;
                     try
@@ -237,6 +301,11 @@ namespace OrderAllot
                             fs.Write(buffer2, 0, len2);
                         }
 
+                        var len3 = buffer3.Length;
+                        using (var fs = File.Create(FileName3, len3))
+                        {
+                            fs.Write(buffer3, 0, len3);
+                        }
                     }
                     catch (Exception ex)
                     {
