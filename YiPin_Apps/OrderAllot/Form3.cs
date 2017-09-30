@@ -1,6 +1,7 @@
 ﻿using LinqToExcel;
 using OfficeOpenXml;
 using OrderAllot.Entities;
+using OrderAllot.Libs;
 using OrderAllot.Maps;
 using System;
 using System.Collections.Generic;
@@ -36,9 +37,6 @@ namespace OrderAllot
             try
             {
                 #region 解析并计算
-                //var workPieceList = new List<WorkPiece>();
-                //var orderStateList = new List<OrderState>();
-
                 var buyersProviders = new List<BuyersProvider>();
                 var providers = new List<string>();//供应商唯一队列
                 var outBuyersProviders = new List<BuyersProvider>();
@@ -49,9 +47,20 @@ namespace OrderAllot
                     ShowMsg("开始读取表格数据");
                     using (var excel = new ExcelQueryFactory(excelPath))
                     {
-                        var bps = from c in excel.Worksheet<BuyersProvider>("分布")
-                                  select c;
-                        buyersProviders.AddRange(bps.ToList().Where(b => !string.IsNullOrEmpty(b._采购) && !string.IsNullOrEmpty(b._供应商)));
+                        var sheetNames = excel.GetWorksheetNames().ToList();
+                        sheetNames.ForEach(s =>
+                        {
+                            try
+                            {
+                                var bps = from c in excel.Worksheet<BuyersProvider>(s)
+                                          select c;
+                                buyersProviders.AddRange(bps.ToList().Where(b => !string.IsNullOrEmpty(b._采购) && !string.IsNullOrEmpty(b._供应商)));
+                            }
+                            catch (Exception ex)
+                            {
+                                ShowMsg(ex.Message);
+                            }
+                        });
                         providers = buyersProviders.Select(b => b._供应商).Distinct().ToList();
                     }
                 });
@@ -61,7 +70,7 @@ namespace OrderAllot
                 {
                     ShowMsg("开始计算表格数据");
 
-                    var relBuyers = GetBuyers();
+                    var relBuyers = Helper.GetBuyers();
                     providers.ForEach(bp =>
                     {
                         var refProvider = buyersProviders.Where(pp => pp._供应商 == bp).ToList();
@@ -92,7 +101,7 @@ namespace OrderAllot
                         }
                         catch (Exception ex)
                         {
-                            var a = 1;
+                            ShowMsg(ex.Message);
                         }
                     });
 
@@ -106,32 +115,6 @@ namespace OrderAllot
             {
                 ShowMsg(ex.Message);
             }
-        }
-
-        private List<string> GetBuyers()
-        {
-            var buyers = new List<string>();
-            buyers.Add("鲍祝平");
-            buyers.Add("毕玉");
-            buyers.Add("侯春喜");
-            buyers.Add("王思雅");
-            buyers.Add("曹晨晨");
-            buyers.Add("黄妍妍");
-            buyers.Add("章玲玲");
-            buyers.Add("邵俊丽");
-            buyers.Add("崔侠梅");
-            buyers.Add("蔡怡雯");
-            buyers.Add("桂娅利");
-            buyers.Add("潘明媛");
-            buyers.Add("秦荧");
-            buyers.Add("邹晓玲");
-            buyers.Add("董文丽");
-            buyers.Add("王梦梦");
-            buyers.Add("何萧雪");
-            buyers.Add("苏苗雨");
-            buyers.Add("王素素");
-            buyers.Add("李曼曼");
-            return buyers;
         }
 
         #region ExportExcel 导出Excel表格
