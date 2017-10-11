@@ -24,6 +24,16 @@ namespace OrderAllot.Maps
         }
         [ExcelColumn("仓库")]
         public string _仓库 { get; set; }
+        [ExcelColumn("库存上限")]
+        public int _库存上限 { get; set; }
+        [ExcelColumn("库存下限")]
+        public int _库存下限 { get; set; }
+        [ExcelColumn("可用数量")]
+        public int _可用数量 { get; set; }
+        [ExcelColumn("采购未入库")]
+        public int _采购未入库 { get; set; }
+        [ExcelColumn("缺货及未派单数量")]
+        public int _缺货及未派单数量 { get; set; }
         [ExcelColumn("采购员")]
         public string _采购员 { get; set; }
         [ExcelColumn("商品成本单价")]
@@ -35,6 +45,16 @@ namespace OrderAllot.Maps
                 return _商品成本单价 * _建议采购数量;
             }
         }
+
+        public int _特殊查看是否够卖
+        {
+            get
+            {
+                return _库存上限 + _库存下限 - _可用数量 - _采购未入库 + _缺货及未派单数量;
+            }
+        }
+
+        public int _特殊最终库存多余数量 { get; set; }
 
         #region CalAmount 计算建议采购数量
         private int CalAmount(int orgAmount)
