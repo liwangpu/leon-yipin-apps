@@ -9,7 +9,7 @@ namespace OrderAllot.Entities
     {
         public string _供应商 { get; set; }
         public string _SKU { get; set; }
-        public int _Qty { get; set; }
+        public double _Qty { get; set; }
         public string _仓库 { get; set; }
         public string _备注 { get; set; }
         public string _合同号 { get; set; }

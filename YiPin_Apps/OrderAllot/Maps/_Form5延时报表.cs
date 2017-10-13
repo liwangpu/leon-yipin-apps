@@ -8,9 +8,9 @@ namespace OrderAllot.Maps
         [ExcelColumn("SKU码")]
         public string _SKU { get; set; }
         [ExcelColumn("可用数量")]
-        public int _可用数量 { get; set; }
+        public double _可用数量 { get; set; }
         [ExcelColumn("缺货及未派单数量")]
-        public int _缺货及未派单数量 { get; set; }
+        public double _缺货及未派单数量 { get; set; }
 
     }
 }

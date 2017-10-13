@@ -4,14 +4,14 @@ namespace OrderAllot.Maps
 {
     public class Warning
     {
-        private int _SuggestAmount;
+        private double _SuggestAmount;
 
         [ExcelColumn("供应商")]
         public string _供应商 { get; set; }
         [ExcelColumn("SKU码")]
         public string _SKU { get; set; }
         [ExcelColumn("建议采购数量")]
-        public int _建议采购数量
+        public double _建议采购数量
         {
             get
             {
@@ -25,15 +25,15 @@ namespace OrderAllot.Maps
         [ExcelColumn("仓库")]
         public string _仓库 { get; set; }
         [ExcelColumn("库存上限")]
-        public int _库存上限 { get; set; }
+        public double _库存上限 { get; set; }
         [ExcelColumn("库存下限")]
-        public int _库存下限 { get; set; }
+        public double _库存下限 { get; set; }
         [ExcelColumn("可用数量")]
-        public int _可用数量 { get; set; }
+        public double _可用数量 { get; set; }
         [ExcelColumn("采购未入库")]
-        public int _采购未入库 { get; set; }
+        public double _采购未入库 { get; set; }
         [ExcelColumn("缺货及未派单数量")]
-        public int _缺货及未派单数量 { get; set; }
+        public double _缺货及未派单数量 { get; set; }
         [ExcelColumn("采购员")]
         public string _采购员 { get; set; }
         [ExcelColumn("商品成本单价")]
@@ -46,7 +46,7 @@ namespace OrderAllot.Maps
             }
         }
 
-        public int _特殊查看是否够卖
+        public double _特殊查看是否够卖
         {
             get
             {
@@ -54,12 +54,12 @@ namespace OrderAllot.Maps
             }
         }
 
-        public int _特殊最终库存多余数量 { get; set; }
+        public double _特殊最终库存多余数量 { get; set; }
 
         #region CalAmount 计算建议采购数量
-        private int CalAmount(int orgAmount)
+        private double CalAmount(double orgAmount)
         {
-            var calAmount = 5;
+            var calAmount = 5.0;
             //小于5 ==>1
 
             if (orgAmount > 5 && orgAmount < 10)
@@ -69,7 +69,7 @@ namespace OrderAllot.Maps
 
             if (orgAmount > 10)
             {
-                var bei = 0;
+                var bei = 0.0;
                 var remain = orgAmount % 10;
                 if (remain >= 5)
                 {

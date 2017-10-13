@@ -112,7 +112,7 @@ namespace OrderAllot
                             cmSkus.Add(shItem._SKU);
                             //两个仓库都有,将两个仓库的 可用库存+可用库存-缺货及未派单-缺货及未派单>0即为有库存,需要导出表格
                             var amount = shItem._可用数量 + refksItem._可用数量 - shItem._缺货及未派单数量 - refksItem._缺货及未派单数量;
-                            if (amount < 0)
+                            if (amount <= 0)
                             {
                                 shRpList.RemoveAt(idx);
                             }
@@ -121,7 +121,7 @@ namespace OrderAllot
                         {
                             //只有上海仓库有,也判断 可用库存-缺货及未派单>0 即导出
                             var amount = shItem._可用数量 - shItem._缺货及未派单数量;
-                            if (amount < 0)
+                            if (amount <= 0)
                             {
                                 shRpList.RemoveAt(idx);
                             }
