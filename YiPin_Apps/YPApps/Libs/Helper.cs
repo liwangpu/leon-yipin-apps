@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OrderAllot.Libs
+namespace YPApps.Libs
 {
     public class Helper
     {

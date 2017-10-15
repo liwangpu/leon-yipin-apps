@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+using YPApps.Forms;
 
-namespace OrderAllot
+namespace YPApps
 {
     static class Program
     {
@@ -15,7 +15,6 @@ namespace OrderAllot
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form2());
             Application.Run(new _订单分配());
         }
     }
