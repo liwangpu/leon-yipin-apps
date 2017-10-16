@@ -50,6 +50,7 @@ namespace YPApps.Forms
                 var exDataList_开发 = new List<EX订单分配>();
                 var exWorkLoad = new List<EX工作量>();
                 var providerNames = new List<string>();//供应商唯一队列
+                var buyerNames = new List<string>();
 
                 #region 解析表格数据
                 var actRead = new Action(() =>
@@ -113,10 +114,19 @@ namespace YPApps.Forms
                         }
                     });
 
+                    //计算工作量
+                    buyerNames.AddRange(exDataList_采购.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList());
+                    buyerNames.ForEach(b =>
+                    {
+                        var refOrders = exDataList_采购.Where(m => m._采购员 == b).ToList();
+                        var amount = refOrders.Select(m => m._供应商).Distinct().Count();
+                        exWorkLoad.Add(new EX工作量() { _采购员 = b, _订单量 = amount });
+                    });
+
 
 
                     #region 导出数据
-                    ExportExcel(exDataList_采购, exDataList_开发);
+                    ExportExcel(exDataList_采购, exDataList_开发, exWorkLoad);
                     #endregion
 
                 }, null);
@@ -149,11 +159,12 @@ namespace YPApps.Forms
         #endregion
 
         #region ExportExcel 导出表格
-        private void ExportExcel(List<EX订单分配> buyerDataList, List<EX订单分配> devDataList)
+        private void ExportExcel(List<EX订单分配> buyerDataList, List<EX订单分配> devDataList, List<EX工作量> workLoadList)
         {
             var strOpMsg = string.Empty;
             var buyerBuffer = XlsxHelper.SimpleWrite(buyerDataList.Select(x => x.ToDictionary()).ToList(), out strOpMsg);
             var devBuffer = XlsxHelper.SimpleWrite(devDataList.Select(x => x.ToDictionary()).ToList(), out strOpMsg);
+            var workloadBuffer = XlsxHelper.SimpleWrite(workLoadList.Select(x => x.ToDictionary()).ToList(), out strOpMsg);
 
             InvokeMainForm((obj) =>
             {
@@ -175,8 +186,8 @@ namespace YPApps.Forms
                     try
                     {
                         XlsxHelper.SaveWorkBook(buyerBuffer, FileName, out strOpMsg);
+                        XlsxHelper.SaveWorkBook(workloadBuffer, FileName2, out strOpMsg);
                         XlsxHelper.SaveWorkBook(devBuffer, FileName3, out strOpMsg);
-
                     }
                     catch (Exception ex)
                     {
@@ -187,7 +198,7 @@ namespace YPApps.Forms
                 }
             }, null);
 
-        } 
+        }
         #endregion
 
     }
