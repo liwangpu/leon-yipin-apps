@@ -91,7 +91,7 @@ namespace OrderAllot
                                 curOrder._供应商 = pd;
                                 curOrder._SKU = sk._SKU;
                                 curOrder._Qty = sk._建议采购数量;
-                                curOrder._采购员 = ChangeLowerBuyer(sk._采购员);
+                                curOrder._采购员 = Helper.ChangeLowerBuyer(sk._采购员);
                                 curOrder._含税单价 = sk._商品成本单价;
                                 curOrder._制单人 = sk._采购员;
                                 curOrder._对应供应商采购金额 = thisProviderAmount;
@@ -335,48 +335,6 @@ namespace OrderAllot
             {
                 this.lbMsg.Text = strMsg;
             }
-        }
-        #endregion
-
-        #region ChangeLowerBuyer 采购员转换
-        /// <summary>
-        /// 采购员转换
-        /// </summary>
-        /// <param name="orgBuyerName"></param>
-        /// <returns></returns>
-        private string ChangeLowerBuyer(string orgBuyerName)
-        {
-            var newBuyerName = orgBuyerName;
-            switch (orgBuyerName)
-            {
-                case "毕玉":
-                    newBuyerName = "李曼曼";
-                    break;
-                case "鲍祝平":
-                    newBuyerName = "王素素";
-                    break;
-                case "黄妍妍":
-                    newBuyerName = "曹晨晨";
-                    break;
-                case "潘明媛":
-                    newBuyerName = "侯春喜";
-                    break;
-                case "章玲玲":
-                    newBuyerName = "董文丽";
-                    break;
-                case "蔡怡雯":
-                    newBuyerName = "崔侠梅";
-                    break;
-                case "邹晓玲":
-                    newBuyerName = "苏苗雨";
-                    break;
-                case "王思雅":
-                    newBuyerName = "韦秋菊";
-                    break;
-                default:
-                    break;
-            }
-            return newBuyerName;
         }
         #endregion
 

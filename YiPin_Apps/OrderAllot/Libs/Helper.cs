@@ -89,7 +89,10 @@ namespace OrderAllot.Libs
                     newBuyerName = "苏苗雨";
                     break;
                 case "王思雅":
-                    newBuyerName = "韦秋菊";
+                    newBuyerName = "苏苗雨";
+                    break;
+                case "王梦梦":
+                    newBuyerName = "吴海燕";
                     break;
                 default:
                     break;
@@ -98,5 +101,31 @@ namespace OrderAllot.Libs
         }
         #endregion
 
+        #region CalAmount 计算建议采购数量
+        public static double CalAmount(double orgAmount)
+        {
+            var calAmount = 5.0;
+            //小于5 ==>1
+
+            if (orgAmount > 5 && orgAmount < 10)
+            {
+                calAmount = 10;
+            }
+
+            if (orgAmount > 10)
+            {
+                var bei = 0.0;
+                var remain = orgAmount % 10;
+                if (remain >= 5)
+                {
+                    bei = 1;
+                }
+                bei += (orgAmount - remain) / 10;
+                calAmount = bei * 10;
+
+            }
+            return calAmount;
+        }
+        #endregion
     }
 }

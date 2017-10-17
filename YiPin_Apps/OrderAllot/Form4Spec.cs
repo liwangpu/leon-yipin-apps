@@ -12,9 +12,9 @@ using OrderAllot.Libs;
 
 namespace OrderAllot
 {
-    public partial class Form4 : Form
+    public partial class Form4Spec : Form
     {
-        public Form4()
+        public Form4Spec()
         {
             InitializeComponent();
         }
@@ -86,6 +86,21 @@ namespace OrderAllot
         }
         #endregion
 
+        #region 上传临时备货
+        private void btnUpTmp_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Title = "表格信息";//设置标题
+            OpenFileDialog1.Multiselect = false;
+            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                txtUpTmp.Text = OpenFileDialog1.FileName;
+            }
+        }
+        #endregion
+
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
             try
@@ -97,7 +112,7 @@ namespace OrderAllot
                 var KunsStoreWarnings = new List<Warning>();
                 var ShanghStoreWarnings = new List<Warning>();
                 var notdfKunsWarnings = new List<Warning>();//上海默认昆山预警,昆山不预警,但是昆山库存够卖两个仓库
-
+                var tmpWarnings = new List<Order>();
                 //var dfKunsWarnings = new List<Warning>();
                 var orderList = new List<Order>();
                 var devList = new List<Order>();//把开发单独分写成一个表格 
@@ -106,7 +121,7 @@ namespace OrderAllot
                 var KunsWarningPath = txtUpKsYj.Text;
                 var KunsStoreWarningPath = txtUpKsKc.Text;
                 var ShanghStoreWarningPath = txtUpSHKc.Text;
-
+                var tmpWarningPath = txtUpTmp.Text;
                 var actRead = new Action(() =>
                 {
                     ShowMsg("开始读取表格数据");
@@ -182,8 +197,24 @@ namespace OrderAllot
                             }
                         });
                     }
-
-
+                    //临时备货
+                    using (var excel = new ExcelQueryFactory(tmpWarningPath))
+                    {
+                        var sheetNames = excel.GetWorksheetNames().ToList();
+                        sheetNames.ForEach(s =>
+                        {
+                            try
+                            {
+                                var tmp = from c in excel.Worksheet<Order>(s)
+                                          select c;
+                                tmpWarnings.AddRange(tmp);
+                            }
+                            catch (Exception ex)
+                            {
+                                ShowMsg(ex.Message);
+                            }
+                        });
+                    }
                 });
 
                 actRead.BeginInvoke((obj) =>
@@ -286,7 +317,7 @@ namespace OrderAllot
                     });
 
                     //计算完毕,开始导出数据
-                    ExportExcel(orderList, notdfKunsWarnings);
+                    ExportExcel(orderList, notdfKunsWarnings, tmpWarnings, diviAmount);
 
                 }, null);
                 #endregion
@@ -302,7 +333,7 @@ namespace OrderAllot
         /// 导出Excel表格
         /// </summary>
         /// <param name="orders"></param>
-        private void ExportExcel(List<Order> orders, List<Warning> notBuyWarnings)
+        private void ExportExcel(List<Order> orders, List<Warning> notBuyWarnings, List<Order> tmp, double diviAmount)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
@@ -317,6 +348,34 @@ namespace OrderAllot
             {
                 var workbox = package.Workbook;
                 var sheet1 = workbox.Worksheets.Add("Sheet1");
+
+                for (int idx = 0, len = tmp.Count; idx < len; idx++)
+                {
+                    var curTmp = tmp[idx];
+                    curTmp._制单人 = curTmp._采购员;
+                    curTmp._Qty = Helper.CalAmount(curTmp._Qty);
+                }
+                orders.AddRange(tmp);
+
+
+
+                //重新计算大小单并转化采购员
+                var providers = orders.Select(m => m._供应商).Distinct().ToList();
+                providers.ForEach(pr =>
+                {
+                    var curDiv = orders.Where(p => p._供应商 == pr).Select(p => p._tmp采购总金额).Sum();
+                    if (curDiv <= diviAmount)
+                    {
+                        //小于分界,分给合肥
+                        for (int ddx = 0,len=orders.Count; ddx < len; ddx++)
+                        {
+                            var curOrder = orders[ddx];
+                            curOrder._采购员 = Helper.ChangeLowerBuyer(curOrder._采购员);
+                        }
+                    }
+                });
+
+                //var newOrders = orders.OrderBy(mm => mm._供应商).ToList();
 
                 #region 标题行
                 sheet1.Cells[1, 1].Value = "供应商";
@@ -570,6 +629,8 @@ namespace OrderAllot
             }
         }
         #endregion
+
+
 
 
     }

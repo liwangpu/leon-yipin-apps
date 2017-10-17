@@ -1,6 +1,6 @@
 ﻿namespace OrderAllot
 {
-    partial class Form4
+    partial class Form4Spec
     {
         /// <summary>
         /// Required designer variable.
@@ -36,19 +36,22 @@
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnUpSHKc = new System.Windows.Forms.Button();
             this.btnKsKc = new System.Windows.Forms.Button();
             this.btnUpKsYj = new System.Windows.Forms.Button();
             this.btnUpDfkunsYj = new System.Windows.Forms.Button();
+            this.txtUpSHKc = new System.Windows.Forms.TextBox();
             this.txtUpKsKc = new System.Windows.Forms.TextBox();
             this.txtUpKsYj = new System.Windows.Forms.TextBox();
             this.txtUpDfkunsYj = new System.Windows.Forms.TextBox();
-            this.txtUpSHKc = new System.Windows.Forms.TextBox();
-            this.btnUpSHKc = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
+            this.txtUpTmp = new System.Windows.Forms.TextBox();
+            this.btnUpTmp = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             this.SuspendLayout();
@@ -62,14 +65,17 @@
             this.groupBox1.Controls.Add(this.txtExport);
             this.groupBox1.Controls.Add(this.lbMsg);
             this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.btnUpTmp);
             this.groupBox1.Controls.Add(this.btnUpSHKc);
             this.groupBox1.Controls.Add(this.btnKsKc);
             this.groupBox1.Controls.Add(this.btnUpKsYj);
+            this.groupBox1.Controls.Add(this.txtUpTmp);
             this.groupBox1.Controls.Add(this.btnUpDfkunsYj);
             this.groupBox1.Controls.Add(this.txtUpSHKc);
             this.groupBox1.Controls.Add(this.txtUpKsKc);
@@ -77,7 +83,7 @@
             this.groupBox1.Controls.Add(this.txtUpDfkunsYj);
             this.groupBox1.Location = new System.Drawing.Point(11, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(385, 221);
+            this.groupBox1.Size = new System.Drawing.Size(385, 246);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
@@ -120,7 +126,7 @@
             // btnAnalyze
             // 
             this.btnAnalyze.Enabled = false;
-            this.btnAnalyze.Location = new System.Drawing.Point(304, 153);
+            this.btnAnalyze.Location = new System.Drawing.Point(303, 178);
             this.btnAnalyze.Name = "btnAnalyze";
             this.btnAnalyze.Size = new System.Drawing.Size(75, 23);
             this.btnAnalyze.TabIndex = 5;
@@ -130,7 +136,7 @@
             // 
             // txtExport
             // 
-            this.txtExport.Location = new System.Drawing.Point(114, 153);
+            this.txtExport.Location = new System.Drawing.Point(113, 178);
             this.txtExport.Name = "txtExport";
             this.txtExport.Size = new System.Drawing.Size(183, 21);
             this.txtExport.TabIndex = 4;
@@ -138,7 +144,7 @@
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(71, 196);
+            this.lbMsg.Location = new System.Drawing.Point(70, 221);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(65, 12);
             this.lbMsg.TabIndex = 3;
@@ -147,11 +153,20 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 156);
+            this.label5.Location = new System.Drawing.Point(5, 181);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 12);
             this.label5.TabIndex = 2;
             this.label5.Text = "处理文件:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(5, 130);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(83, 12);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "上海所有库存:";
             // 
             // label4
             // 
@@ -183,11 +198,21 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 196);
+            this.label1.Location = new System.Drawing.Point(4, 221);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "操作消息:";
+            // 
+            // btnUpSHKc
+            // 
+            this.btnUpSHKc.Location = new System.Drawing.Point(303, 125);
+            this.btnUpSHKc.Name = "btnUpSHKc";
+            this.btnUpSHKc.Size = new System.Drawing.Size(75, 23);
+            this.btnUpSHKc.TabIndex = 1;
+            this.btnUpSHKc.Text = "浏览";
+            this.btnUpSHKc.UseVisualStyleBackColor = true;
+            this.btnUpSHKc.Click += new System.EventHandler(this.btnUpSHKc_Click);
             // 
             // btnKsKc
             // 
@@ -219,6 +244,14 @@
             this.btnUpDfkunsYj.UseVisualStyleBackColor = true;
             this.btnUpDfkunsYj.Click += new System.EventHandler(this.btnUpDfkunsYj_Click);
             // 
+            // txtUpSHKc
+            // 
+            this.txtUpSHKc.Enabled = false;
+            this.txtUpSHKc.Location = new System.Drawing.Point(114, 126);
+            this.txtUpSHKc.Name = "txtUpSHKc";
+            this.txtUpSHKc.Size = new System.Drawing.Size(183, 21);
+            this.txtUpSHKc.TabIndex = 0;
+            // 
             // txtUpKsKc
             // 
             this.txtUpKsKc.Enabled = false;
@@ -243,43 +276,43 @@
             this.txtUpDfkunsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpDfkunsYj.TabIndex = 0;
             // 
-            // txtUpSHKc
+            // txtUpTmp
             // 
-            this.txtUpSHKc.Enabled = false;
-            this.txtUpSHKc.Location = new System.Drawing.Point(114, 126);
-            this.txtUpSHKc.Name = "txtUpSHKc";
-            this.txtUpSHKc.Size = new System.Drawing.Size(183, 21);
-            this.txtUpSHKc.TabIndex = 0;
+            this.txtUpTmp.Enabled = false;
+            this.txtUpTmp.Location = new System.Drawing.Point(114, 150);
+            this.txtUpTmp.Name = "txtUpTmp";
+            this.txtUpTmp.Size = new System.Drawing.Size(183, 21);
+            this.txtUpTmp.TabIndex = 0;
             // 
-            // btnUpSHKc
+            // btnUpTmp
             // 
-            this.btnUpSHKc.Location = new System.Drawing.Point(303, 125);
-            this.btnUpSHKc.Name = "btnUpSHKc";
-            this.btnUpSHKc.Size = new System.Drawing.Size(75, 23);
-            this.btnUpSHKc.TabIndex = 1;
-            this.btnUpSHKc.Text = "浏览";
-            this.btnUpSHKc.UseVisualStyleBackColor = true;
-            this.btnUpSHKc.Click += new System.EventHandler(this.btnUpSHKc_Click);
+            this.btnUpTmp.Location = new System.Drawing.Point(303, 149);
+            this.btnUpTmp.Name = "btnUpTmp";
+            this.btnUpTmp.Size = new System.Drawing.Size(75, 23);
+            this.btnUpTmp.TabIndex = 1;
+            this.btnUpTmp.Text = "浏览";
+            this.btnUpTmp.UseVisualStyleBackColor = true;
+            this.btnUpTmp.Click += new System.EventHandler(this.btnUpTmp_Click);
             // 
-            // label8
+            // label9
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(5, 130);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(83, 12);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "上海所有库存:";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(5, 154);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(59, 12);
+            this.label9.TabIndex = 2;
+            this.label9.Text = "临时备货:";
             // 
-            // Form4
+            // Form4Spec
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 231);
+            this.ClientSize = new System.Drawing.Size(408, 263);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form4";
-            this.Text = "订单分配(排除重复项)";
+            this.Name = "Form4Spec";
+            this.Text = "订单分配(排除重复项)-临时备货";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).EndInit();
@@ -310,6 +343,9 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnUpSHKc;
         private System.Windows.Forms.TextBox txtUpSHKc;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button btnUpTmp;
+        private System.Windows.Forms.TextBox txtUpTmp;
 
     }
 }
