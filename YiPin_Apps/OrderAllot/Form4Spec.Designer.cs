@@ -36,22 +36,22 @@
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnUpTmp = new System.Windows.Forms.Button();
             this.btnUpSHKc = new System.Windows.Forms.Button();
             this.btnKsKc = new System.Windows.Forms.Button();
             this.btnUpKsYj = new System.Windows.Forms.Button();
+            this.txtUpTmp = new System.Windows.Forms.TextBox();
             this.btnUpDfkunsYj = new System.Windows.Forms.Button();
             this.txtUpSHKc = new System.Windows.Forms.TextBox();
             this.txtUpKsKc = new System.Windows.Forms.TextBox();
             this.txtUpKsYj = new System.Windows.Forms.TextBox();
             this.txtUpDfkunsYj = new System.Windows.Forms.TextBox();
-            this.txtUpTmp = new System.Windows.Forms.TextBox();
-            this.btnUpTmp = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             this.SuspendLayout();
@@ -125,7 +125,6 @@
             // 
             // btnAnalyze
             // 
-            this.btnAnalyze.Enabled = false;
             this.btnAnalyze.Location = new System.Drawing.Point(303, 178);
             this.btnAnalyze.Name = "btnAnalyze";
             this.btnAnalyze.Size = new System.Drawing.Size(75, 23);
@@ -158,6 +157,15 @@
             this.label5.Size = new System.Drawing.Size(59, 12);
             this.label5.TabIndex = 2;
             this.label5.Text = "处理文件:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(5, 154);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(59, 12);
+            this.label9.TabIndex = 2;
+            this.label9.Text = "临时备货:";
             // 
             // label8
             // 
@@ -204,6 +212,16 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "操作消息:";
             // 
+            // btnUpTmp
+            // 
+            this.btnUpTmp.Location = new System.Drawing.Point(303, 149);
+            this.btnUpTmp.Name = "btnUpTmp";
+            this.btnUpTmp.Size = new System.Drawing.Size(75, 23);
+            this.btnUpTmp.TabIndex = 1;
+            this.btnUpTmp.Text = "浏览";
+            this.btnUpTmp.UseVisualStyleBackColor = true;
+            this.btnUpTmp.Click += new System.EventHandler(this.btnUpTmp_Click);
+            // 
             // btnUpSHKc
             // 
             this.btnUpSHKc.Location = new System.Drawing.Point(303, 125);
@@ -233,6 +251,14 @@
             this.btnUpKsYj.Text = "浏览";
             this.btnUpKsYj.UseVisualStyleBackColor = true;
             this.btnUpKsYj.Click += new System.EventHandler(this.btnUpKsYj_Click);
+            // 
+            // txtUpTmp
+            // 
+            this.txtUpTmp.Enabled = false;
+            this.txtUpTmp.Location = new System.Drawing.Point(114, 150);
+            this.txtUpTmp.Name = "txtUpTmp";
+            this.txtUpTmp.Size = new System.Drawing.Size(183, 21);
+            this.txtUpTmp.TabIndex = 0;
             // 
             // btnUpDfkunsYj
             // 
@@ -275,33 +301,6 @@
             this.txtUpDfkunsYj.Name = "txtUpDfkunsYj";
             this.txtUpDfkunsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpDfkunsYj.TabIndex = 0;
-            // 
-            // txtUpTmp
-            // 
-            this.txtUpTmp.Enabled = false;
-            this.txtUpTmp.Location = new System.Drawing.Point(114, 150);
-            this.txtUpTmp.Name = "txtUpTmp";
-            this.txtUpTmp.Size = new System.Drawing.Size(183, 21);
-            this.txtUpTmp.TabIndex = 0;
-            // 
-            // btnUpTmp
-            // 
-            this.btnUpTmp.Location = new System.Drawing.Point(303, 149);
-            this.btnUpTmp.Name = "btnUpTmp";
-            this.btnUpTmp.Size = new System.Drawing.Size(75, 23);
-            this.btnUpTmp.TabIndex = 1;
-            this.btnUpTmp.Text = "浏览";
-            this.btnUpTmp.UseVisualStyleBackColor = true;
-            this.btnUpTmp.Click += new System.EventHandler(this.btnUpTmp_Click);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(5, 154);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(59, 12);
-            this.label9.TabIndex = 2;
-            this.label9.Text = "临时备货:";
             // 
             // Form4Spec
             // 

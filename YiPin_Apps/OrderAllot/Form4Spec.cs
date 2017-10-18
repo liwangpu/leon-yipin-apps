@@ -17,6 +17,13 @@ namespace OrderAllot
         public Form4Spec()
         {
             InitializeComponent();
+
+            txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\排除重复单\上海-默认发货仓库昆山.xls";//默认昆山预警
+            txtUpKsYj.Text = @"C:\Users\pulw\Desktop\排除重复单\昆山建议采购.xls";//昆山库存预警
+            txtUpKsKc.Text = @"C:\Users\pulw\Desktop\排除重复单\昆山所有库存.xls";//昆山所有库存
+            txtUpSHKc.Text = @"C:\Users\pulw\Desktop\排除重复单\上海所有库存.xls";//上海所有库存
+            txtUpTmp.Text = @"C:\Users\pulw\Desktop\排除重复单\备货.xls";//临时备货
+
         }
 
         #region 上传默认昆山预警订单
@@ -31,7 +38,6 @@ namespace OrderAllot
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
             {
                 txtUpDfkunsYj.Text = OpenFileDialog1.FileName;
-                btnAnalyze.Enabled = true;
             }
         }
         #endregion
@@ -48,7 +54,6 @@ namespace OrderAllot
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
             {
                 txtUpKsYj.Text = OpenFileDialog1.FileName;
-                btnAnalyze.Enabled = true;
             }
         }
         #endregion
@@ -65,7 +70,6 @@ namespace OrderAllot
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
             {
                 txtUpKsKc.Text = OpenFileDialog1.FileName;
-                btnAnalyze.Enabled = true;
             }
         }
         #endregion
@@ -112,7 +116,7 @@ namespace OrderAllot
                 var KunsStoreWarnings = new List<Warning>();
                 var ShanghStoreWarnings = new List<Warning>();
                 var notdfKunsWarnings = new List<Warning>();//上海默认昆山预警,昆山不预警,但是昆山库存够卖两个仓库
-                var tmpWarnings = new List<Order>();
+                var tmpWarnings = new List<Warning>();
                 //var dfKunsWarnings = new List<Warning>();
                 var orderList = new List<Order>();
                 var devList = new List<Order>();//把开发单独分写成一个表格 
@@ -179,41 +183,48 @@ namespace OrderAllot
                             }
                         });
                     }
-                    //上海仓库
-                    using (var excel = new ExcelQueryFactory(ShanghStoreWarningPath))
+
+                    if (!string.IsNullOrEmpty(ShanghStoreWarningPath))
                     {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
+                        //上海仓库
+                        using (var excel = new ExcelQueryFactory(ShanghStoreWarningPath))
                         {
-                            try
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
                             {
-                                var tmp = from c in excel.Worksheet<Warning>(s)
-                                          select c;
-                                ShanghStoreWarnings.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                              select c;
+                                    ShanghStoreWarnings.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
                     }
-                    //临时备货
-                    using (var excel = new ExcelQueryFactory(tmpWarningPath))
+                    if (!string.IsNullOrEmpty(tmpWarningPath))
                     {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
+                        //临时备货
+                        using (var excel = new ExcelQueryFactory(tmpWarningPath))
                         {
-                            try
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
                             {
-                                var tmp = from c in excel.Worksheet<Order>(s)
-                                          select c;
-                                tmpWarnings.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                              select c;
+                                    tmpWarnings.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
                     }
                 });
 
@@ -225,6 +236,10 @@ namespace OrderAllot
                     for (int idx = dfKunsWarnings.Count - 1; idx >= 0; idx--)
                     {
                         var df = dfKunsWarnings[idx];
+                        if (df._SKU=="TKDA18A99")
+                        {
+                            
+                        }
                         var refKunsItem = KunsWarnings.Where(r => r._SKU == df._SKU).FirstOrDefault();
                         //有对应sku,相关参数加起来
                         if (refKunsItem != null)
@@ -255,6 +270,12 @@ namespace OrderAllot
                     //3.将昆山原来的预警进行sku排除后加入上海默认昆山预警进入分配给采购
                     KunsWarnings.ForEach(ks =>
                     {
+                        if (ks._SKU == "TKDA18A99")
+                        {
+
+                        }
+
+
                         var isHas = dfKunsWarnings.Count(df => df._SKU == ks._SKU) > 0;
                         if (!isHas)
                         {
@@ -270,10 +291,14 @@ namespace OrderAllot
                                         dfKunsWarnings.Add(ks);
                                 }
                             }
-
-
                         }
                     });
+                    //加入特殊临时数据
+                    if (tmpWarnings.Count > 0)
+                    {
+                        dfKunsWarnings.AddRange(tmpWarnings);
+                    }
+
 
                     //供应商唯一取值
                     providers = dfKunsWarnings.Select(p => p._供应商).Where(p => !string.IsNullOrEmpty(p)).Distinct().OrderBy(p => p).ToList();
@@ -317,7 +342,7 @@ namespace OrderAllot
                     });
 
                     //计算完毕,开始导出数据
-                    ExportExcel(orderList, notdfKunsWarnings, tmpWarnings, diviAmount);
+                    ExportExcel(orderList, notdfKunsWarnings);
 
                 }, null);
                 #endregion
@@ -333,7 +358,7 @@ namespace OrderAllot
         /// 导出Excel表格
         /// </summary>
         /// <param name="orders"></param>
-        private void ExportExcel(List<Order> orders, List<Warning> notBuyWarnings, List<Order> tmp, double diviAmount)
+        private void ExportExcel(List<Order> orders, List<Warning> notBuyWarnings)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
@@ -348,34 +373,6 @@ namespace OrderAllot
             {
                 var workbox = package.Workbook;
                 var sheet1 = workbox.Worksheets.Add("Sheet1");
-
-                for (int idx = 0, len = tmp.Count; idx < len; idx++)
-                {
-                    var curTmp = tmp[idx];
-                    curTmp._制单人 = curTmp._采购员;
-                    curTmp._Qty = Helper.CalAmount(curTmp._Qty);
-                }
-                orders.AddRange(tmp);
-
-
-
-                //重新计算大小单并转化采购员
-                var providers = orders.Select(m => m._供应商).Distinct().ToList();
-                providers.ForEach(pr =>
-                {
-                    var curDiv = orders.Where(p => p._供应商 == pr).Select(p => p._tmp采购总金额).Sum();
-                    if (curDiv <= diviAmount)
-                    {
-                        //小于分界,分给合肥
-                        for (int ddx = 0,len=orders.Count; ddx < len; ddx++)
-                        {
-                            var curOrder = orders[ddx];
-                            curOrder._采购员 = Helper.ChangeLowerBuyer(curOrder._采购员);
-                        }
-                    }
-                });
-
-                //var newOrders = orders.OrderBy(mm => mm._供应商).ToList();
 
                 #region 标题行
                 sheet1.Cells[1, 1].Value = "供应商";

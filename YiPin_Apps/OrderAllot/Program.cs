@@ -15,11 +15,11 @@ namespace OrderAllot
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
-            //Application.Run(new Form2());
+            //Application.Run(new Form1());//订单分配
+            //Application.Run(new Form2());//工作完成情况
             //Application.Run(new Form3());
             //Application.Run(new Form4());
-            Application.Run(new Form4Spec());
+            Application.Run(new Form4Spec());//订单分配(排除重复项)
             //Application.Run(new Form5());
         }
     }
