@@ -18,11 +18,18 @@ namespace OrderAllot
         {
             InitializeComponent();
 
-            txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\排除重复单\上海-默认发货仓库昆山.xls";//默认昆山预警
-            txtUpKsYj.Text = @"C:\Users\pulw\Desktop\排除重复单\昆山建议采购.xls";//昆山库存预警
-            txtUpKsKc.Text = @"C:\Users\pulw\Desktop\排除重复单\昆山所有库存.xls";//昆山所有库存
-            txtUpSHKc.Text = @"C:\Users\pulw\Desktop\排除重复单\上海所有库存.xls";//上海所有库存
-            txtUpTmp.Text = @"C:\Users\pulw\Desktop\排除重复单\备货.xls";//临时备货
+            txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\mm\上海-默认发货仓库昆山.xls";//默认昆山预警
+            txtUpKsYj.Text = @"C:\Users\Leon\Desktop\mm\昆山建议采购.xls";//昆山库存预警
+            txtUpKsKc.Text = @"C:\Users\Leon\Desktop\mm\昆山所有库存.xls";//昆山所有库存
+            txtUpSHKc.Text = @"C:\Users\Leon\Desktop\mm\上海所有库存.xls";//上海所有库存
+            txtUpTmp.Text = @"C:\Users\Leon\Desktop\mm\备货.xls";//临时备货
+
+
+            //txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\排除重复项\上海-默认昆山仓.xls";//默认昆山预警
+            //txtUpKsYj.Text = @"C:\Users\Leon\Desktop\排除重复项\昆山建议采购.xls";//昆山库存预警
+            //txtUpKsKc.Text = @"C:\Users\Leon\Desktop\排除重复项\昆山所有库存.xls";//昆山所有库存
+            //txtUpSHKc.Text = @"C:\Users\Leon\Desktop\排除重复项\上海所有库存.xls";//上海所有库存
+            //txtUpTmp.Text = @"C:\Users\Leon\Desktop\排除重复项\备货.xls";//临时备货
 
         }
 
@@ -110,84 +117,35 @@ namespace OrderAllot
             try
             {
                 #region 解析并计算
-                var diviAmount = Convert.ToDouble(NtxtAmount.Value);
-                var dfKunsWarnings = new List<Warning>();
-                var KunsWarnings = new List<Warning>();
-                var KunsStoreWarnings = new List<Warning>();
-                var ShanghStoreWarnings = new List<Warning>();
-                var notdfKunsWarnings = new List<Warning>();//上海默认昆山预警,昆山不预警,但是昆山库存够卖两个仓库
-                var tmpWarnings = new List<Warning>();
-                //var dfKunsWarnings = new List<Warning>();
-                var orderList = new List<Order>();
-                var devList = new List<Order>();//把开发单独分写成一个表格 
-                var providers = new List<string>();//供应商唯一队列
-                var dfKunsWarningPath = txtUpDfkunsYj.Text;
-                var KunsWarningPath = txtUpKsYj.Text;
-                var KunsStoreWarningPath = txtUpKsKc.Text;
-                var ShanghStoreWarningPath = txtUpSHKc.Text;
-                var tmpWarningPath = txtUpTmp.Text;
+                var _d订单金额 = Convert.ToDouble(NtxtAmount.Value);
+
+                var _Im上海默认昆山预警 = new List<Warning>();
+                var _Im昆山预警 = new List<Warning>();
+                var _Im昆山库存 = new List<Warning>();
+                var _Im上海库存 = new List<Warning>();
+                var _Im临时备货 = new List<Warning>();
+                var _最终需要采购的预警 = new List<Warning>();
+                var _Ex库存充足的预警 = new List<Warning>();
+                var _Ex采购需要采购订单 = new List<Order>();
+                var _Ex开发需要采购订单 = new List<Order>();
+
+
+                var str上海默认昆山ExcelPath = txtUpDfkunsYj.Text;
+                var str昆山预警ExcelPath = txtUpKsYj.Text;
+                var str昆山库存ExcelPath = txtUpKsKc.Text;
+                var str上海库存ExcelPath = txtUpSHKc.Text;
+                var str临时备货ExcelPath = txtUpTmp.Text;
+
+
+                #region 读取源数据
                 var actRead = new Action(() =>
                 {
                     ShowMsg("开始读取表格数据");
-                    //上海默认昆山预警
-                    using (var excel = new ExcelQueryFactory(dfKunsWarningPath))
-                    {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
-                        {
-                            try
-                            {
-                                var tmp = from c in excel.Worksheet<Warning>(s)
-                                          select c;
-                                dfKunsWarnings.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
-                    }
-                    //昆山预警
-                    using (var excel = new ExcelQueryFactory(KunsWarningPath))
-                    {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
-                        {
-                            try
-                            {
-                                var tmp = from c in excel.Worksheet<Warning>(s)
-                                          select c;
-                                KunsWarnings.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
-                    }
-                    //昆山仓库
-                    using (var excel = new ExcelQueryFactory(KunsStoreWarningPath))
-                    {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
-                        {
-                            try
-                            {
-                                var tmp = from c in excel.Worksheet<Warning>(s)
-                                          select c;
-                                KunsStoreWarnings.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
-                    }
 
-                    if (!string.IsNullOrEmpty(ShanghStoreWarningPath))
+                    #region 读取上海默认昆山预警
+                    if (!string.IsNullOrEmpty(str上海默认昆山ExcelPath))
                     {
-                        //上海仓库
-                        using (var excel = new ExcelQueryFactory(ShanghStoreWarningPath))
+                        using (var excel = new ExcelQueryFactory(str上海默认昆山ExcelPath))
                         {
                             var sheetNames = excel.GetWorksheetNames().ToList();
                             sheetNames.ForEach(s =>
@@ -196,7 +154,7 @@ namespace OrderAllot
                                 {
                                     var tmp = from c in excel.Worksheet<Warning>(s)
                                               select c;
-                                    ShanghStoreWarnings.AddRange(tmp);
+                                    _Im上海默认昆山预警.AddRange(tmp);
                                 }
                                 catch (Exception ex)
                                 {
@@ -205,10 +163,12 @@ namespace OrderAllot
                             });
                         }
                     }
-                    if (!string.IsNullOrEmpty(tmpWarningPath))
+                    #endregion
+
+                    #region 读取昆山预警
+                    if (!string.IsNullOrEmpty(str昆山预警ExcelPath))
                     {
-                        //临时备货
-                        using (var excel = new ExcelQueryFactory(tmpWarningPath))
+                        using (var excel = new ExcelQueryFactory(str昆山预警ExcelPath))
                         {
                             var sheetNames = excel.GetWorksheetNames().ToList();
                             sheetNames.ForEach(s =>
@@ -217,7 +177,7 @@ namespace OrderAllot
                                 {
                                     var tmp = from c in excel.Worksheet<Warning>(s)
                                               select c;
-                                    tmpWarnings.AddRange(tmp);
+                                    _Im昆山预警.AddRange(tmp);
                                 }
                                 catch (Exception ex)
                                 {
@@ -226,125 +186,288 @@ namespace OrderAllot
                             });
                         }
                     }
+                    #endregion
+
+                    #region 读取昆山仓库
+                    if (!string.IsNullOrEmpty(str昆山库存ExcelPath))
+                    {
+                        using (var excel = new ExcelQueryFactory(str昆山库存ExcelPath))
+                        {
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
+                            {
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                              select c;
+                                    _Im昆山库存.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
+                    }
+                    #endregion
+
+                    #region 读取上海仓库
+                    if (!string.IsNullOrEmpty(str上海库存ExcelPath))
+                    {
+                        using (var excel = new ExcelQueryFactory(str上海库存ExcelPath))
+                        {
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
+                            {
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                              select c;
+                                    _Im上海库存.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
+                    }
+                    #endregion
+
+                    #region 读取临时备货
+                    if (!string.IsNullOrEmpty(str临时备货ExcelPath))
+                    {
+                        using (var excel = new ExcelQueryFactory(str临时备货ExcelPath))
+                        {
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
+                            {
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                              select c;
+                                    _Im临时备货.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
+                    }
+                    #endregion
                 });
+                #endregion
 
+
+                #region 数据处理
                 actRead.BeginInvoke((obj) =>
                 {
                     ShowMsg("开始计算表格数据");
-                    //1.遍历上海默认昆山预警,把昆山预警里面量表都有的sku相关参数加起来
-                    //2.没有的sku进入库存列表进行是否够卖判断,够卖不用采购
-                    for (int idx = dfKunsWarnings.Count - 1; idx >= 0; idx--)
+
+                    var _List两个预警表共有Sku唯一 = new List<string>();//两个表共有的sku,不用判断是否需要采购,直接将需要采购量相加
+                    #region 计算两个预警表共有的sku唯一
                     {
-                        var df = dfKunsWarnings[idx];
-                        if (df._SKU=="TKDA18A99")
+                        var _List上海默认昆山预警Sku唯一 = _Im上海默认昆山预警.Where(m => !string.IsNullOrEmpty(m._SKU)).Select(m => m._SKU).Distinct().ToList();
+                        var _List昆山预警Sku唯一 = _Im昆山预警.Where(m => !string.IsNullOrEmpty(m._SKU)).Select(m => m._SKU).Distinct().ToList();
+                        //提取出两表共有的sku
+                        if (_List上海默认昆山预警Sku唯一.Count > _List昆山预警Sku唯一.Count)
                         {
-                            
-                        }
-                        var refKunsItem = KunsWarnings.Where(r => r._SKU == df._SKU).FirstOrDefault();
-                        //有对应sku,相关参数加起来
-                        if (refKunsItem != null)
-                        {
-                            df._采购未入库 += refKunsItem._采购未入库;
-                            df._建议采购数量 += refKunsItem._建议采购数量;
-                            df._可用数量 += refKunsItem._可用数量;
-                            df._库存上限 += refKunsItem._库存上限;
-                            df._库存下限 += refKunsItem._库存下限;
-                            df._缺货及未派单数量 += refKunsItem._缺货及未派单数量;
-                        }
-                        else
-                        {
-                            //没有对应sku,判断够不够卖
-                            var refKunsStoreItem = KunsStoreWarnings.Where(r => r._SKU == df._SKU).FirstOrDefault();
-                            if (refKunsStoreItem != null)
+                            _List上海默认昆山预警Sku唯一.ForEach(m =>
                             {
-                                //库存足够,删掉,但是删掉之前加入特殊列表
-                                if (df._特殊查看是否够卖 + refKunsStoreItem._特殊查看是否够卖 < 0)
+                                if (!string.IsNullOrEmpty(m))
                                 {
-                                    df._特殊最终库存多余数量 = -(df._特殊查看是否够卖 + refKunsStoreItem._特殊查看是否够卖);
-                                    notdfKunsWarnings.Add(df);
-                                    dfKunsWarnings.RemoveAt(idx);
+                                    int isCommonSku = _List昆山预警Sku唯一.Count(ss => ss == m);
+                                    if (isCommonSku > 0)
+                                        _List两个预警表共有Sku唯一.Add(m);
                                 }
-                            }
-                        }
-                    }
-                    //3.将昆山原来的预警进行sku排除后加入上海默认昆山预警进入分配给采购
-                    KunsWarnings.ForEach(ks =>
-                    {
-                        if (ks._SKU == "TKDA18A99")
-                        {
-
-                        }
-
-
-                        var isHas = dfKunsWarnings.Count(df => df._SKU == ks._SKU) > 0;
-                        if (!isHas)
-                        {
-                            //在昆山预警里面,不是两个预警公共部分,需要到上海库存计算是否够卖
-                            var refShanghStoreItem = ShanghStoreWarnings.Where(r => r._SKU == ks._SKU).FirstOrDefault();
-                            if (refShanghStoreItem != null)
-                            {
-                                //库存足够,删掉,但是删掉之前加入特殊列表
-                                if (ks._特殊查看是否够卖 + refShanghStoreItem._特殊查看是否够卖 < 0)
-                                {
-                                    ks._特殊最终库存多余数量 = -(ks._特殊查看是否够卖 + refShanghStoreItem._特殊查看是否够卖);
-                                    if (ks._特殊查看是否够卖 + refShanghStoreItem._特殊查看是否够卖 > 0)
-                                        dfKunsWarnings.Add(ks);
-                                }
-                            }
-                        }
-                    });
-                    //加入特殊临时数据
-                    if (tmpWarnings.Count > 0)
-                    {
-                        dfKunsWarnings.AddRange(tmpWarnings);
-                    }
-
-
-                    //供应商唯一取值
-                    providers = dfKunsWarnings.Select(p => p._供应商).Where(p => !string.IsNullOrEmpty(p)).Distinct().OrderBy(p => p).ToList();
-                    //计算供应商采购金额
-                    providers.ForEach(pd =>
-                    {
-                        var curProviderSku = dfKunsWarnings.Where(w => w._供应商 == pd).ToList();
-                        var thisProviderAmount = curProviderSku.Select(c => c._采购金额).Sum();
-                        //小于分界,分给合肥
-                        if (thisProviderAmount <= diviAmount)
-                        {
-                            curProviderSku.ForEach(sk =>
-                            {
-                                var curOrder = new Order();
-                                curOrder._供应商 = pd;
-                                curOrder._SKU = sk._SKU;
-                                curOrder._Qty = sk._建议采购数量;
-                                curOrder._采购员 = Helper.ChangeLowerBuyer(sk._采购员);
-                                curOrder._含税单价 = sk._商品成本单价;
-                                curOrder._制单人 = sk._采购员;
-                                curOrder._对应供应商采购金额 = thisProviderAmount;
-                                orderList.Add(curOrder);
                             });
                         }
                         else
                         {
-                            //大于分界,保存不变
-                            curProviderSku.ForEach(sk =>
+                            _List昆山预警Sku唯一.ForEach(m =>
                             {
-                                var curOrder = new Order();
-                                curOrder._供应商 = pd;
-                                curOrder._SKU = sk._SKU;
-                                curOrder._Qty = sk._建议采购数量;
-                                curOrder._采购员 = sk._采购员;
-                                curOrder._含税单价 = sk._商品成本单价;
-                                curOrder._制单人 = curOrder._采购员;
-                                curOrder._对应供应商采购金额 = thisProviderAmount;
-                                orderList.Add(curOrder);
+                                if (!string.IsNullOrEmpty(m))
+                                {
+                                    int isCommonSku = _List上海默认昆山预警Sku唯一.Count(ss => ss == m);
+                                    if (isCommonSku > 0)
+                                        _List两个预警表共有Sku唯一.Add(m);
+                                }
                             });
                         }
-                    });
+                    }
+                    #endregion
+
+
+                    //遍历 上海默认昆山预警
+                    //1.把共有的sku的 采购建议(库存上限+库存下限...)相加起来
+                    //2.把独有的sku 进入昆山所有库存判断是否需要采购
+                    #region 遍历 上海默认昆山预警
+                    {
+                        _Im上海默认昆山预警.ForEach(cur预警Item =>
+                        {
+                            if (!string.IsNullOrEmpty(cur预警Item._SKU))
+                            {
+                                //共有的sku 采购建议(库存上限+库存下限...)相加起来
+                                if (_List两个预警表共有Sku唯一.Count(ss => ss == cur预警Item._SKU) > 0)
+                                {
+                                    var ref昆山SkuItem = _Im昆山预警.Where(kk => kk._SKU == cur预警Item._SKU).FirstOrDefault();
+                                    if (ref昆山SkuItem != null)
+                                    {
+                                        var needOrderItem = new Warning();
+                                        needOrderItem._SKU = cur预警Item._SKU;
+                                        needOrderItem._供应商 = cur预警Item._供应商;
+                                        needOrderItem._采购员 = cur预警Item._采购员;
+                                        needOrderItem._商品成本单价 = cur预警Item._商品成本单价;
+                                        needOrderItem._仓库 = cur预警Item._仓库;
+                                        needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库;
+                                        //要相加的部分
+                                        needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库 + cur预警Item._采购未入库;
+                                        needOrderItem._可用数量 = ref昆山SkuItem._可用数量 + cur预警Item._可用数量;
+                                        needOrderItem._库存上限 = ref昆山SkuItem._库存上限 + cur预警Item._库存上限;
+                                        needOrderItem._库存下限 = ref昆山SkuItem._库存下限 + cur预警Item._库存下限;
+                                        needOrderItem._缺货及未派单数量 = ref昆山SkuItem._缺货及未派单数量 + cur预警Item._缺货及未派单数量;
+                                        _最终需要采购的预警.Add(needOrderItem);
+                                    }
+                                }
+                                //独有的sku 进入昆山所有库存判断是否需要采购
+                                else
+                                {
+                                    //昆山所有库存没有该sku,是需要采购的,不用判断,直接加入 _最终需要采购的预警
+                                    var ref昆山库存SkuItem = _Im昆山库存.Where(cc => cc._SKU == cur预警Item._SKU).FirstOrDefault();
+                                    if (ref昆山库存SkuItem != null)
+                                    {
+                                        if (ref昆山库存SkuItem._建议采购数量 + cur预警Item._建议采购数量 > 0)
+                                        {
+                                            _最终需要采购的预警.Add(cur预警Item);
+                                        }
+                                        else
+                                        {
+                                            _Ex库存充足的预警.Add(cur预警Item);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _最终需要采购的预警.Add(cur预警Item);
+                                    }
+                                }
+                            }
+
+                        });
+                    }
+                    #endregion
+
+
+                    //遍历 昆山预警
+                    //1.把独有的sku 进入上海所有库存判断是否需要采购
+                    #region 遍历 昆山预警
+                    {
+                        _Im昆山预警.ForEach(cur预警Item =>
+                        {
+                            if (!string.IsNullOrEmpty(cur预警Item._SKU))
+                            {
+                                //共有的sku已经处理,这里只对独有的sku判断
+                                if (_List两个预警表共有Sku唯一.Count(ss => ss == cur预警Item._SKU) == 0)
+                                {
+                                    var ref上海库存SkuItem = _Im上海库存.Where(cc => cc._SKU == cur预警Item._SKU).FirstOrDefault();
+                                    if (ref上海库存SkuItem != null)
+                                    {
+                                        if (ref上海库存SkuItem._建议采购数量 + cur预警Item._建议采购数量 > 0)
+                                        {
+                                            _最终需要采购的预警.Add(cur预警Item);
+                                        }
+                                        else
+                                        {
+                                            _Ex库存充足的预警.Add(cur预警Item);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //如果这个独有的sku没有出现在上海库存,不用判断,直接加入 最终需要采购的预警
+                                        _最终需要采购的预警.Add(cur预警Item);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    #endregion
+
+
+                    //加入临时备货
+                    #region 加入临时备货
+                    {
+                        //临时备货里面可能会有和 _最终需要采购的预警里面相同的sku,这时候需要合并,否则直接添加
+                        var final需要采购sku唯一 = _最终需要采购的预警.Where(m=>!string.IsNullOrEmpty(m._SKU)).Select(ss => ss._SKU).Distinct().ToList();
+                        _Im临时备货.ForEach(cur预警Item =>
+                        {
+                            //共有sku
+                            var ref最终需要采购的预警Item = _最终需要采购的预警.Where(ss => ss._SKU == cur预警Item._SKU).FirstOrDefault();
+                            if (ref最终需要采购的预警Item != null)
+                            {
+                                ref最终需要采购的预警Item._缺货及未派单数量 += cur预警Item._缺货及未派单数量;
+                                _最终需要采购的预警.Add(ref最终需要采购的预警Item);
+                            }
+                            else
+                            {
+                                _最终需要采购的预警.Add(cur预警Item);
+                            }
+                        });
+                    }
+                    #endregion
+
+                    var _List供应商唯一 = _最终需要采购的预警.Select(p => p._供应商).Distinct().ToList();
+
+                    //计算采购金额,转换采购
+                    #region 计算采购金额,转换采购
+                    {
+                        _List供应商唯一.ForEach(strCur供应商 =>
+                        {
+                            var ref供应商预警Items = _最终需要采购的预警.Where(ss => ss._供应商 == strCur供应商).ToList();
+                            var ref供应商预警采购金额总计 = ref供应商预警Items.Select(ss => ss._采购金额).Sum();
+                            //小于分界,分给合肥
+                            if (ref供应商预警采购金额总计 <= _d订单金额)
+                            {
+                                ref供应商预警Items.ForEach(cur预警Item =>
+                                {
+                                    var curOrder = new Order();
+                                    curOrder._供应商 = strCur供应商;
+                                    curOrder._SKU = cur预警Item._SKU;
+                                    curOrder._Qty = cur预警Item._建议采购数量;
+                                    curOrder._采购员 = Helper.ChangeLowerBuyer(cur预警Item._采购员);
+                                    curOrder._含税单价 = cur预警Item._商品成本单价;
+                                    curOrder._制单人 = cur预警Item._采购员;
+                                    curOrder._对应供应商采购金额 = ref供应商预警采购金额总计;
+                                    _Ex采购需要采购订单.Add(curOrder);
+                                });
+                            }
+                            else
+                            {
+                                ref供应商预警Items.ForEach(cur预警Item =>
+                                {
+                                    var curOrder = new Order();
+                                    curOrder._供应商 = strCur供应商;
+                                    curOrder._SKU = cur预警Item._SKU;
+                                    curOrder._Qty = cur预警Item._建议采购数量;
+                                    curOrder._采购员 = cur预警Item._采购员;
+                                    curOrder._含税单价 = cur预警Item._商品成本单价;
+                                    curOrder._制单人 = cur预警Item._采购员;
+                                    curOrder._对应供应商采购金额 = ref供应商预警采购金额总计;
+                                    _Ex采购需要采购订单.Add(curOrder);
+                                });
+                            }
+
+
+
+                        });
+                    }
+                    #endregion
+
 
                     //计算完毕,开始导出数据
-                    ExportExcel(orderList, notdfKunsWarnings);
+                    ExportExcel(_Ex采购需要采购订单, _Ex库存充足的预警);
 
                 }, null);
+                #endregion
                 #endregion
             }
             catch (Exception ex)
@@ -516,7 +639,7 @@ namespace OrderAllot
                     sheet1.Cells[rowIdx, 1].Value = curOrder._SKU;
                     sheet1.Cells[rowIdx, 2].Value = curOrder._供应商;
                     sheet1.Cells[rowIdx, 3].Value = curOrder._采购员;
-                    sheet1.Cells[rowIdx, 4].Value = curOrder._特殊最终库存多余数量;
+                    sheet1.Cells[rowIdx, 4].Value = -curOrder._建议采购数量;
 
                 }
                 #endregion
