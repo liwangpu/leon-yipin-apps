@@ -53,15 +53,29 @@ namespace OrderAllot.Maps
         {
             get
             {
-                return _商品成本单价 * _建议采购数量;
+                return _商品成本单价 * _最终需要采购数量;
             }
         }
+
+        /// <summary>
+        /// 这个没有经转换,是最原始的建议采购数量,用来对比库存信息是否够卖信息
+        /// </summary>
         public double _建议采购数量
         {
             get
             {
-                var tmp = _库存上限 + _库存下限 - _可用数量 - _采购未入库 + _缺货及未派单数量;
-                return Helper.CalAmount(tmp);
+                return _库存上限 + _库存下限 - _可用数量 - _采购未入库 + _缺货及未派单数量;
+            }
+        }
+
+        /// <summary>
+        /// 经过转换的,是最终需要采购的数量
+        /// </summary>
+        public double _最终需要采购数量
+        {
+            get
+            {
+                return Helper.CalAmount(_建议采购数量);
             }
         }
     }

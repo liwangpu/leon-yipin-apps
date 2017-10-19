@@ -18,18 +18,20 @@ namespace OrderAllot
         {
             InitializeComponent();
 
-            txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\mm\上海-默认发货仓库昆山.xls";//默认昆山预警
-            txtUpKsYj.Text = @"C:\Users\Leon\Desktop\mm\昆山建议采购.xls";//昆山库存预警
-            txtUpKsKc.Text = @"C:\Users\Leon\Desktop\mm\昆山所有库存.xls";//昆山所有库存
-            txtUpSHKc.Text = @"C:\Users\Leon\Desktop\mm\上海所有库存.xls";//上海所有库存
-            txtUpTmp.Text = @"C:\Users\Leon\Desktop\mm\备货.xls";//临时备货
 
 
-            //txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\排除重复项\上海-默认昆山仓.xls";//默认昆山预警
-            //txtUpKsYj.Text = @"C:\Users\Leon\Desktop\排除重复项\昆山建议采购.xls";//昆山库存预警
-            //txtUpKsKc.Text = @"C:\Users\Leon\Desktop\排除重复项\昆山所有库存.xls";//昆山所有库存
-            //txtUpSHKc.Text = @"C:\Users\Leon\Desktop\排除重复项\上海所有库存.xls";//上海所有库存
-            //txtUpTmp.Text = @"C:\Users\Leon\Desktop\排除重复项\备货.xls";//临时备货
+            //txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\mm\上海-默认发货仓库昆山.xls";//默认昆山预警
+            //txtUpKsYj.Text = @"C:\Users\pulw\Desktop\mm\昆山建议采购.xls";//昆山库存预警
+            //txtUpKsKc.Text = @"C:\Users\pulw\Desktop\mm\昆山所有库存.xls";//昆山所有库存
+            //txtUpSHKc.Text = @"C:\Users\pulw\Desktop\mm\上海所有库存.xls";//上海所有库存
+            //txtUpTmp.Text = @"C:\Users\pulw\Desktop\mm\备货.xls";//临时备货
+
+
+            txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海-默认昆山仓.xls";//默认昆山预警
+            txtUpKsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山建议采购.xls";//昆山库存预警
+            txtUpKsKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山所有库存.xls";//昆山所有库存
+            txtUpSHKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海所有库存.xls";//上海所有库存
+            //txtUpTmp.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\备货.xls";//临时备货
 
         }
 
@@ -308,47 +310,56 @@ namespace OrderAllot
                         {
                             if (!string.IsNullOrEmpty(cur预警Item._SKU))
                             {
-                                //共有的sku 采购建议(库存上限+库存下限...)相加起来
-                                if (_List两个预警表共有Sku唯一.Count(ss => ss == cur预警Item._SKU) > 0)
+                                if (cur预警Item._SKU == "DNFA12A33")
                                 {
-                                    var ref昆山SkuItem = _Im昆山预警.Where(kk => kk._SKU == cur预警Item._SKU).FirstOrDefault();
-                                    if (ref昆山SkuItem != null)
-                                    {
-                                        var needOrderItem = new Warning();
-                                        needOrderItem._SKU = cur预警Item._SKU;
-                                        needOrderItem._供应商 = cur预警Item._供应商;
-                                        needOrderItem._采购员 = cur预警Item._采购员;
-                                        needOrderItem._商品成本单价 = cur预警Item._商品成本单价;
-                                        needOrderItem._仓库 = cur预警Item._仓库;
-                                        needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库;
-                                        //要相加的部分
-                                        needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库 + cur预警Item._采购未入库;
-                                        needOrderItem._可用数量 = ref昆山SkuItem._可用数量 + cur预警Item._可用数量;
-                                        needOrderItem._库存上限 = ref昆山SkuItem._库存上限 + cur预警Item._库存上限;
-                                        needOrderItem._库存下限 = ref昆山SkuItem._库存下限 + cur预警Item._库存下限;
-                                        needOrderItem._缺货及未派单数量 = ref昆山SkuItem._缺货及未派单数量 + cur预警Item._缺货及未派单数量;
-                                        _最终需要采购的预警.Add(needOrderItem);
-                                    }
+
                                 }
-                                //独有的sku 进入昆山所有库存判断是否需要采购
-                                else
+
+                                if (cur预警Item._建议采购数量 > 0)
                                 {
-                                    //昆山所有库存没有该sku,是需要采购的,不用判断,直接加入 _最终需要采购的预警
-                                    var ref昆山库存SkuItem = _Im昆山库存.Where(cc => cc._SKU == cur预警Item._SKU).FirstOrDefault();
-                                    if (ref昆山库存SkuItem != null)
+                                    //共有的sku 采购建议(库存上限+库存下限...)相加起来
+                                    if (_List两个预警表共有Sku唯一.Count(ss => ss == cur预警Item._SKU) > 0)
                                     {
-                                        if (ref昆山库存SkuItem._建议采购数量 + cur预警Item._建议采购数量 > 0)
+                                        var ref昆山SkuItem = _Im昆山预警.Where(kk => kk._SKU == cur预警Item._SKU).FirstOrDefault();
+                                        if (ref昆山SkuItem != null)
                                         {
-                                            _最终需要采购的预警.Add(cur预警Item);
+                                            var needOrderItem = new Warning();
+                                            needOrderItem._SKU = cur预警Item._SKU;
+                                            needOrderItem._供应商 = cur预警Item._供应商;
+                                            needOrderItem._采购员 = cur预警Item._采购员;
+                                            needOrderItem._商品成本单价 = cur预警Item._商品成本单价;
+                                            needOrderItem._仓库 = cur预警Item._仓库;
+                                            needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库;
+                                            //要相加的部分
+                                            needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库 + cur预警Item._采购未入库;
+                                            needOrderItem._可用数量 = ref昆山SkuItem._可用数量 + cur预警Item._可用数量;
+                                            needOrderItem._库存上限 = ref昆山SkuItem._库存上限 + cur预警Item._库存上限;
+                                            needOrderItem._库存下限 = ref昆山SkuItem._库存下限 + cur预警Item._库存下限;
+                                            needOrderItem._缺货及未派单数量 = ref昆山SkuItem._缺货及未派单数量 + cur预警Item._缺货及未派单数量;
+                                            _最终需要采购的预警.Add(needOrderItem);
+                                        }
+                                    }
+                                    //独有的sku 进入昆山所有库存判断是否需要采购
+                                    else
+                                    {
+                                        //昆山所有库存没有该sku,是需要采购的,不用判断,直接加入 _最终需要采购的预警
+                                        var ref昆山库存SkuItem = _Im昆山库存.Where(cc => cc._SKU == cur预警Item._SKU).FirstOrDefault();
+                                        if (ref昆山库存SkuItem != null)
+                                        {
+                                            if (ref昆山库存SkuItem._建议采购数量 + cur预警Item._建议采购数量 > 0)
+                                            {
+                                                _最终需要采购的预警.Add(cur预警Item);
+                                            }
+                                            else
+                                            {
+                                                //cur预警Item.
+                                                _Ex库存充足的预警.Add(cur预警Item);
+                                            }
                                         }
                                         else
                                         {
-                                            _Ex库存充足的预警.Add(cur预警Item);
+                                            _最终需要采购的预警.Add(cur预警Item);
                                         }
-                                    }
-                                    else
-                                    {
-                                        _最终需要采购的预警.Add(cur预警Item);
                                     }
                                 }
                             }
@@ -366,25 +377,32 @@ namespace OrderAllot
                         {
                             if (!string.IsNullOrEmpty(cur预警Item._SKU))
                             {
-                                //共有的sku已经处理,这里只对独有的sku判断
-                                if (_List两个预警表共有Sku唯一.Count(ss => ss == cur预警Item._SKU) == 0)
+                                //if (cur预警Item._SKU == "TKDA11A44-P")
+                                //{
+
+                                //}
+                                if (cur预警Item._建议采购数量 > 0)
                                 {
-                                    var ref上海库存SkuItem = _Im上海库存.Where(cc => cc._SKU == cur预警Item._SKU).FirstOrDefault();
-                                    if (ref上海库存SkuItem != null)
+                                    //共有的sku已经处理,这里只对独有的sku判断
+                                    if (_List两个预警表共有Sku唯一.Count(ss => ss == cur预警Item._SKU) == 0)
                                     {
-                                        if (ref上海库存SkuItem._建议采购数量 + cur预警Item._建议采购数量 > 0)
+                                        var ref上海库存SkuItem = _Im上海库存.Where(cc => cc._SKU == cur预警Item._SKU).FirstOrDefault();
+                                        if (ref上海库存SkuItem != null)
                                         {
-                                            _最终需要采购的预警.Add(cur预警Item);
+                                            if (ref上海库存SkuItem._建议采购数量 + cur预警Item._建议采购数量 > 0)
+                                            {
+                                                _最终需要采购的预警.Add(cur预警Item);
+                                            }
+                                            else
+                                            {
+                                                _Ex库存充足的预警.Add(cur预警Item);
+                                            }
                                         }
                                         else
                                         {
-                                            _Ex库存充足的预警.Add(cur预警Item);
+                                            //如果这个独有的sku没有出现在上海库存,不用判断,直接加入 最终需要采购的预警
+                                            _最终需要采购的预警.Add(cur预警Item);
                                         }
-                                    }
-                                    else
-                                    {
-                                        //如果这个独有的sku没有出现在上海库存,不用判断,直接加入 最终需要采购的预警
-                                        _最终需要采购的预警.Add(cur预警Item);
                                     }
                                 }
                             }
@@ -397,7 +415,7 @@ namespace OrderAllot
                     #region 加入临时备货
                     {
                         //临时备货里面可能会有和 _最终需要采购的预警里面相同的sku,这时候需要合并,否则直接添加
-                        var final需要采购sku唯一 = _最终需要采购的预警.Where(m=>!string.IsNullOrEmpty(m._SKU)).Select(ss => ss._SKU).Distinct().ToList();
+                        var final需要采购sku唯一 = _最终需要采购的预警.Where(m => !string.IsNullOrEmpty(m._SKU)).Select(ss => ss._SKU).Distinct().ToList();
                         _Im临时备货.ForEach(cur预警Item =>
                         {
                             //共有sku
@@ -432,7 +450,7 @@ namespace OrderAllot
                                     var curOrder = new Order();
                                     curOrder._供应商 = strCur供应商;
                                     curOrder._SKU = cur预警Item._SKU;
-                                    curOrder._Qty = cur预警Item._建议采购数量;
+                                    curOrder._Qty = cur预警Item._最终需要采购数量;
                                     curOrder._采购员 = Helper.ChangeLowerBuyer(cur预警Item._采购员);
                                     curOrder._含税单价 = cur预警Item._商品成本单价;
                                     curOrder._制单人 = cur预警Item._采购员;
@@ -447,7 +465,7 @@ namespace OrderAllot
                                     var curOrder = new Order();
                                     curOrder._供应商 = strCur供应商;
                                     curOrder._SKU = cur预警Item._SKU;
-                                    curOrder._Qty = cur预警Item._建议采购数量;
+                                    curOrder._Qty = cur预警Item._最终需要采购数量;
                                     curOrder._采购员 = cur预警Item._采购员;
                                     curOrder._含税单价 = cur预警Item._商品成本单价;
                                     curOrder._制单人 = cur预警Item._采购员;

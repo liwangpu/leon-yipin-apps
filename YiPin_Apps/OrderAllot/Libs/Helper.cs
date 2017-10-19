@@ -104,9 +104,14 @@ namespace OrderAllot.Libs
         #region CalAmount 计算建议采购数量
         public static double CalAmount(double orgAmount)
         {
+            if (orgAmount <= 0)
+            {
+                return orgAmount;
+            }
+
+
             var calAmount = 5.0;
             //小于5 ==>1
-
             if (orgAmount > 5 && orgAmount < 10)
             {
                 calAmount = 10;
