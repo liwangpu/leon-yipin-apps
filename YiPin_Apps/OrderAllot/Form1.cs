@@ -25,7 +25,8 @@ namespace OrderAllot
         }
         #endregion
 
-        private void btnUpload_Click(object sender, EventArgs e)
+        #region 上传上海库存预警
+        private void btnUpShangsYj_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
             OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
@@ -34,92 +35,187 @@ namespace OrderAllot
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
             {
-                txtUpload.Text = OpenFileDialog1.FileName;
-                btnAnalyze.Enabled = true;
+                txtUpShangsYj.Text = OpenFileDialog1.FileName;
             }
         }
+        #endregion
 
+        #region 上传昆山所有库存
+        private void btnUpKunsStore_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Title = "表格信息";//设置标题
+            OpenFileDialog1.Multiselect = false;
+            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                txtUpKunsStore.Text = OpenFileDialog1.FileName;
+            }
+        }
+        #endregion
+
+        #region 处理数据
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
             try
             {
                 #region 解析并计算
-                var diviAmount = Convert.ToDouble(NtxtAmount.Value);
-                var warningList = new List<Warning>();
-                var orderList = new List<Order>();
-                var devList = new List<Order>();//把开发单独分写成一个表格 
-                var providers = new List<string>();//供应商唯一队列
-                var excelPath = txtUpload.Text;
+                var d订单分配金额 = Convert.ToDouble(NtxtAmount.Value);
+                var _Im上海库存预警 = new List<Warning>();
+                var _Im昆山所有库存 = new List<Warning>();
+                var _List需要采购的预警 = new List<Warning>();
+                var _Ex采购订单分配 = new List<Order>();
+                var _Ex开发订单分配 = new List<Order>();//把开发单独分写成一个表格 
+                var str上海库存预警ExcelPath = txtUpShangsYj.Text;
+                var str昆山所有库存ExcelPath = txtUpKunsStore.Text;
+
+                #region 读取数据
                 var actRead = new Action(() =>
                 {
                     ShowMsg("开始读取表格数据");
-                    using (var excel = new ExcelQueryFactory(excelPath))
-                    {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
-                        {
-                            try
-                            {
-                                var tmp = from c in excel.Worksheet<Warning>(s)
-                                          select c;
-                                warningList.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
-                    }
-                });
 
+                    #region 读取上海库存预警
+                    if (!string.IsNullOrEmpty(str上海库存预警ExcelPath))
+                    {
+                        using (var excel = new ExcelQueryFactory(str上海库存预警ExcelPath))
+                        {
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
+                            {
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                              select c;
+                                    _Im上海库存预警.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
+                    }
+                    #endregion
+
+                    #region 读取昆山所有库存
+                    if (!string.IsNullOrEmpty(str昆山所有库存ExcelPath))
+                    {
+                        using (var excel = new ExcelQueryFactory(str上海库存预警ExcelPath))
+                        {
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
+                            {
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                              select c;
+                                    _Im昆山所有库存.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
+                    }
+                    #endregion
+
+                });
+                #endregion
+
+                #region 数据分析
                 actRead.BeginInvoke((obj) =>
                 {
                     ShowMsg("开始计算表格数据");
-                    //供应商唯一取值
-                    providers = warningList.Select(p => p._供应商).Where(p => !string.IsNullOrEmpty(p)).Distinct().OrderBy(p => p).ToList();
-                    //计算供应商采购金额
-                    providers.ForEach(pd =>
+
+                    //判断是否需要采购,如需要加入 _List需要采购的预警
+                    #region 判断是否需要采购
                     {
-                        var curProviderSku = warningList.Where(w => w._供应商 == pd).ToList();
-                        var thisProviderAmount = curProviderSku.Select(c => c._采购金额).Sum();
-                        //小于分界,分给合肥
-                        if (thisProviderAmount <= diviAmount)
+                        _Im上海库存预警.ForEach(cur库存预警Item =>
                         {
-                            curProviderSku.ForEach(sk =>
+                            if (!string.IsNullOrEmpty(cur库存预警Item._SKU))
                             {
-                                var curOrder = new Order();
-                                curOrder._供应商 = pd;
-                                curOrder._SKU = sk._SKU;
-                                curOrder._Qty = sk._建议采购数量;
-                                curOrder._采购员 = Helper.ChangeLowerBuyer(sk._采购员);
-                                curOrder._含税单价 = sk._商品成本单价;
-                                curOrder._制单人 = sk._采购员;
-                                curOrder._对应供应商采购金额 = thisProviderAmount;
-                                orderList.Add(curOrder);
-                            });
+                                if (cur库存预警Item._建议采购数量 > 0)
+                                {
+                                    var ref昆山库存Item = _Im昆山所有库存.Where(ss => ss._SKU == cur库存预警Item._SKU).FirstOrDefault();
+                                    if (ref昆山库存Item != null)
+                                    {
+                                        if (ref昆山库存Item._建议采购数量 + cur库存预警Item._建议采购数量 > 0)
+                                            _List需要采购的预警.Add(ref昆山库存Item);
+                                    }
+                                    else
+                                    {
+                                        //昆山没有该记录,直接采购
+                                        _List需要采购的预警.Add(ref昆山库存Item);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    #endregion
+
+
+                    ////供应商唯一取值
+                    var strProviderNames = _Im上海库存预警.Select(p => p._供应商).Distinct().OrderBy(p => p).ToList();
+
+                    #region 计算划分采购订单
+                    strProviderNames.ForEach(strCurProviderName =>
+                    {
+                        if (!string.IsNullOrEmpty(strCurProviderName))
+                        {
+                            var refCur供应商预警Items = _List需要采购的预警.Where(ss => ss._供应商 == strCurProviderName).ToList();
+                            var refCur供应商采购金额总计 = refCur供应商预警Items.Select(ss => ss._采购金额).Sum();
+                            //小于分界,分给合肥
+                            if (refCur供应商采购金额总计 <= d订单分配金额)
+                            {
+                                refCur供应商预警Items.ForEach(cur库存预警Item =>
+                                {
+                                    var curOrder = new Order();
+                                    curOrder._供应商 = strCurProviderName;
+                                    curOrder._SKU = cur库存预警Item._SKU;
+                                    curOrder._Qty = cur库存预警Item._最终需要采购数量;
+                                    curOrder._采购员 = Helper.ChangeLowerBuyer(cur库存预警Item._采购员);
+                                    curOrder._含税单价 = cur库存预警Item._商品成本单价;
+                                    curOrder._制单人 = cur库存预警Item._采购员;
+                                    curOrder._对应供应商采购金额 = refCur供应商采购金额总计;
+                                    if (Helper.IsBuyer(cur库存预警Item._采购员))
+                                        _Ex采购订单分配.Add(curOrder);
+                                    else
+                                        _Ex开发订单分配.Add(curOrder);
+                                });
+                            }
                         }
                         else
                         {
-                            //大于分界,保存不变
-                            curProviderSku.ForEach(sk =>
+                            //空白供应商,可能有不同的采购员,不需要转换
+                            var refCur供应商预警Items = _List需要采购的预警.Where(ss => string.IsNullOrEmpty(ss._供应商)).ToList();
+                            refCur供应商预警Items.ForEach(cur库存预警Item =>
                             {
                                 var curOrder = new Order();
-                                curOrder._供应商 = pd;
-                                curOrder._SKU = sk._SKU;
-                                curOrder._Qty = sk._建议采购数量;
-                                curOrder._采购员 = sk._采购员;
-                                curOrder._含税单价 = sk._商品成本单价;
-                                curOrder._制单人 = curOrder._采购员;
-                                curOrder._对应供应商采购金额 = thisProviderAmount;
-                                orderList.Add(curOrder);
+                                curOrder._供应商 = strCurProviderName;
+                                curOrder._SKU = cur库存预警Item._SKU;
+                                curOrder._Qty = cur库存预警Item._最终需要采购数量;
+                                curOrder._采购员 = cur库存预警Item._采购员;
+                                curOrder._含税单价 = cur库存预警Item._商品成本单价;
+                                curOrder._制单人 = cur库存预警Item._采购员;
+                                curOrder._对应供应商采购金额 = 0;
+                                if (Helper.IsBuyer(cur库存预警Item._采购员))
+                                    _Ex采购订单分配.Add(curOrder);
+                                else
+                                    _Ex开发订单分配.Add(curOrder);
                             });
                         }
                     });
+                    #endregion
+
 
                     //计算完毕,开始导出数据
-                    ExportExcel(orderList);
+                    ExportExcel(_Ex采购订单分配, _Ex开发订单分配);
 
                 }, null);
+                #endregion
+
                 #endregion
             }
             catch (Exception ex)
@@ -127,20 +223,19 @@ namespace OrderAllot
                 ShowMsg(ex.Message);
             }
         }
+        #endregion
 
         #region ExportExcel 导出Excel表格
         /// <summary>
         /// 导出Excel表格
         /// </summary>
-        /// <param name="orders"></param>
-        private void ExportExcel(List<Order> orders)
+        /// <param name="List采购订单"></param>
+        private void ExportExcel(List<Order> List采购订单, List<Order> List开发订单)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
             var buffer2 = new byte[0];
             var buffer3 = new byte[0];
-            var devOrder = new List<Order>();
-
 
             #region 订单分配
             using (ExcelPackage package = new ExcelPackage())
@@ -167,27 +262,17 @@ namespace OrderAllot
                 #endregion
 
                 #region 数据行
-                for (int idx = 0, rowIdx = 2, len = orders.Count; idx < len; idx++)
+                for (int idx = 0, rowIdx = 2, len = List采购订单.Count; idx < len; idx++, rowIdx++)
                 {
-                    var curOrder = orders[idx];
-                    if (Helper.IsBuyer(curOrder._制单人))
-                    {
-
-                        sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
-                        sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
-                        sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
-                        sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
-                        sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
-                        sheet1.Cells[rowIdx, 10].Value = "支付宝";
-                        sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
-                        //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
-
-                        rowIdx++;
-                    }
-                    else
-                    {
-                        devOrder.Add(curOrder);
-                    }
+                    var curOrder = List采购订单[idx];
+                    sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
+                    sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
+                    sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
+                    sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
+                    sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
+                    sheet1.Cells[rowIdx, 10].Value = "支付宝";
+                    sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
+                    //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
                 }
                 #endregion
 
@@ -202,6 +287,10 @@ namespace OrderAllot
                 var workbox = package.Workbook;
                 var sheet1 = workbox.Worksheets.Add("Sheet1");
 
+                var List采购开发订单 = new List<Order>();
+                List采购开发订单.AddRange(List采购订单);
+                List采购开发订单.AddRange(List开发订单);
+
                 #region 标题行
                 sheet1.Cells[1, 1].Value = "采购员";
                 sheet1.Cells[1, 2].Value = "订单量";
@@ -209,11 +298,11 @@ namespace OrderAllot
 
                 #region 数据行
                 var buyers = new List<string>();
-                buyers = orders.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList();
+                buyers = List采购开发订单.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList();
                 for (int idx = 0, len = buyers.Count, rowIdx = 2; idx < len; idx++, rowIdx++)
                 {
                     var curBuyerName = buyers[idx];
-                    var refOrders = orders.Where(m => m._采购员 == curBuyerName).ToList();
+                    var refOrders = List采购开发订单.Where(m => m._采购员 == curBuyerName).ToList();
                     var amount = refOrders.Select(m => m._供应商).Distinct().Count();
 
                     sheet1.Cells[rowIdx, 1].Value = curBuyerName;
@@ -250,9 +339,9 @@ namespace OrderAllot
                 #endregion
 
                 #region 数据行
-                for (int idx = 0, rowIdx = 2, len = devOrder.Count; idx < len; idx++, rowIdx++)
+                for (int idx = 0, rowIdx = 2, len = List开发订单.Count; idx < len; idx++, rowIdx++)
                 {
-                    var curOrder = devOrder[idx];
+                    var curOrder = List开发订单[idx];
                     sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
                     sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
                     sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
@@ -362,8 +451,5 @@ namespace OrderAllot
             }
         }
         #endregion
-
-
-
     }
 }
