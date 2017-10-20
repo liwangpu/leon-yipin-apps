@@ -27,10 +27,10 @@ namespace OrderAllot
             //txtUpTmp.Text = @"C:\Users\pulw\Desktop\mm\备货.xls";//临时备货
 
 
-            txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海-默认昆山仓.xls";//默认昆山预警
-            txtUpKsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山建议采购.xls";//昆山库存预警
-            txtUpKsKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山所有库存.xls";//昆山所有库存
-            txtUpSHKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海所有库存.xls";//上海所有库存
+            //txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海-默认昆山仓.xls";//默认昆山预警
+            //txtUpKsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山建议采购.xls";//昆山库存预警
+            //txtUpKsKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山所有库存.xls";//昆山所有库存
+            //txtUpSHKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海所有库存.xls";//上海所有库存
             //txtUpTmp.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\备货.xls";//临时备货
 
         }
@@ -40,7 +40,8 @@ namespace OrderAllot
         {
             //上传默认昆山预警订单
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
             OpenFileDialog1.Title = "表格信息";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
@@ -56,7 +57,8 @@ namespace OrderAllot
         {
             //昆山采购建议
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
             OpenFileDialog1.Title = "表格信息";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
@@ -72,7 +74,8 @@ namespace OrderAllot
         {
             //昆山所有库存
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
             OpenFileDialog1.Title = "表格信息";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
@@ -88,7 +91,8 @@ namespace OrderAllot
         {
             //上海所有库存
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
             OpenFileDialog1.Title = "表格信息";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
@@ -103,7 +107,8 @@ namespace OrderAllot
         private void btnUpTmp_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
             OpenFileDialog1.Title = "表格信息";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观

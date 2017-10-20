@@ -16,6 +16,10 @@ namespace OrderAllot
         public Form1()
         {
             InitializeComponent();
+
+            //txtUpShangsYj.Text = @"C:\Users\pulw\Desktop\aa - 副本\上海建议采购.xlsx";
+            //txtUpKunsStore.Text = @"C:\Users\pulw\Desktop\aa - 副本\昆山所有库存.xlsx";
+
         }
 
         #region Form1_Load
@@ -29,7 +33,8 @@ namespace OrderAllot
         private void btnUpShangsYj_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
             OpenFileDialog1.Title = "表格信息";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
@@ -44,7 +49,8 @@ namespace OrderAllot
         private void btnUpKunsStore_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
             OpenFileDialog1.Title = "表格信息";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
@@ -134,6 +140,12 @@ namespace OrderAllot
                     {
                         _Im上海库存预警.ForEach(cur库存预警Item =>
                         {
+                            //if (cur库存预警Item._SKU == "DNFA15A24")
+                            //{
+
+                            //}
+
+
                             if (!string.IsNullOrEmpty(cur库存预警Item._SKU))
                             {
                                 if (cur库存预警Item._建议采购数量 > 0)
@@ -176,6 +188,24 @@ namespace OrderAllot
                                     curOrder._SKU = cur库存预警Item._SKU;
                                     curOrder._Qty = cur库存预警Item._最终需要采购数量;
                                     curOrder._采购员 = Helper.ChangeLowerBuyer(cur库存预警Item._采购员);
+                                    curOrder._含税单价 = cur库存预警Item._商品成本单价;
+                                    curOrder._制单人 = cur库存预警Item._采购员;
+                                    curOrder._对应供应商采购金额 = refCur供应商采购金额总计;
+                                    if (Helper.IsBuyer(cur库存预警Item._采购员))
+                                        _Ex采购订单分配.Add(curOrder);
+                                    else
+                                        _Ex开发订单分配.Add(curOrder);
+                                });
+                            }
+                            else
+                            {
+                                refCur供应商预警Items.ForEach(cur库存预警Item =>
+                                {
+                                    var curOrder = new Order();
+                                    curOrder._供应商 = strCurProviderName;
+                                    curOrder._SKU = cur库存预警Item._SKU;
+                                    curOrder._Qty = cur库存预警Item._最终需要采购数量;
+                                    curOrder._采购员 = cur库存预警Item._采购员;
                                     curOrder._含税单价 = cur库存预警Item._商品成本单价;
                                     curOrder._制单人 = cur库存预警Item._采购员;
                                     curOrder._对应供应商采购金额 = refCur供应商采购金额总计;
