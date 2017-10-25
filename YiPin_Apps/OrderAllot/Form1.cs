@@ -17,8 +17,8 @@ namespace OrderAllot
         {
             InitializeComponent();
 
-            //txtUpShangsYj.Text = @"C:\Users\pulw\Desktop\aa - 副本\上海建议采购.xlsx";
-            //txtUpKunsStore.Text = @"C:\Users\pulw\Desktop\aa - 副本\昆山所有库存.xlsx";
+            //txtUpShangsYj.Text = @"C:\Users\pulw\Desktop\订单分配\上海建议采购.xlsx";
+            //txtUpKunsStore.Text = @"C:\Users\pulw\Desktop\订单分配\昆山所有库存.xlsx";
 
         }
 

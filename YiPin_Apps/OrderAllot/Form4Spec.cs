@@ -334,13 +334,13 @@ namespace OrderAllot
                                             needOrderItem._采购员 = cur预警Item._采购员;
                                             needOrderItem._商品成本单价 = cur预警Item._商品成本单价;
                                             needOrderItem._仓库 = cur预警Item._仓库;
-                                            needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库;
+                                            needOrderItem.org采购未入库 = ref昆山SkuItem._采购未入库.ToString();
                                             //要相加的部分
-                                            needOrderItem._采购未入库 = ref昆山SkuItem._采购未入库 + cur预警Item._采购未入库;
+                                            needOrderItem.org采购未入库 = (ref昆山SkuItem._采购未入库 + cur预警Item._采购未入库).ToString();
                                             needOrderItem._可用数量 = ref昆山SkuItem._可用数量 + cur预警Item._可用数量;
                                             needOrderItem._库存上限 = ref昆山SkuItem._库存上限 + cur预警Item._库存上限;
                                             needOrderItem._库存下限 = ref昆山SkuItem._库存下限 + cur预警Item._库存下限;
-                                            needOrderItem._缺货及未派单数量 = ref昆山SkuItem._缺货及未派单数量 + cur预警Item._缺货及未派单数量;
+                                            needOrderItem.org缺货及未派单数量 = (ref昆山SkuItem._缺货及未派单数量 + cur预警Item._缺货及未派单数量).ToString();
                                             _最终需要采购的预警.Add(needOrderItem);
                                         }
                                     }
@@ -427,7 +427,9 @@ namespace OrderAllot
                             var ref最终需要采购的预警Item = _最终需要采购的预警.Where(ss => ss._SKU == cur预警Item._SKU).FirstOrDefault();
                             if (ref最终需要采购的预警Item != null)
                             {
-                                ref最终需要采购的预警Item._缺货及未派单数量 += cur预警Item._缺货及未派单数量;
+                                var og = string.IsNullOrEmpty(ref最终需要采购的预警Item.org缺货及未派单数量) ? 0.0 : Convert.ToDouble(ref最终需要采购的预警Item._缺货及未派单数量);
+                                var ogn = string.IsNullOrEmpty(cur预警Item.org缺货及未派单数量) ? 0.0 : Convert.ToDouble(cur预警Item._缺货及未派单数量);
+                                ref最终需要采购的预警Item.org缺货及未派单数量 = (og + ogn).ToString();
                                 _最终需要采购的预警.Add(ref最终需要采购的预警Item);
                             }
                             else

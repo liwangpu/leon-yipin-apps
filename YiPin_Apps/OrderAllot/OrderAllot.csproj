@@ -122,6 +122,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Libs\Helper.cs" />
+    <Compile Include="Libs\MappingCore.cs" />
     <Compile Include="Maps\BuyersProvider.cs" />
     <Compile Include="Maps\OrderState.cs" />
     <Compile Include="Maps\Warning.cs" />
