@@ -775,6 +775,11 @@ namespace OrderAllot
         }
         #endregion
 
+        private void Form4Spec_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
 
 

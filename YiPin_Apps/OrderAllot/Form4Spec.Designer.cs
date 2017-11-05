@@ -312,6 +312,7 @@
             this.MinimizeBox = false;
             this.Name = "Form4Spec";
             this.Text = "订单分配(排除重复项)-临时备货";
+            this.Load += new System.EventHandler(this.Form4Spec_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).EndInit();

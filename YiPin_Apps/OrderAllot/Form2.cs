@@ -54,7 +54,6 @@ namespace OrderAllot
                                 var tmp = from c in excel.Worksheet<OrderState>(s)
                                           select c;
                                 orderStateList.AddRange(tmp);
-                                var a = 1;
                             }
                             catch (Exception ex)
                             {
