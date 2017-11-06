@@ -1512,7 +1512,7 @@ namespace OrderAllot
                     _D1_J1_Amount = tmp;
                     _D1_J2_Amount = tmp * 2;
                     var maxAmount = grade1Purchases.Max(x => x._总金额);
-                    _D1_J4_Amount = GetInteger((maxAmount - tmp) / 2) + tmp;
+                    _D1_J4_Amount = GetInteger((maxAmount - _D1_J3_Amount) / 2) + _D1_J3_Amount;
                     _D1_J5_Amount = maxAmount;
                 }
 
@@ -1524,7 +1524,7 @@ namespace OrderAllot
                     _D2_J1_Amount = tmp;
                     _D2_J2_Amount = tmp * 2;
                     var maxAmount = grade2Purchases.Max(x => x._总金额);
-                    _D2_J4_Amount = GetInteger((maxAmount - tmp) / 2) + tmp;
+                    _D2_J4_Amount = GetInteger((maxAmount - _D2_J3_Amount) / 2) + _D2_J3_Amount;
                     _D2_J5_Amount = maxAmount;
                 }
 
@@ -1536,7 +1536,7 @@ namespace OrderAllot
                     _D3_J1_Amount = tmp;
                     _D3_J2_Amount = tmp * 2;
                     var maxAmount = grade3Purchases.Max(x => x._总金额);
-                    _D3_J4_Amount = GetInteger((maxAmount - tmp) / 2) + tmp;
+                    _D3_J4_Amount = GetInteger((maxAmount - _D3_J3_Amount) / 2) + _D3_J3_Amount;
                     _D3_J5_Amount = maxAmount;
                 }
 
@@ -1548,7 +1548,7 @@ namespace OrderAllot
                     _D4_J1_Amount = tmp;
                     _D4_J2_Amount = tmp * 2;
                     var maxAmount = grade4Purchases.Max(x => x._总金额);
-                    _D4_J4_Amount = GetInteger((maxAmount - tmp) / 2) + tmp;
+                    _D4_J4_Amount = GetInteger((maxAmount - _D4_J3_Amount) / 2) + _D4_J3_Amount;
                     _D4_J5_Amount = maxAmount;
                 }
 
@@ -1560,7 +1560,7 @@ namespace OrderAllot
                     _D5_J1_Amount = tmp;
                     _D5_J2_Amount = tmp * 2;
                     var maxAmount = grade5Purchases.Max(x => x._总金额);
-                    _D5_J4_Amount = GetInteger((maxAmount - tmp) / 2) + tmp;
+                    _D5_J4_Amount = GetInteger((maxAmount - _D5_J3_Amount) / 2) + _D5_J3_Amount;
                     _D5_J5_Amount = maxAmount;
                 }
             }

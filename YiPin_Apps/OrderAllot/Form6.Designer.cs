@@ -41,9 +41,12 @@
             this.btnRefreshConfig = new System.Windows.Forms.Button();
             this.ntxtD5 = new System.Windows.Forms.NumericUpDown();
             this.ntxtD4 = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.ntxtAward = new System.Windows.Forms.NumericUpDown();
             this.ntxtJDiff = new System.Windows.Forms.NumericUpDown();
             this.ntxtBaseDDif = new System.Windows.Forms.NumericUpDown();
             this.ntxtBaseD3 = new System.Windows.Forms.NumericUpDown();
@@ -119,20 +122,17 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.ntxtAward = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseDDif)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -367,6 +367,24 @@
             0,
             0});
             // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(641, 178);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(11, 12);
+            this.label18.TabIndex = 0;
+            this.label18.Text = "%";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(492, 178);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(77, 12);
+            this.label17.TabIndex = 0;
+            this.label17.Text = "制单奖励比率";
+            // 
             // label38
             // 
             this.label38.AutoSize = true;
@@ -393,6 +411,24 @@
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 0;
             this.label8.Text = "第五档";
+            // 
+            // ntxtAward
+            // 
+            this.ntxtAward.DecimalPlaces = 2;
+            this.ntxtAward.Location = new System.Drawing.Point(575, 176);
+            this.ntxtAward.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtAward.Name = "ntxtAward";
+            this.ntxtAward.Size = new System.Drawing.Size(60, 21);
+            this.ntxtAward.TabIndex = 1;
+            this.ntxtAward.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             // 
             // ntxtJDiff
             // 
@@ -1120,42 +1156,6 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "第一档";
             // 
-            // ntxtAward
-            // 
-            this.ntxtAward.DecimalPlaces = 2;
-            this.ntxtAward.Location = new System.Drawing.Point(575, 176);
-            this.ntxtAward.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.ntxtAward.Name = "ntxtAward";
-            this.ntxtAward.Size = new System.Drawing.Size(60, 21);
-            this.ntxtAward.TabIndex = 1;
-            this.ntxtAward.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(492, 178);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(77, 12);
-            this.label17.TabIndex = 0;
-            this.label17.Text = "制单奖励比率";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(641, 178);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(11, 12);
-            this.label18.TabIndex = 0;
-            this.label18.Text = "%";
-            // 
             // Form6
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1163,6 +1163,8 @@
             this.ClientSize = new System.Drawing.Size(736, 469);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(752, 507);
             this.Name = "Form6";
             this.Text = "订单奖励计算";
             this.Load += new System.EventHandler(this.Form6_Load);
@@ -1172,13 +1174,13 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseDDif)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).EndInit();
             this.ResumeLayout(false);
 
         }
