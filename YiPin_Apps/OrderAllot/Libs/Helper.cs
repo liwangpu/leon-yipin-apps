@@ -37,6 +37,12 @@ namespace OrderAllot.Libs
             buyers.Add("苏苗雨");
             buyers.Add("王素素");
             buyers.Add("李曼曼");
+            buyers.Add("陈春梦");
+            buyers.Add("周晓悦");
+            buyers.Add("袁国梁");
+            buyers.Add("吴海燕");
+            buyers.Add("吴倩");
+            buyers.Add("韩丽敏");
             return buyers;
         }
         #endregion
@@ -68,13 +74,13 @@ namespace OrderAllot.Libs
             switch (orgBuyerName)
             {
                 case "毕玉":
-                    newBuyerName = "李曼曼";
+                    newBuyerName = "韩丽敏";
                     break;
                 case "鲍祝平":
                     newBuyerName = "王素素";
                     break;
                 case "黄妍妍":
-                    newBuyerName = "曹晨晨";
+                    newBuyerName = "吴倩";
                     break;
                 case "潘明媛":
                     newBuyerName = "侯春喜";
@@ -89,7 +95,7 @@ namespace OrderAllot.Libs
                     newBuyerName = "苏苗雨";
                     break;
                 case "王思雅":
-                    newBuyerName = "苏苗雨";
+                    newBuyerName = "袁国梁";
                     break;
                 case "王梦梦":
                     newBuyerName = "吴海燕";

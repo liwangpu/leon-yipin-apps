@@ -118,7 +118,6 @@ namespace OrderAllot
             }
             set
             {
-                lbBaseD1.Text = value.ToString();
                 v_D1_Base = value;
             }
         }
@@ -135,7 +134,6 @@ namespace OrderAllot
             }
             set
             {
-                lbBaseD2.Text = value.ToString();
                 v_D2_Base = value;
             }
         }
@@ -152,7 +150,6 @@ namespace OrderAllot
             }
             set
             {
-                ntxtBaseD3.Value = value;
                 v_D3_Base = value;
             }
         }
@@ -169,7 +166,6 @@ namespace OrderAllot
             }
             set
             {
-                lbBaseD4.Text = value.ToString();
                 v_D4_Base = value;
             }
         }
@@ -186,7 +182,6 @@ namespace OrderAllot
             }
             set
             {
-                lbBaseD5.Text = value.ToString();
                 v_D5_Base = value;
             }
         }
@@ -1432,7 +1427,7 @@ namespace OrderAllot
                 ShowMsg("奖励计算完毕,准备导出");
                 Export(result.OrderByDescending(x => x.IsBuyer).ToList());
             }, null);
-        } 
+        }
         #endregion
 
         /**************** common ****************/
@@ -1441,7 +1436,7 @@ namespace OrderAllot
         private void RefreshConfig()
         {
             _D_Base_Dif = ntxtBaseDDif.Value;
-            _D3_Base = ntxtBaseD3.Value;
+
             _TransferRate = ntxtAward.Value != 0 ? ntxtAward.Value / 100 : 0;
 
             _D1_SKUAmount = ntxtD1.Value;
@@ -1451,10 +1446,11 @@ namespace OrderAllot
             _D5_SKUAmount = ntxtD5.Value;
 
             #region 刷新档次基数差
-            _D1_Base = _D3_Base - _D_Base_Dif * 2;
-            _D2_Base = _D3_Base - _D_Base_Dif * 1;
-            _D4_Base = _D3_Base + _D_Base_Dif * 1;
-            _D5_Base = _D3_Base + _D_Base_Dif * 2;
+            _D1_Base = ntxtBaseD1.Value;
+            _D2_Base = ntxtBaseD2.Value;
+            _D3_Base = ntxtBaseD3.Value;
+            _D4_Base = ntxtBaseD4.Value;
+            _D5_Base = ntxtBaseD5.Value;
             #endregion
 
             #region 第1档各个阶段
@@ -1496,7 +1492,7 @@ namespace OrderAllot
             _D5_J4 = _D5_J3 + _DJDiff * 1;
             _D5_J5 = _D5_J3 + _DJDiff * 2;
             #endregion
-        } 
+        }
         #endregion
 
         #region 刷新奖励金额配置
@@ -1564,7 +1560,7 @@ namespace OrderAllot
                     _D5_J5_Amount = maxAmount;
                 }
             }
-        } 
+        }
         #endregion
 
         #region 导出结果表格
@@ -1722,7 +1718,7 @@ namespace OrderAllot
                     ShowMsg("表格生成完毕");
                 }
             }, null);
-        } 
+        }
         #endregion
 
         #region InvokeMainForm 调用主线程
@@ -1773,7 +1769,7 @@ namespace OrderAllot
         private static decimal GetInteger(decimal dou)
         {
             return Math.Round(dou, 2);
-        } 
+        }
         #endregion
 
     }

@@ -66,7 +66,6 @@
             this.lbD1_J2 = new System.Windows.Forms.Label();
             this.lbD1_J1_Amount = new System.Windows.Forms.Label();
             this.lbD1_J1 = new System.Windows.Forms.Label();
-            this.lbBaseD1 = new System.Windows.Forms.Label();
             this.lbD5_J3_Amount = new System.Windows.Forms.Label();
             this.lbD5_J3 = new System.Windows.Forms.Label();
             this.lbD5_J5_Amount = new System.Windows.Forms.Label();
@@ -77,7 +76,6 @@
             this.lbD5_J2 = new System.Windows.Forms.Label();
             this.lbD5_J1_Amount = new System.Windows.Forms.Label();
             this.lbD5_J1 = new System.Windows.Forms.Label();
-            this.lbBaseD5 = new System.Windows.Forms.Label();
             this.lbD4_J3_Amount = new System.Windows.Forms.Label();
             this.lbD4_J3 = new System.Windows.Forms.Label();
             this.lbD4_J5_Amount = new System.Windows.Forms.Label();
@@ -88,7 +86,6 @@
             this.lbD4_J2 = new System.Windows.Forms.Label();
             this.lbD4_J1_Amount = new System.Windows.Forms.Label();
             this.lbD4_J1 = new System.Windows.Forms.Label();
-            this.lbBaseD4 = new System.Windows.Forms.Label();
             this.lbD3_J5_Amount = new System.Windows.Forms.Label();
             this.lbD3_J5 = new System.Windows.Forms.Label();
             this.lbD3_J4_Amount = new System.Windows.Forms.Label();
@@ -108,7 +105,6 @@
             this.lbD2_J2 = new System.Windows.Forms.Label();
             this.lbD2_J1_Amount = new System.Windows.Forms.Label();
             this.lbD2_J1 = new System.Windows.Forms.Label();
-            this.lbBaseD2 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -122,6 +118,10 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.ntxtBaseD1 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtBaseD2 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtBaseD4 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtBaseD5 = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD5)).BeginInit();
@@ -133,6 +133,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -210,6 +214,10 @@
             this.groupBox2.Controls.Add(this.ntxtAward);
             this.groupBox2.Controls.Add(this.ntxtJDiff);
             this.groupBox2.Controls.Add(this.ntxtBaseDDif);
+            this.groupBox2.Controls.Add(this.ntxtBaseD5);
+            this.groupBox2.Controls.Add(this.ntxtBaseD4);
+            this.groupBox2.Controls.Add(this.ntxtBaseD2);
+            this.groupBox2.Controls.Add(this.ntxtBaseD1);
             this.groupBox2.Controls.Add(this.ntxtBaseD3);
             this.groupBox2.Controls.Add(this.ntxtD3);
             this.groupBox2.Controls.Add(this.label7);
@@ -227,7 +235,6 @@
             this.groupBox2.Controls.Add(this.lbD1_J2);
             this.groupBox2.Controls.Add(this.lbD1_J1_Amount);
             this.groupBox2.Controls.Add(this.lbD1_J1);
-            this.groupBox2.Controls.Add(this.lbBaseD1);
             this.groupBox2.Controls.Add(this.lbD5_J3_Amount);
             this.groupBox2.Controls.Add(this.lbD5_J3);
             this.groupBox2.Controls.Add(this.lbD5_J5_Amount);
@@ -238,7 +245,6 @@
             this.groupBox2.Controls.Add(this.lbD5_J2);
             this.groupBox2.Controls.Add(this.lbD5_J1_Amount);
             this.groupBox2.Controls.Add(this.lbD5_J1);
-            this.groupBox2.Controls.Add(this.lbBaseD5);
             this.groupBox2.Controls.Add(this.lbD4_J3_Amount);
             this.groupBox2.Controls.Add(this.lbD4_J3);
             this.groupBox2.Controls.Add(this.lbD4_J5_Amount);
@@ -249,7 +255,6 @@
             this.groupBox2.Controls.Add(this.lbD4_J2);
             this.groupBox2.Controls.Add(this.lbD4_J1_Amount);
             this.groupBox2.Controls.Add(this.lbD4_J1);
-            this.groupBox2.Controls.Add(this.lbBaseD4);
             this.groupBox2.Controls.Add(this.lbD3_J5_Amount);
             this.groupBox2.Controls.Add(this.lbD3_J5);
             this.groupBox2.Controls.Add(this.lbD3_J4_Amount);
@@ -269,7 +274,6 @@
             this.groupBox2.Controls.Add(this.lbD2_J2);
             this.groupBox2.Controls.Add(this.lbD2_J1_Amount);
             this.groupBox2.Controls.Add(this.lbD2_J1);
-            this.groupBox2.Controls.Add(this.lbBaseD2);
             this.groupBox2.Controls.Add(this.label16);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.label27);
@@ -402,6 +406,7 @@
             this.label14.Size = new System.Drawing.Size(65, 12);
             this.label14.TabIndex = 0;
             this.label14.Text = "档次基数差";
+            this.label14.Visible = false;
             // 
             // label8
             // 
@@ -465,6 +470,7 @@
             0,
             0,
             65536});
+            this.ntxtBaseDDif.Visible = false;
             // 
             // ntxtBaseD3
             // 
@@ -652,15 +658,6 @@
             this.lbD1_J1.TabIndex = 0;
             this.lbD1_J1.Text = "0";
             // 
-            // lbBaseD1
-            // 
-            this.lbBaseD1.AutoSize = true;
-            this.lbBaseD1.Location = new System.Drawing.Point(139, 37);
-            this.lbBaseD1.Name = "lbBaseD1";
-            this.lbBaseD1.Size = new System.Drawing.Size(11, 12);
-            this.lbBaseD1.TabIndex = 0;
-            this.lbBaseD1.Text = "0";
-            // 
             // lbD5_J3_Amount
             // 
             this.lbD5_J3_Amount.AutoSize = true;
@@ -751,15 +748,6 @@
             this.lbD5_J1.TabIndex = 0;
             this.lbD5_J1.Text = "0";
             // 
-            // lbBaseD5
-            // 
-            this.lbBaseD5.AutoSize = true;
-            this.lbBaseD5.Location = new System.Drawing.Point(139, 145);
-            this.lbBaseD5.Name = "lbBaseD5";
-            this.lbBaseD5.Size = new System.Drawing.Size(11, 12);
-            this.lbBaseD5.TabIndex = 0;
-            this.lbBaseD5.Text = "0";
-            // 
             // lbD4_J3_Amount
             // 
             this.lbD4_J3_Amount.AutoSize = true;
@@ -849,15 +837,6 @@
             this.lbD4_J1.Size = new System.Drawing.Size(11, 12);
             this.lbD4_J1.TabIndex = 0;
             this.lbD4_J1.Text = "0";
-            // 
-            // lbBaseD4
-            // 
-            this.lbBaseD4.AutoSize = true;
-            this.lbBaseD4.Location = new System.Drawing.Point(139, 118);
-            this.lbBaseD4.Name = "lbBaseD4";
-            this.lbBaseD4.Size = new System.Drawing.Size(11, 12);
-            this.lbBaseD4.TabIndex = 0;
-            this.lbBaseD4.Text = "0";
             // 
             // lbD3_J5_Amount
             // 
@@ -1030,15 +1009,6 @@
             this.lbD2_J1.TabIndex = 0;
             this.lbD2_J1.Text = "0";
             // 
-            // lbBaseD2
-            // 
-            this.lbBaseD2.AutoSize = true;
-            this.lbBaseD2.Location = new System.Drawing.Point(139, 64);
-            this.lbBaseD2.Name = "lbBaseD2";
-            this.lbBaseD2.Size = new System.Drawing.Size(11, 12);
-            this.lbBaseD2.TabIndex = 0;
-            this.lbBaseD2.Text = "0";
-            // 
             // label16
             // 
             this.label16.AutoSize = true;
@@ -1156,6 +1126,58 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "第一档";
             // 
+            // ntxtBaseD1
+            // 
+            this.ntxtBaseD1.DecimalPlaces = 2;
+            this.ntxtBaseD1.Location = new System.Drawing.Point(141, 35);
+            this.ntxtBaseD1.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD1.Name = "ntxtBaseD1";
+            this.ntxtBaseD1.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD1.TabIndex = 1;
+            // 
+            // ntxtBaseD2
+            // 
+            this.ntxtBaseD2.DecimalPlaces = 2;
+            this.ntxtBaseD2.Location = new System.Drawing.Point(141, 62);
+            this.ntxtBaseD2.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD2.Name = "ntxtBaseD2";
+            this.ntxtBaseD2.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD2.TabIndex = 1;
+            // 
+            // ntxtBaseD4
+            // 
+            this.ntxtBaseD4.DecimalPlaces = 2;
+            this.ntxtBaseD4.Location = new System.Drawing.Point(141, 118);
+            this.ntxtBaseD4.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD4.Name = "ntxtBaseD4";
+            this.ntxtBaseD4.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD4.TabIndex = 1;
+            // 
+            // ntxtBaseD5
+            // 
+            this.ntxtBaseD5.DecimalPlaces = 2;
+            this.ntxtBaseD5.Location = new System.Drawing.Point(141, 143);
+            this.ntxtBaseD5.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD5.Name = "ntxtBaseD5";
+            this.ntxtBaseD5.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD5.TabIndex = 1;
+            // 
             // Form6
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1181,6 +1203,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1205,10 +1231,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown ntxtBaseD3;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label lbBaseD1;
-        private System.Windows.Forms.Label lbBaseD5;
-        private System.Windows.Forms.Label lbBaseD4;
-        private System.Windows.Forms.Label lbBaseD2;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.NumericUpDown ntxtBaseDDif;
         private System.Windows.Forms.Label lbD1_J3;
@@ -1281,5 +1303,9 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.NumericUpDown ntxtAward;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.NumericUpDown ntxtBaseD5;
+        private System.Windows.Forms.NumericUpDown ntxtBaseD4;
+        private System.Windows.Forms.NumericUpDown ntxtBaseD2;
+        private System.Windows.Forms.NumericUpDown ntxtBaseD1;
     }
 }
