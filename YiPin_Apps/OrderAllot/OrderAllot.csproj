@@ -127,7 +127,6 @@
     <Compile Include="FormCore.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Libs\Helper.cs" />
     <Compile Include="Libs\MappingCore.cs" />
     <Compile Include="Maps\BuyersProvider.cs" />
     <Compile Include="Maps\OrderState.cs" />
@@ -193,6 +192,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLibs\CommonLibs.csproj">
+      <Project>{a1249099-ae74-4c44-ae37-bf54e8875086}</Project>
+      <Name>CommonLibs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

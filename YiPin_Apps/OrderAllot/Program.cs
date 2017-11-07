@@ -21,7 +21,7 @@ namespace OrderAllot
             //Application.Run(new Form4());
             //Application.Run(new Form4Spec());//订单分配(排除重复项)
             //Application.Run(new Form5());//延时报表
-            Application.Run(new Form6());//计算工资
+            Application.Run(new Form6());//订单奖励计算
         }
     }
 }

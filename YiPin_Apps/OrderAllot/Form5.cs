@@ -85,56 +85,65 @@ namespace OrderAllot
                 var actRead = new Action(() =>
                 {
                     ShowMsg("开始读取表格数据");
-                    using (var excel = new ExcelQueryFactory(shExcelPath))
+                    if (!string.IsNullOrEmpty(shExcelPath))
                     {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
+                        using (var excel = new ExcelQueryFactory(shExcelPath))
                         {
-                            try
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
                             {
-                                var tmp = from c in excel.Worksheet<_Form5延时报表>(s)
-                                          select c;
-                                shRpList.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<_Form5延时报表>(s)
+                                              select c;
+                                    shRpList.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
                     }
-                    using (var excel = new ExcelQueryFactory(ksExcelPath))
+                    if (!string.IsNullOrEmpty(ksExcelPath))
                     {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
+                        using (var excel = new ExcelQueryFactory(ksExcelPath))
                         {
-                            try
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
                             {
-                                var tmp = from c in excel.Worksheet<_Form5延时报表>(s)
-                                          select c;
-                                ksRpList.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<_Form5延时报表>(s)
+                                              select c;
+                                    ksRpList.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
                     }
-                    using (var excel = new ExcelQueryFactory(quehExcelPath))
+                    if (!string.IsNullOrEmpty(quehExcelPath))
                     {
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
+                        using (var excel = new ExcelQueryFactory(quehExcelPath))
                         {
-                            try
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
                             {
-                                var tmp = from c in excel.Worksheet<_Form5缺货延时报表判断>(s)
-                                          select c;
-                                quehList.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<_Form5缺货延时报表判断>(s)
+                                              select c;
+                                    quehList.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
                     }
 
                 });
