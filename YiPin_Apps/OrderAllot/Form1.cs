@@ -108,7 +108,7 @@ namespace OrderAllot
                     #region 读取昆山所有库存
                     if (!string.IsNullOrEmpty(str昆山所有库存ExcelPath))
                     {
-                        using (var excel = new ExcelQueryFactory(str上海库存预警ExcelPath))
+                        using (var excel = new ExcelQueryFactory(str昆山所有库存ExcelPath))
                         {
                             var sheetNames = excel.GetWorksheetNames().ToList();
                             sheetNames.ForEach(s =>
@@ -141,7 +141,7 @@ namespace OrderAllot
                     {
                         _Im上海库存预警.ForEach(cur库存预警Item =>
                         {
-                            //if (cur库存预警Item._SKU == "DNFA15A24")
+                            //if (cur库存预警Item._SKU == "DNFK5K72-BL")
                             //{
 
                             //}
@@ -155,15 +155,34 @@ namespace OrderAllot
                                     if (ref昆山库存Item != null)
                                     {
                                         if (ref昆山库存Item._建议采购数量 + cur库存预警Item._建议采购数量 > 0)
-                                            _List需要采购的预警.Add(ref昆山库存Item);
+                                        {
+                                            //需要把两个相加起来
+                                            var needOrderItem = new Warning();
+                                            needOrderItem._SKU = cur库存预警Item._SKU;
+                                            needOrderItem._供应商 = cur库存预警Item._供应商;
+                                            needOrderItem._采购员 = cur库存预警Item._采购员;
+                                            needOrderItem._商品成本单价 = cur库存预警Item._商品成本单价;
+                                            needOrderItem._仓库 = cur库存预警Item._仓库;
+                                            //要相加的部分
+                                            needOrderItem.org采购未入库 = (ref昆山库存Item._采购未入库 + cur库存预警Item._采购未入库).ToString();
+                                            needOrderItem._可用数量 = ref昆山库存Item._可用数量 + cur库存预警Item._可用数量;
+                                            needOrderItem._库存上限 = ref昆山库存Item._库存上限 + cur库存预警Item._库存上限;
+                                            needOrderItem._库存下限 = ref昆山库存Item._库存下限 + cur库存预警Item._库存下限;
+                                            needOrderItem.org缺货及未派单数量 = (ref昆山库存Item._缺货及未派单数量 + cur库存预警Item._缺货及未派单数量).ToString();
+                                            _List需要采购的预警.Add(needOrderItem);
+                                        }
                                     }
                                     else
                                     {
                                         //昆山没有该记录,直接采购
-                                        _List需要采购的预警.Add(ref昆山库存Item);
+                                        _List需要采购的预警.Add(cur库存预警Item);
                                     }
                                 }
                             }
+
+
+
+
                         });
                     }
                     #endregion

@@ -28,10 +28,10 @@ namespace OrderAllot
             //txtUpTmp.Text = @"C:\Users\pulw\Desktop\mm\备货.xls";//临时备货
 
 
-            //txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海-默认昆山仓.xls";//默认昆山预警
-            //txtUpKsYj.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山建议采购.xls";//昆山库存预警
-            //txtUpKsKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\昆山所有库存.xls";//昆山所有库存
-            //txtUpSHKc.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\上海所有库存.xls";//上海所有库存
+            //txtUpDfkunsYj.Text = @"C:\Users\pulw\Desktop\新建文件夹\上海-默认昆山.xlsx";//默认昆山预警
+            //txtUpKsYj.Text = @"C:\Users\pulw\Desktop\新建文件夹\昆山建议采购.xlsx";//昆山库存预警
+            //txtUpKsKc.Text = @"C:\Users\pulw\Desktop\新建文件夹\昆山所有库存.xlsx";//昆山所有库存
+            //txtUpSHKc.Text = @"C:\Users\pulw\Desktop\新建文件夹\上海所有库存.xlsx";//上海所有库存
             //txtUpTmp.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\备货.xls";//临时备货
 
         }
@@ -316,10 +316,10 @@ namespace OrderAllot
                         {
                             if (!string.IsNullOrEmpty(cur预警Item._SKU))
                             {
-                                if (cur预警Item._SKU == "DNFA12A33")
-                                {
+                                //if (cur预警Item._SKU == "DNFA12A33")
+                                //{
 
-                                }
+                                //}
 
                                 if (cur预警Item._建议采购数量 > 0)
                                 {
@@ -335,7 +335,6 @@ namespace OrderAllot
                                             needOrderItem._采购员 = cur预警Item._采购员;
                                             needOrderItem._商品成本单价 = cur预警Item._商品成本单价;
                                             needOrderItem._仓库 = cur预警Item._仓库;
-                                            needOrderItem.org采购未入库 = ref昆山SkuItem._采购未入库.ToString();
                                             //要相加的部分
                                             needOrderItem.org采购未入库 = (ref昆山SkuItem._采购未入库 + cur预警Item._采购未入库).ToString();
                                             needOrderItem._可用数量 = ref昆山SkuItem._可用数量 + cur预警Item._可用数量;
@@ -383,7 +382,7 @@ namespace OrderAllot
                         {
                             if (!string.IsNullOrEmpty(cur预警Item._SKU))
                             {
-                                //if (cur预警Item._SKU == "TKDA11A44-P")
+                                //if (cur预警Item._SKU == "DNFK5K72-BL")
                                 //{
 
                                 //}
@@ -397,7 +396,21 @@ namespace OrderAllot
                                         {
                                             if (ref上海库存SkuItem._建议采购数量 + cur预警Item._建议采购数量 > 0)
                                             {
-                                                _最终需要采购的预警.Add(cur预警Item);
+                                                //_最终需要采购的预警.Add(cur预警Item);
+                                                //需要把两个相加起来
+                                                var needOrderItem = new Warning();
+                                                needOrderItem._SKU = cur预警Item._SKU;
+                                                needOrderItem._供应商 = cur预警Item._供应商;
+                                                needOrderItem._采购员 = cur预警Item._采购员;
+                                                needOrderItem._商品成本单价 = cur预警Item._商品成本单价;
+                                                needOrderItem._仓库 = cur预警Item._仓库;
+                                                //要相加的部分
+                                                needOrderItem.org采购未入库 = (ref上海库存SkuItem._采购未入库 + cur预警Item._采购未入库).ToString();
+                                                needOrderItem._可用数量 = ref上海库存SkuItem._可用数量 + cur预警Item._可用数量;
+                                                needOrderItem._库存上限 = ref上海库存SkuItem._库存上限 + cur预警Item._库存上限;
+                                                needOrderItem._库存下限 = ref上海库存SkuItem._库存下限 + cur预警Item._库存下限;
+                                                needOrderItem.org缺货及未派单数量 = (ref上海库存SkuItem._缺货及未派单数量 + cur预警Item._缺货及未派单数量).ToString();
+                                                _最终需要采购的预警.Add(needOrderItem);
                                             }
                                             else
                                             {
