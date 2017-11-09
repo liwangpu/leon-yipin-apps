@@ -302,7 +302,7 @@
             this.txtUpDfkunsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpDfkunsYj.TabIndex = 0;
             // 
-            // Form4Spec
+            // Form4SpecTmp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -310,8 +310,8 @@
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form4Spec";
-            this.Text = "订单分配(排除重复项)-临时备货";
+            this.Name = "Form4SpecTmp";
+            this.Text = "订单分配(排除重复项)-新";
             this.Load += new System.EventHandler(this.Form4Spec_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
