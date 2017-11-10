@@ -16,10 +16,10 @@ namespace OrderAllot
             InitializeComponent();
 
 
-            //txtUpShRp.Text = @"C:\Users\Leon\Desktop\上海所有库存.xlsx";
-            //txtUpKsRp.Text = @"C:\Users\Leon\Desktop\昆山所有库存.xlsx";
-            //txtQueh.Text = @"C:\Users\Leon\Desktop\缺货延时报表11.6.xlsx";
-            //btnAnalyze.Enabled = true;
+            txtUpShRp.Text = @"C:\Users\pulw\Desktop\延时报表\上海所有库存1.xlsx";
+            txtUpKsRp.Text = @"C:\Users\pulw\Desktop\延时报表\昆山所有库存1.xlsx";
+            txtQueh.Text = @"C:\Users\pulw\Desktop\延时报表\缺货延时报表1.xlsx";
+            btnAnalyze.Enabled = true;
 
         }
 
@@ -76,18 +76,51 @@ namespace OrderAllot
             try
             {
                 #region 解析并计算
-                var shRpList = new List<_Form5延时报表>();
-                var ksRpList = new List<_Form5延时报表>();
+                var list上海库存 = new List<_Form5延时报表>();
+                var list昆山库存 = new List<_Form5延时报表>();
                 var quehList = new List<_Form5缺货延时报表判断>();
-                var shExcelPath = txtUpShRp.Text;
-                var ksExcelPath = txtUpKsRp.Text;
-                var quehExcelPath = txtQueh.Text;
+                var str上海库存Path = txtUpShRp.Text;
+                var str昆山库存Path = txtUpKsRp.Text;
+                var str缺货延时报表Path = txtQueh.Text;
+
                 var actRead = new Action(() =>
                 {
                     ShowMsg("开始读取表格数据");
-                    if (!string.IsNullOrEmpty(shExcelPath))
+                    if (!string.IsNullOrEmpty(str上海库存Path))
                     {
-                        using (var excel = new ExcelQueryFactory(shExcelPath))
+                        using (var excel = new ExcelQueryFactory(str上海库存Path))
+                        {
+                         
+
+                            try
+                            {
+                                var sheetNames = excel.GetWorksheetNames().ToList();
+                                sheetNames.ForEach(s =>
+                                {
+                                    try
+                                    {
+                                        var tmp = from c in excel.Worksheet<_Form5延时报表>(s)
+                                                  select c;
+                                        list上海库存.AddRange(tmp);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        ShowMsg(ex.Message);
+                                    }
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+
+                                var aaaa = 1;
+                            }
+
+                
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(str昆山库存Path))
+                    {
+                        using (var excel = new ExcelQueryFactory(str昆山库存Path))
                         {
                             var sheetNames = excel.GetWorksheetNames().ToList();
                             sheetNames.ForEach(s =>
@@ -96,7 +129,7 @@ namespace OrderAllot
                                 {
                                     var tmp = from c in excel.Worksheet<_Form5延时报表>(s)
                                               select c;
-                                    shRpList.AddRange(tmp);
+                                    list昆山库存.AddRange(tmp);
                                 }
                                 catch (Exception ex)
                                 {
@@ -105,29 +138,9 @@ namespace OrderAllot
                             });
                         }
                     }
-                    if (!string.IsNullOrEmpty(ksExcelPath))
+                    if (!string.IsNullOrEmpty(str缺货延时报表Path))
                     {
-                        using (var excel = new ExcelQueryFactory(ksExcelPath))
-                        {
-                            var sheetNames = excel.GetWorksheetNames().ToList();
-                            sheetNames.ForEach(s =>
-                            {
-                                try
-                                {
-                                    var tmp = from c in excel.Worksheet<_Form5延时报表>(s)
-                                              select c;
-                                    ksRpList.AddRange(tmp);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ShowMsg(ex.Message);
-                                }
-                            });
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(quehExcelPath))
-                    {
-                        using (var excel = new ExcelQueryFactory(quehExcelPath))
+                        using (var excel = new ExcelQueryFactory(str缺货延时报表Path))
                         {
                             var sheetNames = excel.GetWorksheetNames().ToList();
                             sheetNames.ForEach(s =>
@@ -153,10 +166,10 @@ namespace OrderAllot
                 {
                     ShowMsg("开始计算表格数据");
                     var cmSkus = new List<string>();
-                    for (int idx = shRpList.Count - 1; idx >= 0; idx--)
+                    for (int idx = list上海库存.Count - 1; idx >= 0; idx--)
                     {
-                        var shItem = shRpList[idx];
-                        var refksItem = ksRpList.Where(k => k._SKU == shItem._SKU).FirstOrDefault();
+                        var shItem = list上海库存[idx];
+                        var refksItem = list昆山库存.Where(k => k._SKU == shItem._SKU).FirstOrDefault();
                         if (refksItem != null)
                         {
                             cmSkus.Add(shItem._SKU);
@@ -164,7 +177,7 @@ namespace OrderAllot
                             var amount = shItem._可用数量 + refksItem._可用数量 - shItem._缺货及未派单数量 - refksItem._缺货及未派单数量;
                             if (amount < 0)
                             {
-                                shRpList.RemoveAt(idx);
+                                list上海库存.RemoveAt(idx);
                             }
                             else
                             {
@@ -180,19 +193,19 @@ namespace OrderAllot
                             var amount = shItem._可用数量 - shItem._缺货及未派单数量;
                             if (amount < 0)
                             {
-                                shRpList.RemoveAt(idx);
+                                list上海库存.RemoveAt(idx);
                             }
                         }
                     }
                     //上海仓库计算完了,然后把昆山仓库加上去
-                    ksRpList.ForEach(ks =>
+                    list昆山库存.ForEach(ks =>
                     {
                         var isDuplicate = cmSkus.Count(c => c == ks._SKU);
                         if (isDuplicate == 0)
                         {
                             var amount = ks._可用数量 - ks._缺货及未派单数量;
                             if (amount >= 0)
-                                shRpList.Add(ks);
+                                list上海库存.Add(ks);
                         }
                     });
 
@@ -204,7 +217,7 @@ namespace OrderAllot
                             var curQueh = quehList[idx];
                             if (curQueh._是否停售 != "停售")
                             {
-                                var isExist = shRpList.Where(x => x._SKU == curQueh.sku).Count() > 0;
+                                var isExist = list上海库存.Where(x => x._SKU == curQueh.sku).Count() > 0;
                                 if (isExist)
                                 {
                                     quehList.RemoveAt(idx);
@@ -219,7 +232,7 @@ namespace OrderAllot
 
 
                     //计算完毕,开始导出数据
-                    ExportExcel(shRpList, quehList);
+                    ExportExcel(list上海库存, quehList);
                 }, null);
                 #endregion
             }
