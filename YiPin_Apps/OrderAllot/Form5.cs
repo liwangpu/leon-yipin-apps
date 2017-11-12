@@ -16,10 +16,10 @@ namespace OrderAllot
             InitializeComponent();
 
 
-            txtUpShRp.Text = @"C:\Users\pulw\Desktop\延时报表\上海所有库存1.xlsx";
-            txtUpKsRp.Text = @"C:\Users\pulw\Desktop\延时报表\昆山所有库存1.xlsx";
-            txtQueh.Text = @"C:\Users\pulw\Desktop\延时报表\缺货延时报表1.xlsx";
-            btnAnalyze.Enabled = true;
+            //txtUpShRp.Text = @"C:\Users\pulw\Desktop\延时报表\上海所有库存1.xlsx";
+            //txtUpKsRp.Text = @"C:\Users\pulw\Desktop\延时报表\昆山所有库存1.xlsx";
+            //txtQueh.Text = @"C:\Users\pulw\Desktop\延时报表\缺货延时报表1.xlsx";
+            //btnAnalyze.Enabled = true;
 
         }
 

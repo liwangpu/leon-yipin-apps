@@ -43,12 +43,14 @@
             this.ntxtD4 = new System.Windows.Forms.NumericUpDown();
             this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.ntxtAward = new System.Windows.Forms.NumericUpDown();
-            this.ntxtJDiff = new System.Windows.Forms.NumericUpDown();
             this.ntxtBaseDDif = new System.Windows.Forms.NumericUpDown();
+            this.ntxtBaseD5 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtBaseD4 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtBaseD2 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtBaseD1 = new System.Windows.Forms.NumericUpDown();
             this.ntxtBaseD3 = new System.Windows.Forms.NumericUpDown();
             this.ntxtD3 = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -118,25 +120,28 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.ntxtBaseD1 = new System.Windows.Forms.NumericUpDown();
-            this.ntxtBaseD2 = new System.Windows.Forms.NumericUpDown();
-            this.ntxtBaseD4 = new System.Windows.Forms.NumericUpDown();
-            this.ntxtBaseD5 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff1 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff2 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff3 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff4 = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseDDif)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff4)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -208,11 +213,13 @@
             this.groupBox2.Controls.Add(this.ntxtD4);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.label17);
-            this.groupBox2.Controls.Add(this.label38);
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.ntxtAward);
-            this.groupBox2.Controls.Add(this.ntxtJDiff);
+            this.groupBox2.Controls.Add(this.ntxtJDiff4);
+            this.groupBox2.Controls.Add(this.ntxtJDiff3);
+            this.groupBox2.Controls.Add(this.ntxtJDiff2);
+            this.groupBox2.Controls.Add(this.ntxtJDiff1);
             this.groupBox2.Controls.Add(this.ntxtBaseDDif);
             this.groupBox2.Controls.Add(this.ntxtBaseD5);
             this.groupBox2.Controls.Add(this.ntxtBaseD4);
@@ -374,7 +381,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(641, 178);
+            this.label18.Location = new System.Drawing.Point(693, 178);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(11, 12);
             this.label18.TabIndex = 0;
@@ -383,20 +390,11 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(492, 178);
+            this.label17.Location = new System.Drawing.Point(544, 178);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(77, 12);
             this.label17.TabIndex = 0;
             this.label17.Text = "制单奖励比率";
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(300, 176);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(53, 12);
-            this.label38.TabIndex = 0;
-            this.label38.Text = "阶段差值";
             // 
             // label14
             // 
@@ -420,7 +418,7 @@
             // ntxtAward
             // 
             this.ntxtAward.DecimalPlaces = 2;
-            this.ntxtAward.Location = new System.Drawing.Point(575, 176);
+            this.ntxtAward.Location = new System.Drawing.Point(627, 176);
             this.ntxtAward.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -434,24 +432,6 @@
             0,
             0,
             0});
-            // 
-            // ntxtJDiff
-            // 
-            this.ntxtJDiff.DecimalPlaces = 2;
-            this.ntxtJDiff.Location = new System.Drawing.Point(373, 174);
-            this.ntxtJDiff.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.ntxtJDiff.Name = "ntxtJDiff";
-            this.ntxtJDiff.Size = new System.Drawing.Size(60, 21);
-            this.ntxtJDiff.TabIndex = 1;
-            this.ntxtJDiff.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            131072});
             // 
             // ntxtBaseDDif
             // 
@@ -471,6 +451,58 @@
             0,
             65536});
             this.ntxtBaseDDif.Visible = false;
+            // 
+            // ntxtBaseD5
+            // 
+            this.ntxtBaseD5.DecimalPlaces = 2;
+            this.ntxtBaseD5.Location = new System.Drawing.Point(141, 143);
+            this.ntxtBaseD5.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD5.Name = "ntxtBaseD5";
+            this.ntxtBaseD5.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD5.TabIndex = 1;
+            // 
+            // ntxtBaseD4
+            // 
+            this.ntxtBaseD4.DecimalPlaces = 2;
+            this.ntxtBaseD4.Location = new System.Drawing.Point(141, 118);
+            this.ntxtBaseD4.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD4.Name = "ntxtBaseD4";
+            this.ntxtBaseD4.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD4.TabIndex = 1;
+            // 
+            // ntxtBaseD2
+            // 
+            this.ntxtBaseD2.DecimalPlaces = 2;
+            this.ntxtBaseD2.Location = new System.Drawing.Point(141, 62);
+            this.ntxtBaseD2.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD2.Name = "ntxtBaseD2";
+            this.ntxtBaseD2.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD2.TabIndex = 1;
+            // 
+            // ntxtBaseD1
+            // 
+            this.ntxtBaseD1.DecimalPlaces = 2;
+            this.ntxtBaseD1.Location = new System.Drawing.Point(141, 35);
+            this.ntxtBaseD1.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtBaseD1.Name = "ntxtBaseD1";
+            this.ntxtBaseD1.Size = new System.Drawing.Size(60, 21);
+            this.ntxtBaseD1.TabIndex = 1;
             // 
             // ntxtBaseD3
             // 
@@ -1126,57 +1158,77 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "第一档";
             // 
-            // ntxtBaseD1
+            // ntxtJDiff1
             // 
-            this.ntxtBaseD1.DecimalPlaces = 2;
-            this.ntxtBaseD1.Location = new System.Drawing.Point(141, 35);
-            this.ntxtBaseD1.Maximum = new decimal(new int[] {
+            this.ntxtJDiff1.DecimalPlaces = 2;
+            this.ntxtJDiff1.Location = new System.Drawing.Point(248, 160);
+            this.ntxtJDiff1.Maximum = new decimal(new int[] {
             9999,
             0,
             0,
             0});
-            this.ntxtBaseD1.Name = "ntxtBaseD1";
-            this.ntxtBaseD1.Size = new System.Drawing.Size(60, 21);
-            this.ntxtBaseD1.TabIndex = 1;
+            this.ntxtJDiff1.Name = "ntxtJDiff1";
+            this.ntxtJDiff1.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff1.TabIndex = 1;
+            this.ntxtJDiff1.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
             // 
-            // ntxtBaseD2
+            // ntxtJDiff2
             // 
-            this.ntxtBaseD2.DecimalPlaces = 2;
-            this.ntxtBaseD2.Location = new System.Drawing.Point(141, 62);
-            this.ntxtBaseD2.Maximum = new decimal(new int[] {
+            this.ntxtJDiff2.DecimalPlaces = 2;
+            this.ntxtJDiff2.Location = new System.Drawing.Point(319, 160);
+            this.ntxtJDiff2.Maximum = new decimal(new int[] {
             9999,
             0,
             0,
             0});
-            this.ntxtBaseD2.Name = "ntxtBaseD2";
-            this.ntxtBaseD2.Size = new System.Drawing.Size(60, 21);
-            this.ntxtBaseD2.TabIndex = 1;
+            this.ntxtJDiff2.Name = "ntxtJDiff2";
+            this.ntxtJDiff2.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff2.TabIndex = 1;
+            this.ntxtJDiff2.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
             // 
-            // ntxtBaseD4
+            // ntxtJDiff3
             // 
-            this.ntxtBaseD4.DecimalPlaces = 2;
-            this.ntxtBaseD4.Location = new System.Drawing.Point(141, 118);
-            this.ntxtBaseD4.Maximum = new decimal(new int[] {
+            this.ntxtJDiff3.DecimalPlaces = 2;
+            this.ntxtJDiff3.Location = new System.Drawing.Point(390, 160);
+            this.ntxtJDiff3.Maximum = new decimal(new int[] {
             9999,
             0,
             0,
             0});
-            this.ntxtBaseD4.Name = "ntxtBaseD4";
-            this.ntxtBaseD4.Size = new System.Drawing.Size(60, 21);
-            this.ntxtBaseD4.TabIndex = 1;
+            this.ntxtJDiff3.Name = "ntxtJDiff3";
+            this.ntxtJDiff3.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff3.TabIndex = 1;
+            this.ntxtJDiff3.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
             // 
-            // ntxtBaseD5
+            // ntxtJDiff4
             // 
-            this.ntxtBaseD5.DecimalPlaces = 2;
-            this.ntxtBaseD5.Location = new System.Drawing.Point(141, 143);
-            this.ntxtBaseD5.Maximum = new decimal(new int[] {
+            this.ntxtJDiff4.DecimalPlaces = 2;
+            this.ntxtJDiff4.Location = new System.Drawing.Point(461, 160);
+            this.ntxtJDiff4.Maximum = new decimal(new int[] {
             9999,
             0,
             0,
             0});
-            this.ntxtBaseD5.Name = "ntxtBaseD5";
-            this.ntxtBaseD5.Size = new System.Drawing.Size(60, 21);
-            this.ntxtBaseD5.TabIndex = 1;
+            this.ntxtJDiff4.Name = "ntxtJDiff4";
+            this.ntxtJDiff4.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff4.TabIndex = 1;
+            this.ntxtJDiff4.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
             // 
             // Form6
             // 
@@ -1197,16 +1249,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseDDif)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff4)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1256,8 +1311,6 @@
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label38;
-        private System.Windows.Forms.NumericUpDown ntxtJDiff;
         private System.Windows.Forms.Label lbD1_J5;
         private System.Windows.Forms.Label lbD5_J5;
         private System.Windows.Forms.Label lbD4_J5;
@@ -1307,5 +1360,9 @@
         private System.Windows.Forms.NumericUpDown ntxtBaseD4;
         private System.Windows.Forms.NumericUpDown ntxtBaseD2;
         private System.Windows.Forms.NumericUpDown ntxtBaseD1;
+        private System.Windows.Forms.NumericUpDown ntxtJDiff4;
+        private System.Windows.Forms.NumericUpDown ntxtJDiff3;
+        private System.Windows.Forms.NumericUpDown ntxtJDiff2;
+        private System.Windows.Forms.NumericUpDown ntxtJDiff1;
     }
 }

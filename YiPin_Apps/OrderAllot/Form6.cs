@@ -918,11 +918,32 @@ namespace OrderAllot
 
 
 
-        private decimal _DJDiff
+        private decimal _DJDiff1
         {
             get
             {
-                return ntxtJDiff.Value;
+                return ntxtJDiff1.Value;
+            }
+        }
+        private decimal _DJDiff2
+        {
+            get
+            {
+                return ntxtJDiff2.Value;
+            }
+        }
+        private decimal _DJDiff3
+        {
+            get
+            {
+                return ntxtJDiff3.Value;
+            }
+        }
+        private decimal _DJDiff4
+        {
+            get
+            {
+                return ntxtJDiff4.Value;
             }
         }
         #endregion
@@ -1455,42 +1476,42 @@ namespace OrderAllot
 
             #region 第1档各个阶段
             _D1_J3 = _D1_Base;
-            _D1_J1 = _D1_J3 - _DJDiff * 2;
-            _D1_J2 = _D1_J3 - _DJDiff * 1;
-            _D1_J4 = _D1_J3 + _DJDiff * 1;
-            _D1_J5 = _D1_J3 + _DJDiff * 2;
+            _D1_J2 = _D1_J3 - _DJDiff2;
+            _D1_J1 = _D1_J2 - _DJDiff1;
+            _D1_J4 = _D1_J3 + _DJDiff3;
+            _D1_J5 = _D1_J4 + _DJDiff4;
             #endregion
 
             #region 第2档各个阶段
             _D2_J3 = _D2_Base;
-            _D2_J1 = _D2_J3 - _DJDiff * 2;
-            _D2_J2 = _D2_J3 - _DJDiff * 1;
-            _D2_J4 = _D2_J3 + _DJDiff * 1;
-            _D2_J5 = _D2_J3 + _DJDiff * 2;
+            _D2_J2 = _D2_J3 - _DJDiff2;
+            _D2_J1 = _D2_J2 - _DJDiff1;
+            _D2_J4 = _D2_J3 + _DJDiff3;
+            _D2_J5 = _D2_J4 + _DJDiff4;
             #endregion
 
             #region 第3档各个阶段
             _D3_J3 = _D3_Base;
-            _D3_J1 = _D3_J3 - _DJDiff * 2;
-            _D3_J2 = _D3_J3 - _DJDiff * 1;
-            _D3_J4 = _D3_J3 + _DJDiff * 1;
-            _D3_J5 = _D3_J3 + _DJDiff * 2;
+            _D3_J2 = _D3_J3 - _DJDiff2;
+            _D3_J1 = _D3_J2 - _DJDiff1;
+            _D3_J4 = _D3_J3 + _DJDiff3;
+            _D3_J5 = _D3_J4 + _DJDiff4;
             #endregion
 
             #region 第4档各个阶段
             _D4_J3 = _D4_Base;
-            _D4_J1 = _D4_J3 - _DJDiff * 2;
-            _D4_J2 = _D4_J3 - _DJDiff * 1;
-            _D4_J4 = _D4_J3 + _DJDiff * 1;
-            _D4_J5 = _D4_J3 + _DJDiff * 2;
+            _D4_J2 = _D4_J3 - _DJDiff2;
+            _D4_J1 = _D4_J2 - _DJDiff1;
+            _D4_J4 = _D4_J3 + _DJDiff3;
+            _D4_J5 = _D4_J4 + _DJDiff4;
             #endregion
 
             #region 第5档各个阶段
             _D5_J3 = _D5_Base;
-            _D5_J1 = _D5_J3 - _DJDiff * 2;
-            _D5_J2 = _D5_J3 - _DJDiff * 1;
-            _D5_J4 = _D5_J3 + _DJDiff * 1;
-            _D5_J5 = _D5_J3 + _DJDiff * 2;
+            _D5_J2 = _D5_J3 - _DJDiff2;
+            _D5_J1 = _D5_J2 - _DJDiff1;
+            _D5_J4 = _D5_J3 + _DJDiff3;
+            _D5_J5 = _D5_J4 + _DJDiff4;
             #endregion
         }
         #endregion

@@ -460,22 +460,25 @@ namespace OrderAllot
                     for (int idx = _最终需要采购的预警.Count - 1; idx >= 0; idx--)
                     {
                         var curItem = _最终需要采购的预警[idx];
-                        double _两个仓库可用库存以及采购未入库之和 = 0;//可用库存+可用库存+采购未入库+采购未入库
+                        double _两个仓库可用库存以及采购未入库之和 = 0;//可用库存+可用库存+采购未入库+采购未入库-缺货及未派单
                         double _两个库存下限之和 = 0;//库存下限+库存下限
+                        double _缺货以及未派单 = 0;
                         var _上海仓Item = _Im上海库存.Where(x => x._SKU == curItem._SKU).FirstOrDefault();
                         var _昆山仓Item = _Im昆山库存.Where(x => x._SKU == curItem._SKU).FirstOrDefault();
                         if (_上海仓Item != null)
                         {
                             _两个仓库可用库存以及采购未入库之和 += _上海仓Item._可用数量 + _上海仓Item._采购未入库;
                             _两个库存下限之和 += _上海仓Item._库存下限;
+                            _缺货以及未派单 += _上海仓Item._缺货及未派单数量;
                         }
                         if (_昆山仓Item != null)
                         {
                             _两个仓库可用库存以及采购未入库之和 += _昆山仓Item._可用数量 + _昆山仓Item._采购未入库;
                             _两个库存下限之和 += _昆山仓Item._库存下限;
+                            _缺货以及未派单 += _昆山仓Item._缺货及未派单数量;
                         }
 
-                        if (_两个仓库可用库存以及采购未入库之和 > _两个库存下限之和)
+                        if (_两个仓库可用库存以及采购未入库之和 - _缺货以及未派单 > _两个库存下限之和)
                         {
                             _最终需要采购的预警.RemoveAt(idx);
                         }
