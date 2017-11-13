@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtnHotDay = new System.Windows.Forms.NumericUpDown();
             this.NtxtAmount = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -36,6 +37,7 @@
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -56,11 +58,9 @@
             this.txtUpKsKc = new System.Windows.Forms.TextBox();
             this.txtUpKsYj = new System.Windows.Forms.TextBox();
             this.txtUpDfkunsYj = new System.Windows.Forms.TextBox();
-            this.txtnHotDay = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtnHotDay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -100,6 +100,23 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
+            // 
+            // txtnHotDay
+            // 
+            this.txtnHotDay.Location = new System.Drawing.Point(114, 178);
+            this.txtnHotDay.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtnHotDay.Name = "txtnHotDay";
+            this.txtnHotDay.Size = new System.Drawing.Size(120, 21);
+            this.txtnHotDay.TabIndex = 11;
+            this.txtnHotDay.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
             // NtxtAmount
             // 
@@ -170,6 +187,15 @@
             this.label5.Size = new System.Drawing.Size(59, 12);
             this.label5.TabIndex = 2;
             this.label5.Text = "处理文件:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(240, 180);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(17, 12);
+            this.label12.TabIndex = 2;
+            this.label12.Text = "天";
             // 
             // label11
             // 
@@ -261,6 +287,7 @@
             this.btnUpTmp.TabIndex = 1;
             this.btnUpTmp.Text = "浏览";
             this.btnUpTmp.UseVisualStyleBackColor = true;
+            this.btnUpTmp.Click += new System.EventHandler(this.btnUpTmp_Click);
             // 
             // btnUpSHKc
             // 
@@ -270,6 +297,7 @@
             this.btnUpSHKc.TabIndex = 1;
             this.btnUpSHKc.Text = "浏览";
             this.btnUpSHKc.UseVisualStyleBackColor = true;
+            this.btnUpSHKc.Click += new System.EventHandler(this.btnUpSHKc_Click);
             // 
             // btnKsKc
             // 
@@ -279,6 +307,7 @@
             this.btnKsKc.TabIndex = 1;
             this.btnKsKc.Text = "浏览";
             this.btnKsKc.UseVisualStyleBackColor = true;
+            this.btnKsKc.Click += new System.EventHandler(this.btnKsKc_Click);
             // 
             // btnUpKsYj
             // 
@@ -288,6 +317,7 @@
             this.btnUpKsYj.TabIndex = 1;
             this.btnUpKsYj.Text = "浏览";
             this.btnUpKsYj.UseVisualStyleBackColor = true;
+            this.btnUpKsYj.Click += new System.EventHandler(this.btnUpKsYj_Click);
             // 
             // txtUpHot
             // 
@@ -313,6 +343,7 @@
             this.btnUpDfkunsYj.TabIndex = 1;
             this.btnUpDfkunsYj.Text = "浏览";
             this.btnUpDfkunsYj.UseVisualStyleBackColor = true;
+            this.btnUpDfkunsYj.Click += new System.EventHandler(this.btnUpDfkunsYj_Click);
             // 
             // txtUpSHKc
             // 
@@ -346,44 +377,20 @@
             this.txtUpDfkunsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpDfkunsYj.TabIndex = 0;
             // 
-            // txtnHotDay
-            // 
-            this.txtnHotDay.Location = new System.Drawing.Point(114, 178);
-            this.txtnHotDay.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.txtnHotDay.Name = "txtnHotDay";
-            this.txtnHotDay.Size = new System.Drawing.Size(120, 21);
-            this.txtnHotDay.TabIndex = 11;
-            this.txtnHotDay.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 180);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(17, 12);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "天";
-            // 
             // _订单分配_除热销
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(409, 305);
             this.Controls.Add(this.groupBox1);
+            this.MaximumSize = new System.Drawing.Size(425, 343);
+            this.MinimumSize = new System.Drawing.Size(425, 343);
             this.Name = "_订单分配_除热销";
             this.Text = "订单分配(除热销)";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtnHotDay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).EndInit();
             this.ResumeLayout(false);
 
         }

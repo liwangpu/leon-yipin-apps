@@ -14,6 +14,8 @@ namespace OrderAllot
 {
     public partial class Form1 : Form
     {
+        private double _HotDay;
+
         public Form1()
         {
             InitializeComponent();
@@ -62,21 +64,40 @@ namespace OrderAllot
         }
         #endregion
 
+        #region 上传热销
+        private void btnUpHot_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
+            OpenFileDialog1.Title = "表格信息";//设置标题
+            OpenFileDialog1.Multiselect = false;
+            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                txtUpHot.Text = OpenFileDialog1.FileName;
+            }
+        }
+        #endregion
+
         #region 处理数据
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
             try
             {
+                _HotDay = Convert.ToDouble(txtnHotDay.Value);
+
                 #region 解析并计算
                 var d订单分配金额 = Convert.ToDouble(NtxtAmount.Value);
-                var _Im上海库存预警 = new List<Warning>();
-                var _Im昆山所有库存 = new List<Warning>();
-                var _List需要采购的预警 = new List<Warning>();
+                var _Im上海库存预警 = new List<_除热销_Warning>();
+                var _Im昆山所有库存 = new List<_除热销_Warning>();
+                var _List需要采购的预警 = new List<_除热销_Warning>();
+                var _Im热销产品 = new List<_热销产品>();
                 var _Ex采购订单分配 = new List<Order>();
                 var _Ex开发订单分配 = new List<Order>();//把开发单独分写成一个表格 
                 var str上海库存预警ExcelPath = txtUpShangsYj.Text;
                 var str昆山所有库存ExcelPath = txtUpKunsStore.Text;
-
+                var str热销产品ExcelPath = txtUpHot.Text;
                 #region 读取数据
                 var actRead = new Action(() =>
                 {
@@ -92,7 +113,7 @@ namespace OrderAllot
                             {
                                 try
                                 {
-                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                    var tmp = from c in excel.Worksheet<_除热销_Warning>(s)
                                               select c;
                                     _Im上海库存预警.AddRange(tmp);
                                 }
@@ -115,7 +136,7 @@ namespace OrderAllot
                             {
                                 try
                                 {
-                                    var tmp = from c in excel.Worksheet<Warning>(s)
+                                    var tmp = from c in excel.Worksheet<_除热销_Warning>(s)
                                               select c;
                                     _Im昆山所有库存.AddRange(tmp);
                                 }
@@ -128,6 +149,28 @@ namespace OrderAllot
                     }
                     #endregion
 
+                    #region 读取热销产品
+                    if (!string.IsNullOrEmpty(str热销产品ExcelPath))
+                    {
+                        using (var excel = new ExcelQueryFactory(str热销产品ExcelPath))
+                        {
+                            var sheetNames = excel.GetWorksheetNames().ToList();
+                            sheetNames.ForEach(s =>
+                            {
+                                try
+                                {
+                                    var tmp = from c in excel.Worksheet<_热销产品>(s)
+                                              select c;
+                                    _Im热销产品.AddRange(tmp);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ShowMsg(ex.Message);
+                                }
+                            });
+                        }
+                    }
+                    #endregion
                 });
                 #endregion
 
@@ -157,7 +200,7 @@ namespace OrderAllot
                                         if (ref昆山库存Item._建议采购数量 + cur库存预警Item._建议采购数量 > 0)
                                         {
                                             //需要把两个相加起来
-                                            var needOrderItem = new Warning();
+                                            var needOrderItem = new _除热销_Warning();
                                             needOrderItem._SKU = cur库存预警Item._SKU;
                                             needOrderItem._供应商 = cur库存预警Item._供应商;
                                             needOrderItem._采购员 = cur库存预警Item._采购员;
@@ -169,6 +212,11 @@ namespace OrderAllot
                                             needOrderItem._库存上限 = ref昆山库存Item._库存上限 + cur库存预警Item._库存上限;
                                             needOrderItem._库存下限 = ref昆山库存Item._库存下限 + cur库存预警Item._库存下限;
                                             needOrderItem.org缺货及未派单数量 = (ref昆山库存Item._缺货及未派单数量 + cur库存预警Item._缺货及未派单数量).ToString();
+
+                                            needOrderItem._30天销量 = ref昆山库存Item._30天销量 + cur库存预警Item._30天销量;
+                                            needOrderItem._15天销量 = ref昆山库存Item._15天销量 + cur库存预警Item._15天销量;
+                                            needOrderItem._5天销量 = ref昆山库存Item._5天销量 + cur库存预警Item._5天销量;
+
                                             _List需要采购的预警.Add(needOrderItem);
                                         }
                                     }
@@ -187,6 +235,73 @@ namespace OrderAllot
                     }
                     #endregion
 
+                    //重新计算因为热销产生的建议采购数量过大
+                    #region 重新计算因为热销产生的建议采购数量过大
+                    if (_Im热销产品.Count > 0)
+                    {
+
+                        for (int idx = _List需要采购的预警.Count - 1; idx >= 0; idx--)
+                        {
+                            var sh = _List需要采购的预警[idx];
+                            //if (sh._SKU == "MVPA18B65-FU")
+                            //{
+
+                            //}
+
+                            var normal = sh._最终需要采购数量;
+
+                            var refHot = _Im热销产品.Where(x => x._SKU == sh._SKU).FirstOrDefault();
+                            if (refHot != null)
+                            {
+                                //除了热销这两天
+                                //var _50天销量总和 = sh._30天销量 + sh._15天销量 + sh._5天销量;
+                                //var _排除热销天数销量总和 = (sh._30天销量 - refHot._销量)/30 + sh._15天销量) / 30 + (sh._5天销量 - refHot._销量 * 3);
+
+                                var _30av = (sh._30天销量 - refHot._销量) / 30;
+                                var _15av = (sh._15天销量 - refHot._销量) / 15;
+                                var _5av = (sh._5天销量 - refHot._销量) / 5;
+
+                                sh._日销量 = (_30av + _15av + _5av) / 3;
+                                sh.IsHot = true;
+                                if (sh._最终需要采购数量 > normal)
+                                {
+                                    sh.IsHot = false;
+                                }
+                            }
+
+                            if (sh._最终需要采购数量 <= 0)
+                            {
+                                _List需要采购的预警.RemoveAt(idx);
+                            }
+                        }
+                    }
+                    #endregion
+
+                    //把最终建议采购的sku 两个仓库的 可用库存+可用库存 是否大于 两个仓库的 库存下限+库存下限
+                    //如果大于 那么说明这个sku不需要采购
+                    #region 二次判断排除生成另一张表
+
+                    for (int idx = _List需要采购的预警.Count - 1; idx >= 0; idx--)
+                    {
+                        var curItem = _List需要采购的预警[idx];
+                        double _两个仓库可用库存以及采购未入库之和 = 0;//可用库存+可用库存+采购未入库+采购未入库-缺货及未派单
+                        double _两个库存下限之和 = 0;//库存下限+库存下限
+                        double _缺货以及未派单 = 0;
+                        var _昆山仓Item = _Im昆山所有库存.Where(x => x._SKU == curItem._SKU).FirstOrDefault();
+
+                        if (_昆山仓Item != null)
+                        {
+                            _两个仓库可用库存以及采购未入库之和 += _昆山仓Item._可用数量 + _昆山仓Item._采购未入库;
+                            _两个库存下限之和 += _昆山仓Item._库存下限;
+                            _缺货以及未派单 += _昆山仓Item._缺货及未派单数量;
+                        }
+
+                        if (_两个仓库可用库存以及采购未入库之和 - _缺货以及未派单 > _两个库存下限之和)
+                        {
+                            _List需要采购的预警.RemoveAt(idx);
+                        }
+                    }
+                    #endregion
 
                     ////供应商唯一取值
                     var strProviderNames = _Im上海库存预警.Select(p => p._供应商).Distinct().OrderBy(p => p).ToList();
@@ -501,5 +616,7 @@ namespace OrderAllot
             }
         }
         #endregion
+
+
     }
 }

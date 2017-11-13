@@ -31,24 +31,37 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.NtxtAmount = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnUpShangsYj = new System.Windows.Forms.Button();
-            this.txtUpShangsYj = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtUpKunsStore = new System.Windows.Forms.TextBox();
             this.btnUpKunsStore = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.btnUpShangsYj = new System.Windows.Forms.Button();
+            this.txtUpKunsStore = new System.Windows.Forms.TextBox();
+            this.txtUpShangsYj = new System.Windows.Forms.TextBox();
+            this.txtnHotDay = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnUpHot = new System.Windows.Forms.Button();
+            this.txtUpHot = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtnHotDay)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtnHotDay);
+            this.groupBox1.Controls.Add(this.label12);
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.btnUpHot);
+            this.groupBox1.Controls.Add(this.txtUpHot);
             this.groupBox1.Controls.Add(this.NtxtAmount);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label6);
@@ -65,7 +78,7 @@
             this.groupBox1.Controls.Add(this.txtUpShangsYj);
             this.groupBox1.Location = new System.Drawing.Point(12, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(368, 176);
+            this.groupBox1.Size = new System.Drawing.Size(368, 233);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
@@ -96,6 +109,33 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "元";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(42, 163);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 12);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "结果:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 88);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(83, 12);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "昆山所有库存:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 61);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(83, 12);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "上海库存预警:";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -107,7 +147,7 @@
             // 
             // btnAnalyze
             // 
-            this.btnAnalyze.Location = new System.Drawing.Point(286, 112);
+            this.btnAnalyze.Location = new System.Drawing.Point(286, 163);
             this.btnAnalyze.Name = "btnAnalyze";
             this.btnAnalyze.Size = new System.Drawing.Size(75, 23);
             this.btnAnalyze.TabIndex = 5;
@@ -117,7 +157,7 @@
             // 
             // txtExport
             // 
-            this.txtExport.Location = new System.Drawing.Point(96, 112);
+            this.txtExport.Location = new System.Drawing.Point(96, 163);
             this.txtExport.Name = "txtExport";
             this.txtExport.Size = new System.Drawing.Size(183, 21);
             this.txtExport.TabIndex = 4;
@@ -125,7 +165,7 @@
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(74, 152);
+            this.lbMsg.Location = new System.Drawing.Point(94, 196);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(65, 12);
             this.lbMsg.TabIndex = 3;
@@ -134,46 +174,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 152);
+            this.label1.Location = new System.Drawing.Point(28, 196);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "操作消息:";
-            // 
-            // btnUpShangsYj
-            // 
-            this.btnUpShangsYj.Location = new System.Drawing.Point(286, 56);
-            this.btnUpShangsYj.Name = "btnUpShangsYj";
-            this.btnUpShangsYj.Size = new System.Drawing.Size(75, 23);
-            this.btnUpShangsYj.TabIndex = 1;
-            this.btnUpShangsYj.Text = "浏览";
-            this.btnUpShangsYj.UseVisualStyleBackColor = true;
-            this.btnUpShangsYj.Click += new System.EventHandler(this.btnUpShangsYj_Click);
-            // 
-            // txtUpShangsYj
-            // 
-            this.txtUpShangsYj.Enabled = false;
-            this.txtUpShangsYj.Location = new System.Drawing.Point(97, 58);
-            this.txtUpShangsYj.Name = "txtUpShangsYj";
-            this.txtUpShangsYj.Size = new System.Drawing.Size(183, 21);
-            this.txtUpShangsYj.TabIndex = 0;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 61);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(83, 12);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "上海库存预警:";
-            // 
-            // txtUpKunsStore
-            // 
-            this.txtUpKunsStore.Enabled = false;
-            this.txtUpKunsStore.Location = new System.Drawing.Point(96, 85);
-            this.txtUpKunsStore.Name = "txtUpKunsStore";
-            this.txtUpKunsStore.Size = new System.Drawing.Size(183, 21);
-            this.txtUpKunsStore.TabIndex = 0;
             // 
             // btnUpKunsStore
             // 
@@ -185,39 +190,108 @@
             this.btnUpKunsStore.UseVisualStyleBackColor = true;
             this.btnUpKunsStore.Click += new System.EventHandler(this.btnUpKunsStore_Click);
             // 
-            // label5
+            // btnUpShangsYj
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 88);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(83, 12);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "昆山所有库存:";
+            this.btnUpShangsYj.Location = new System.Drawing.Point(286, 56);
+            this.btnUpShangsYj.Name = "btnUpShangsYj";
+            this.btnUpShangsYj.Size = new System.Drawing.Size(75, 23);
+            this.btnUpShangsYj.TabIndex = 1;
+            this.btnUpShangsYj.Text = "浏览";
+            this.btnUpShangsYj.UseVisualStyleBackColor = true;
+            this.btnUpShangsYj.Click += new System.EventHandler(this.btnUpShangsYj_Click);
             // 
-            // label6
+            // txtUpKunsStore
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(42, 112);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 12);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "结果:";
+            this.txtUpKunsStore.Enabled = false;
+            this.txtUpKunsStore.Location = new System.Drawing.Point(96, 85);
+            this.txtUpKunsStore.Name = "txtUpKunsStore";
+            this.txtUpKunsStore.Size = new System.Drawing.Size(183, 21);
+            this.txtUpKunsStore.TabIndex = 0;
+            // 
+            // txtUpShangsYj
+            // 
+            this.txtUpShangsYj.Enabled = false;
+            this.txtUpShangsYj.Location = new System.Drawing.Point(97, 58);
+            this.txtUpShangsYj.Name = "txtUpShangsYj";
+            this.txtUpShangsYj.Size = new System.Drawing.Size(183, 21);
+            this.txtUpShangsYj.TabIndex = 0;
+            // 
+            // txtnHotDay
+            // 
+            this.txtnHotDay.Location = new System.Drawing.Point(96, 136);
+            this.txtnHotDay.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtnHotDay.Name = "txtnHotDay";
+            this.txtnHotDay.Size = new System.Drawing.Size(120, 21);
+            this.txtnHotDay.TabIndex = 17;
+            this.txtnHotDay.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(222, 138);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(17, 12);
+            this.label12.TabIndex = 14;
+            this.label12.Text = "天";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(31, 138);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(59, 12);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "热销天数:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(31, 115);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(59, 12);
+            this.label10.TabIndex = 16;
+            this.label10.Text = "热销订单:";
+            // 
+            // btnUpHot
+            // 
+            this.btnUpHot.Location = new System.Drawing.Point(286, 111);
+            this.btnUpHot.Name = "btnUpHot";
+            this.btnUpHot.Size = new System.Drawing.Size(75, 23);
+            this.btnUpHot.TabIndex = 13;
+            this.btnUpHot.Text = "浏览";
+            this.btnUpHot.UseVisualStyleBackColor = true;
+            this.btnUpHot.Click += new System.EventHandler(this.btnUpHot_Click);
+            // 
+            // txtUpHot
+            // 
+            this.txtUpHot.Enabled = false;
+            this.txtUpHot.Location = new System.Drawing.Point(97, 112);
+            this.txtUpHot.Name = "txtUpHot";
+            this.txtUpHot.Size = new System.Drawing.Size(183, 21);
+            this.txtUpHot.TabIndex = 12;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(392, 192);
+            this.ClientSize = new System.Drawing.Size(392, 241);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(408, 230);
-            this.MinimumSize = new System.Drawing.Size(408, 230);
             this.Name = "Form1";
             this.Text = "订单分配";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtnHotDay)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -239,6 +313,12 @@
         private System.Windows.Forms.Button btnUpKunsStore;
         private System.Windows.Forms.TextBox txtUpKunsStore;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown txtnHotDay;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnUpHot;
+        private System.Windows.Forms.TextBox txtUpHot;
     }
 }
 

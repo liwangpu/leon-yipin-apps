@@ -181,10 +181,10 @@ namespace OrderAllot.Maps
 
     public class _热销产品
     {
-        [ExcelColumn("商品sku")]
+        [ExcelColumn("SKU")]
         public string _SKU { get; set; }
 
-        [ExcelColumn("销量（已发货并且扣了库存的销量）")]
+        [ExcelColumn("销量")]
         public double _销量 { get; set; }
     }
 }

@@ -18,11 +18,11 @@ namespace OrderAllot
         {
             InitializeComponent();
 
-            txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\数据11.12\上海-默认发货昆山仓.xlsx";//默认昆山预警
-            txtUpKsYj.Text = @"C:\Users\Leon\Desktop\数据11.12\昆山建议采购.xlsx";//昆山库存预警
-            txtUpKsKc.Text = @"C:\Users\Leon\Desktop\数据11.12\昆山所有库存.xlsx";//昆山所有库存
-            txtUpSHKc.Text = @"C:\Users\Leon\Desktop\数据11.12\上海所有库存.xlsx";//上海所有库存
-            txtUpHot.Text = @"C:\Users\Leon\Desktop\数据11.12\双十一两天各平台销量.xlsx";
+            //txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\数据11.12\上海-默认发货昆山仓.xlsx";//默认昆山预警
+            //txtUpKsYj.Text = @"C:\Users\Leon\Desktop\数据11.12\昆山建议采购.xlsx";//昆山库存预警
+            //txtUpKsKc.Text = @"C:\Users\Leon\Desktop\数据11.12\昆山所有库存.xlsx";//昆山所有库存
+            //txtUpSHKc.Text = @"C:\Users\Leon\Desktop\数据11.12\上海所有库存.xlsx";//上海所有库存
+            //txtUpHot.Text = @"C:\Users\Leon\Desktop\数据11.12\双十一两天各平台销量.xlsx";
             //txtUpTmp.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\备货.xls";//临时备货
 
 
@@ -487,6 +487,103 @@ namespace OrderAllot
                     }
                     #endregion
 
+                    //加入临时备货
+                    #region 加入临时备货
+                    {
+                        //临时备货里面可能会有和 _最终需要采购的预警里面相同的sku,这时候需要合并,否则直接添加
+                        var final需要采购sku唯一 = _最终需要采购的预警.Where(m => !string.IsNullOrEmpty(m._SKU)).Select(ss => ss._SKU).Distinct().ToList();
+                        _Im临时备货.ForEach(cur预警Item =>
+                        {
+                            //共有sku
+                            var ref最终需要采购的预警Item = _最终需要采购的预警.Where(ss => ss._SKU == cur预警Item._SKU).FirstOrDefault();
+                            if (ref最终需要采购的预警Item != null)
+                            {
+                                var og = string.IsNullOrEmpty(ref最终需要采购的预警Item.org缺货及未派单数量) ? 0.0 : Convert.ToDouble(ref最终需要采购的预警Item._缺货及未派单数量);
+                                var ogn = string.IsNullOrEmpty(cur预警Item.org缺货及未派单数量) ? 0.0 : Convert.ToDouble(cur预警Item._缺货及未派单数量);
+                                ref最终需要采购的预警Item.org缺货及未派单数量 = (og + ogn).ToString();
+                                _最终需要采购的预警.Add(ref最终需要采购的预警Item);
+                            }
+                            else
+                            {
+                                _最终需要采购的预警.Add(cur预警Item);
+                            }
+                        });
+                    }
+                    #endregion
+
+                    //重新计算因为热销产生的建议采购数量过大
+                    #region 重新计算因为热销产生的建议采购数量过大
+                    if (_Im热销产品.Count > 0)
+                    {
+                        //_最终需要采购的预警.ForEach(sh =>
+                        //{
+
+                        //    //if (sh._SKU == "MVPA18B65-FU")
+                        //    //{
+
+                        //    //}
+
+                        //    var normal = sh._最终需要采购数量;
+
+                        //    var refHot = _Im热销产品.Where(x => x._SKU == sh._SKU).FirstOrDefault();
+                        //    if (refHot != null)
+                        //    {
+                        //        //除了热销这两天
+                        //        //var _50天销量总和 = sh._30天销量 + sh._15天销量 + sh._5天销量;
+                        //        //var _排除热销天数销量总和 = (sh._30天销量 - refHot._销量)/30 + sh._15天销量) / 30 + (sh._5天销量 - refHot._销量 * 3);
+
+                        //        var _30av = (sh._30天销量 - refHot._销量) / 30;
+                        //        var _15av = (sh._15天销量 - refHot._销量) / 15;
+                        //        var _5av = (sh._5天销量 - refHot._销量) / 5;
+
+                        //        sh._日销量 = (_30av + _15av + _5av) / 3;
+                        //        sh.IsHot = true;
+                        //        if (sh._最终需要采购数量 > normal)
+                        //        {
+                        //            sh.IsHot = false;
+                        //        }
+                        //    }
+                        //});
+
+
+                        for (int idx = _最终需要采购的预警.Count - 1; idx >= 0; idx--)
+                        {
+                            var sh = _最终需要采购的预警[idx];
+                            //if (sh._SKU == "MVPA18B65-FU")
+                            //{
+
+                            //}
+
+                            var normal = sh._最终需要采购数量;
+
+                            var refHot = _Im热销产品.Where(x => x._SKU == sh._SKU).FirstOrDefault();
+                            if (refHot != null)
+                            {
+                                //除了热销这两天
+                                //var _50天销量总和 = sh._30天销量 + sh._15天销量 + sh._5天销量;
+                                //var _排除热销天数销量总和 = (sh._30天销量 - refHot._销量)/30 + sh._15天销量) / 30 + (sh._5天销量 - refHot._销量 * 3);
+
+                                var _30av = (sh._30天销量 - refHot._销量) / 30;
+                                var _15av = (sh._15天销量 - refHot._销量) / 15;
+                                var _5av = (sh._5天销量 - refHot._销量) / 5;
+
+                                sh._日销量 = (_30av + _15av + _5av) / 3;
+                                sh.IsHot = true;
+                                if (sh._最终需要采购数量 > normal)
+                                {
+                                    sh.IsHot = false;
+                                }
+                            }
+
+                            if (sh._最终需要采购数量 <= 0)
+                            {
+                                _最终需要采购的预警.RemoveAt(idx);
+                            }
+                        }
+                    }
+                    #endregion
+
+
 
                     //把最终建议采购的sku 两个仓库的 可用库存+可用库存 是否大于 两个仓库的 库存下限+库存下限
                     //如果大于 那么说明这个sku不需要采购
@@ -519,65 +616,6 @@ namespace OrderAllot
                         }
                     }
                     #endregion
-
-                    //加入临时备货
-                    #region 加入临时备货
-                    {
-                        //临时备货里面可能会有和 _最终需要采购的预警里面相同的sku,这时候需要合并,否则直接添加
-                        var final需要采购sku唯一 = _最终需要采购的预警.Where(m => !string.IsNullOrEmpty(m._SKU)).Select(ss => ss._SKU).Distinct().ToList();
-                        _Im临时备货.ForEach(cur预警Item =>
-                        {
-                            //共有sku
-                            var ref最终需要采购的预警Item = _最终需要采购的预警.Where(ss => ss._SKU == cur预警Item._SKU).FirstOrDefault();
-                            if (ref最终需要采购的预警Item != null)
-                            {
-                                var og = string.IsNullOrEmpty(ref最终需要采购的预警Item.org缺货及未派单数量) ? 0.0 : Convert.ToDouble(ref最终需要采购的预警Item._缺货及未派单数量);
-                                var ogn = string.IsNullOrEmpty(cur预警Item.org缺货及未派单数量) ? 0.0 : Convert.ToDouble(cur预警Item._缺货及未派单数量);
-                                ref最终需要采购的预警Item.org缺货及未派单数量 = (og + ogn).ToString();
-                                _最终需要采购的预警.Add(ref最终需要采购的预警Item);
-                            }
-                            else
-                            {
-                                _最终需要采购的预警.Add(cur预警Item);
-                            }
-                        });
-                    }
-                    #endregion
-
-                    //重新计算因为热销产生的建议采购数量过大
-                    #region MyRegion
-                    if (_Im热销产品.Count > 0)
-                    {
-                        _最终需要采购的预警.ForEach(sh =>
-                        {
-
-                            //if (sh._SKU == "MVPA18B65-FU")
-                            //{
-
-                            //}
-
-                            var normal = sh._最终需要采购数量;
-
-                            var refHot = _Im热销产品.Where(x => x._SKU == sh._SKU).FirstOrDefault();
-                            if (refHot != null)
-                            {
-                                //除了热销这两天
-                                var _50天销量总和 = sh._30天销量 + sh._15天销量 + sh._5天销量;
-                                var _排除热销天数销量总和 = _50天销量总和 - refHot._销量;
-                                var _平均销量 = _排除热销天数销量总和 / (50 - _HotDay);
-                                sh._日销量 = _平均销量;
-                                sh.IsHot = true;
-                                if (sh._最终需要采购数量 > normal)
-                                {
-                                    sh.IsHot = false;
-                                }
-                            }
-                        });
-                    }
-                    #endregion
-
-
-
 
                     var _List供应商唯一 = _最终需要采购的预警.Select(p => p._供应商).Distinct().ToList();
 
@@ -941,6 +979,10 @@ namespace OrderAllot
             }
         }
         #endregion
+
+
+
+
 
 
 
