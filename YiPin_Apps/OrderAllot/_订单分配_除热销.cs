@@ -28,7 +28,6 @@ namespace OrderAllot
 
         }
 
-        private double _HotDay;
 
         #region 上传默认昆山预警订单
         private void btnUpDfkunsYj_Click(object sender, EventArgs e)
@@ -134,9 +133,14 @@ namespace OrderAllot
         {
             try
             {
-                _HotDay = Convert.ToDouble(txtnHotDay.Value);
+
+                var bIn5Day = cb5day.Checked;
+                var bIn15Day = cb15day.Checked;
+                var bIn30Day = cb30day.Checked;
 
                 #region 解析并计算
+
+
                 var _d订单金额 = Convert.ToDouble(NtxtAmount.Value);
 
                 var _Im上海默认昆山预警 = new List<_除热销_Warning>();
@@ -515,36 +519,6 @@ namespace OrderAllot
                     #region 重新计算因为热销产生的建议采购数量过大
                     if (_Im热销产品.Count > 0)
                     {
-                        //_最终需要采购的预警.ForEach(sh =>
-                        //{
-
-                        //    //if (sh._SKU == "MVPA18B65-FU")
-                        //    //{
-
-                        //    //}
-
-                        //    var normal = sh._最终需要采购数量;
-
-                        //    var refHot = _Im热销产品.Where(x => x._SKU == sh._SKU).FirstOrDefault();
-                        //    if (refHot != null)
-                        //    {
-                        //        //除了热销这两天
-                        //        //var _50天销量总和 = sh._30天销量 + sh._15天销量 + sh._5天销量;
-                        //        //var _排除热销天数销量总和 = (sh._30天销量 - refHot._销量)/30 + sh._15天销量) / 30 + (sh._5天销量 - refHot._销量 * 3);
-
-                        //        var _30av = (sh._30天销量 - refHot._销量) / 30;
-                        //        var _15av = (sh._15天销量 - refHot._销量) / 15;
-                        //        var _5av = (sh._5天销量 - refHot._销量) / 5;
-
-                        //        sh._日销量 = (_30av + _15av + _5av) / 3;
-                        //        sh.IsHot = true;
-                        //        if (sh._最终需要采购数量 > normal)
-                        //        {
-                        //            sh.IsHot = false;
-                        //        }
-                        //    }
-                        //});
-
 
                         for (int idx = _最终需要采购的预警.Count - 1; idx >= 0; idx--)
                         {
@@ -563,9 +537,9 @@ namespace OrderAllot
                                 //var _50天销量总和 = sh._30天销量 + sh._15天销量 + sh._5天销量;
                                 //var _排除热销天数销量总和 = (sh._30天销量 - refHot._销量)/30 + sh._15天销量) / 30 + (sh._5天销量 - refHot._销量 * 3);
 
-                                var _30av = (sh._30天销量 - refHot._销量) / 30;
-                                var _15av = (sh._15天销量 - refHot._销量) / 15;
-                                var _5av = (sh._5天销量 - refHot._销量) / 5;
+                                var _30av = (sh._30天销量 - (bIn30Day ? refHot._销量 : 0)) / 30;
+                                var _15av = (sh._15天销量 - (bIn15Day ? refHot._销量 : 0)) / 15;
+                                var _5av = (sh._5天销量 - (bIn5Day ? refHot._销量 : 0)) / 5;
 
                                 sh._日销量 = (_30av + _15av + _5av) / 3;
                                 sh.IsHot = true;

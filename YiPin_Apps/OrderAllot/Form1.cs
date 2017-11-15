@@ -14,7 +14,6 @@ namespace OrderAllot
 {
     public partial class Form1 : Form
     {
-        private double _HotDay;
 
         public Form1()
         {
@@ -85,7 +84,9 @@ namespace OrderAllot
         {
             try
             {
-                _HotDay = Convert.ToDouble(txtnHotDay.Value);
+                var bIn5Day = cb5day.Checked;
+                var bIn15Day = cb15day.Checked;
+                var bIn30Day = cb30day.Checked;
 
                 #region 解析并计算
                 var d订单分配金额 = Convert.ToDouble(NtxtAmount.Value);
@@ -257,9 +258,9 @@ namespace OrderAllot
                                 //var _50天销量总和 = sh._30天销量 + sh._15天销量 + sh._5天销量;
                                 //var _排除热销天数销量总和 = (sh._30天销量 - refHot._销量)/30 + sh._15天销量) / 30 + (sh._5天销量 - refHot._销量 * 3);
 
-                                var _30av = (sh._30天销量 - refHot._销量) / 30;
-                                var _15av = (sh._15天销量 - refHot._销量) / 15;
-                                var _5av = (sh._5天销量 - refHot._销量) / 5;
+                                var _30av = (sh._30天销量 - (bIn30Day ? refHot._销量 : 0)) / 30;
+                                var _15av = (sh._15天销量 - (bIn15Day ? refHot._销量 : 0)) / 15;
+                                var _5av = (sh._5天销量 - (bIn5Day ? refHot._销量 : 0)) / 5;
 
                                 sh._日销量 = (_30av + _15av + _5av) / 3;
                                 sh.IsHot = true;

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txtnHotDay = new System.Windows.Forms.NumericUpDown();
             this.NtxtAmount = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -37,8 +36,6 @@
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -58,14 +55,18 @@
             this.txtUpKsKc = new System.Windows.Forms.TextBox();
             this.txtUpKsYj = new System.Windows.Forms.TextBox();
             this.txtUpDfkunsYj = new System.Windows.Forms.TextBox();
+            this.cb5day = new System.Windows.Forms.CheckBox();
+            this.cb15day = new System.Windows.Forms.CheckBox();
+            this.cb30day = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtnHotDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.txtnHotDay);
+            this.groupBox1.Controls.Add(this.cb30day);
+            this.groupBox1.Controls.Add(this.cb15day);
+            this.groupBox1.Controls.Add(this.cb5day);
             this.groupBox1.Controls.Add(this.NtxtAmount);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label7);
@@ -73,8 +74,6 @@
             this.groupBox1.Controls.Add(this.txtExport);
             this.groupBox1.Controls.Add(this.lbMsg);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label12);
-            this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label8);
@@ -100,23 +99,6 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
-            // 
-            // txtnHotDay
-            // 
-            this.txtnHotDay.Location = new System.Drawing.Point(114, 178);
-            this.txtnHotDay.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.txtnHotDay.Name = "txtnHotDay";
-            this.txtnHotDay.Size = new System.Drawing.Size(120, 21);
-            this.txtnHotDay.TabIndex = 11;
-            this.txtnHotDay.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
             // 
             // NtxtAmount
             // 
@@ -187,24 +169,6 @@
             this.label5.Size = new System.Drawing.Size(59, 12);
             this.label5.TabIndex = 2;
             this.label5.Text = "处理文件:";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 180);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(17, 12);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "天";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 180);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(59, 12);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "热销天数:";
             // 
             // label10
             // 
@@ -377,6 +341,42 @@
             this.txtUpDfkunsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpDfkunsYj.TabIndex = 0;
             // 
+            // cb5day
+            // 
+            this.cb5day.AutoSize = true;
+            this.cb5day.Checked = true;
+            this.cb5day.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb5day.Location = new System.Drawing.Point(115, 179);
+            this.cb5day.Name = "cb5day";
+            this.cb5day.Size = new System.Drawing.Size(42, 16);
+            this.cb5day.TabIndex = 11;
+            this.cb5day.Text = "5天";
+            this.cb5day.UseVisualStyleBackColor = true;
+            // 
+            // cb15day
+            // 
+            this.cb15day.AutoSize = true;
+            this.cb15day.Checked = true;
+            this.cb15day.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb15day.Location = new System.Drawing.Point(163, 179);
+            this.cb15day.Name = "cb15day";
+            this.cb15day.Size = new System.Drawing.Size(48, 16);
+            this.cb15day.TabIndex = 11;
+            this.cb15day.Text = "15天";
+            this.cb15day.UseVisualStyleBackColor = true;
+            // 
+            // cb30day
+            // 
+            this.cb30day.AutoSize = true;
+            this.cb30day.Checked = true;
+            this.cb30day.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb30day.Location = new System.Drawing.Point(217, 179);
+            this.cb30day.Name = "cb30day";
+            this.cb30day.Size = new System.Drawing.Size(48, 16);
+            this.cb30day.TabIndex = 11;
+            this.cb30day.Text = "30天";
+            this.cb30day.UseVisualStyleBackColor = true;
+            // 
             // _订单分配_除热销
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -389,7 +389,6 @@
             this.Text = "订单分配(除热销)";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtnHotDay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).EndInit();
             this.ResumeLayout(false);
 
@@ -424,8 +423,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button btnUpHot;
         private System.Windows.Forms.TextBox txtUpHot;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.NumericUpDown txtnHotDay;
-        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox cb30day;
+        private System.Windows.Forms.CheckBox cb15day;
+        private System.Windows.Forms.CheckBox cb5day;
     }
 }
