@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cb30day = new System.Windows.Forms.CheckBox();
+            this.cb15day = new System.Windows.Forms.CheckBox();
+            this.cb5day = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.btnUpHot = new System.Windows.Forms.Button();
             this.txtUpHot = new System.Windows.Forms.TextBox();
@@ -46,9 +49,6 @@
             this.btnUpShangsYj = new System.Windows.Forms.Button();
             this.txtUpKunsStore = new System.Windows.Forms.TextBox();
             this.txtUpShangsYj = new System.Windows.Forms.TextBox();
-            this.cb30day = new System.Windows.Forms.CheckBox();
-            this.cb15day = new System.Windows.Forms.CheckBox();
-            this.cb5day = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             this.SuspendLayout();
@@ -81,6 +81,42 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
+            // 
+            // cb30day
+            // 
+            this.cb30day.AutoSize = true;
+            this.cb30day.Checked = true;
+            this.cb30day.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb30day.Location = new System.Drawing.Point(212, 141);
+            this.cb30day.Name = "cb30day";
+            this.cb30day.Size = new System.Drawing.Size(48, 16);
+            this.cb30day.TabIndex = 17;
+            this.cb30day.Text = "30天";
+            this.cb30day.UseVisualStyleBackColor = true;
+            // 
+            // cb15day
+            // 
+            this.cb15day.AutoSize = true;
+            this.cb15day.Checked = true;
+            this.cb15day.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb15day.Location = new System.Drawing.Point(158, 141);
+            this.cb15day.Name = "cb15day";
+            this.cb15day.Size = new System.Drawing.Size(48, 16);
+            this.cb15day.TabIndex = 18;
+            this.cb15day.Text = "15天";
+            this.cb15day.UseVisualStyleBackColor = true;
+            // 
+            // cb5day
+            // 
+            this.cb5day.AutoSize = true;
+            this.cb5day.Checked = true;
+            this.cb5day.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb5day.Location = new System.Drawing.Point(110, 141);
+            this.cb5day.Name = "cb5day";
+            this.cb5day.Size = new System.Drawing.Size(42, 16);
+            this.cb5day.TabIndex = 19;
+            this.cb5day.Text = "5天";
+            this.cb5day.UseVisualStyleBackColor = true;
             // 
             // label10
             // 
@@ -242,42 +278,6 @@
             this.txtUpShangsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpShangsYj.TabIndex = 0;
             // 
-            // cb30day
-            // 
-            this.cb30day.AutoSize = true;
-            this.cb30day.Checked = true;
-            this.cb30day.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb30day.Location = new System.Drawing.Point(212, 141);
-            this.cb30day.Name = "cb30day";
-            this.cb30day.Size = new System.Drawing.Size(48, 16);
-            this.cb30day.TabIndex = 17;
-            this.cb30day.Text = "30天";
-            this.cb30day.UseVisualStyleBackColor = true;
-            // 
-            // cb15day
-            // 
-            this.cb15day.AutoSize = true;
-            this.cb15day.Checked = true;
-            this.cb15day.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb15day.Location = new System.Drawing.Point(158, 141);
-            this.cb15day.Name = "cb15day";
-            this.cb15day.Size = new System.Drawing.Size(48, 16);
-            this.cb15day.TabIndex = 18;
-            this.cb15day.Text = "15天";
-            this.cb15day.UseVisualStyleBackColor = true;
-            // 
-            // cb5day
-            // 
-            this.cb5day.AutoSize = true;
-            this.cb5day.Checked = true;
-            this.cb5day.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb5day.Location = new System.Drawing.Point(110, 141);
-            this.cb5day.Name = "cb5day";
-            this.cb5day.Size = new System.Drawing.Size(42, 16);
-            this.cb5day.TabIndex = 19;
-            this.cb5day.Text = "5天";
-            this.cb5day.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -285,6 +285,8 @@
             this.ClientSize = new System.Drawing.Size(392, 241);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(408, 279);
+            this.MinimumSize = new System.Drawing.Size(408, 279);
             this.Name = "Form1";
             this.Text = "订单分配";
             this.Load += new System.EventHandler(this.Form1_Load);
