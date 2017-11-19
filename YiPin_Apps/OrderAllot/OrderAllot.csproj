@@ -139,6 +139,7 @@
     <Compile Include="Maps\Warning.cs" />
     <Compile Include="Maps\_Form5延时报表.cs" />
     <Compile Include="Maps\_Form6采购流水.cs" />
+    <Compile Include="Maps\_SKU供应商信息.cs" />
     <Compile Include="Maps\_除热销Models.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,6 +148,12 @@
     </Compile>
     <Compile Include="Form4Spec.Designer.cs">
       <DependentUpon>Form4Spec.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_判断供应商个数.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_判断供应商个数.Designer.cs">
+      <DependentUpon>_判断供应商个数.cs</DependentUpon>
     </Compile>
     <Compile Include="_订单分配_除热销.cs">
       <SubType>Form</SubType>
@@ -184,6 +191,9 @@
     </Compile>
     <EmbeddedResource Include="Form4Spec.resx">
       <DependentUpon>Form4Spec.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_判断供应商个数.resx">
+      <DependentUpon>_判断供应商个数.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_订单分配_除热销.resx">
       <DependentUpon>_订单分配_除热销.cs</DependentUpon>
