@@ -19,8 +19,8 @@ namespace Gadget
 
         private void _库存盘点_Load(object sender, EventArgs e)
         {
-            //txtUpJiaoHuo.Text = @"C:\Users\Leon\Desktop\aaa\拣货表.xls";
-            //txtUpKucun.Text = @"C:\Users\Leon\Desktop\aaa\上海所有库存.xlsx";
+            txtUpJiaoHuo.Text = @"C:\Users\Leon\Desktop\aaa\拣货表.xlsx";
+            txtUpKucun.Text = @"C:\Users\Leon\Desktop\aaa\上海所有库存.xlsx";
         }
 
         /**************** button event ****************/
@@ -77,7 +77,7 @@ namespace Gadget
                 {
                     using (var excel = new ExcelQueryFactory(str拣货表Path))
                     {
-                        excel.StrictMapping = LinqToExcel.Query.StrictMappingType.ClassStrict;
+                        //excel.StrictMapping = LinqToExcel.Query.StrictMappingType.ClassStrict;
                         var sheetNames = excel.GetWorksheetNames().ToList();
                         sheetNames.ForEach(s =>
                         {
@@ -102,7 +102,7 @@ namespace Gadget
                 {
                     using (var excel = new ExcelQueryFactory(str库存表Path))
                     {
-                        excel.StrictMapping = LinqToExcel.Query.StrictMappingType.ClassStrict;
+                        //excel.StrictMapping = LinqToExcel.Query.StrictMappingType.ClassStrict;
                         var sheetNames = excel.GetWorksheetNames().ToList();
                         sheetNames.ForEach(s =>
                         {
@@ -182,12 +182,15 @@ namespace Gadget
                                     data._可用数量 = defaultItem._可用数量;
                                     data._库存数量 = defaultItem._库存数量;
                                     data._占用数量 = defaultItem._占用数量;
-
-                                    var ref拣货Item = list拣货信息.Where(x => x._SKU == stParentPart).FirstOrDefault();
-                                    if (ref拣货Item != null)
+                                    data._库位 = defaultItem._库位;
+                                    if (curSKU == stParentPart)
                                     {
-                                        data._拣货单数量 = ref拣货Item._拣货单数量;
-                                        data._实际仓库数量 = ref拣货Item._实际仓库数量;
+                                        var ref拣货Item = list拣货信息.Where(x => x._SKU == curSKU).FirstOrDefault();
+                                        if (ref拣货Item != null)
+                                        {
+                                            data._拣货单数量 = ref拣货Item._拣货单数量;
+                                            data._实际仓库数量 = ref拣货Item._实际仓库数量;
+                                        }
                                     }
                                     list结果信息.Add(data);
                                 }
@@ -210,12 +213,15 @@ namespace Gadget
                                         data._可用数量 = item._可用数量;
                                         data._库存数量 = item._库存数量;
                                         data._占用数量 = item._占用数量;
-
-                                        var ref拣货Item = list拣货信息.Where(x => x._SKU == stParentPart).FirstOrDefault();
-                                        if (ref拣货Item != null)
+                                        data._库位 = item._库位;
+                                        if (curSKU == stParentPart)
                                         {
-                                            data._拣货单数量 = ref拣货Item._拣货单数量;
-                                            data._实际仓库数量 = ref拣货Item._实际仓库数量;
+                                            var ref拣货Item = list拣货信息.Where(x => x._SKU == curSKU).FirstOrDefault();
+                                            if (ref拣货Item != null)
+                                            {
+                                                data._拣货单数量 = ref拣货Item._拣货单数量;
+                                                data._实际仓库数量 = ref拣货Item._实际仓库数量;
+                                            }
                                         }
                                         list结果信息.Add(data);
                                     }
@@ -223,7 +229,7 @@ namespace Gadget
                             }
                         }
                         #endregion
-                    } 
+                    }
                 });
 
                 Export(list结果信息);
@@ -293,7 +299,7 @@ namespace Gadget
                     ShowMsg("表格生成完毕");
                 }
             }, null);
-        } 
+        }
         #endregion
 
         #region ShowMsg 消息提示
@@ -362,6 +368,8 @@ namespace Gadget
             public decimal _占用数量 { get; set; }
             [ExcelColumn("可用数量")]
             public decimal _可用数量 { get; set; }
+            [ExcelColumn("库位")]
+            public string _库位 { get; set; }
         }
 
         class _导出表
@@ -372,6 +380,8 @@ namespace Gadget
             public decimal _可用数量 { get; set; }
             public decimal _拣货单数量 { get; set; }
             public decimal _实际仓库数量 { get; set; }
+            public string _库位 { get; set; }
         }
+
     }
 }

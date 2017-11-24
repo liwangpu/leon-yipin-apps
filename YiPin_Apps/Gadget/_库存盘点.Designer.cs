@@ -133,6 +133,7 @@
             this.btnUpKucun.TabIndex = 1;
             this.btnUpKucun.Text = "浏览";
             this.btnUpKucun.UseVisualStyleBackColor = true;
+            this.btnUpKucun.Click += new System.EventHandler(this.btnUpKucun_Click);
             // 
             // btnUpJiaoHuo
             // 
