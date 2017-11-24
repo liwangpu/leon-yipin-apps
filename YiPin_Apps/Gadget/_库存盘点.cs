@@ -19,8 +19,8 @@ namespace Gadget
 
         private void _库存盘点_Load(object sender, EventArgs e)
         {
-            txtUpJiaoHuo.Text = @"C:\Users\Leon\Desktop\aaa\拣货表.xls";
-            txtUpKucun.Text = @"C:\Users\Leon\Desktop\aaa\上海所有库存.xlsx";
+            //txtUpJiaoHuo.Text = @"C:\Users\Leon\Desktop\aaa\拣货表.xls";
+            //txtUpKucun.Text = @"C:\Users\Leon\Desktop\aaa\上海所有库存.xlsx";
         }
 
         /**************** button event ****************/
@@ -233,6 +233,7 @@ namespace Gadget
 
         /**************** common method ****************/
 
+        #region Export 导出结果表格
         private void Export(List<_导出表> list)
         {
             ShowMsg("开始生成表格");
@@ -292,7 +293,8 @@ namespace Gadget
                     ShowMsg("表格生成完毕");
                 }
             }, null);
-        }
+        } 
+        #endregion
 
         #region ShowMsg 消息提示
         /// <summary>
@@ -371,7 +373,5 @@ namespace Gadget
             public decimal _拣货单数量 { get; set; }
             public decimal _实际仓库数量 { get; set; }
         }
-
-
     }
 }

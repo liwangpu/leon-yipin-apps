@@ -166,8 +166,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(368, 140);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(384, 178);
+            this.MinimumSize = new System.Drawing.Size(384, 178);
             this.Name = "_库存盘点";
-            this.Text = "_库存盘点";
+            this.Text = "库存盘点";
             this.Load += new System.EventHandler(this._库存盘点_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
