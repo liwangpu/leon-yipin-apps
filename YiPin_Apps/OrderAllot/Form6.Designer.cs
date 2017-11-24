@@ -37,7 +37,6 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lbD3_J3 = new System.Windows.Forms.Label();
             this.cbSelfSKUAmount = new System.Windows.Forms.CheckBox();
-            this.btnCalcu = new System.Windows.Forms.Button();
             this.btnRefreshConfig = new System.Windows.Forms.Button();
             this.ntxtD5 = new System.Windows.Forms.NumericUpDown();
             this.ntxtD4 = new System.Windows.Forms.NumericUpDown();
@@ -46,6 +45,10 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.ntxtAward = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff4 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff3 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff2 = new System.Windows.Forms.NumericUpDown();
+            this.ntxtJDiff1 = new System.Windows.Forms.NumericUpDown();
             this.ntxtBaseDDif = new System.Windows.Forms.NumericUpDown();
             this.ntxtBaseD5 = new System.Windows.Forms.NumericUpDown();
             this.ntxtBaseD4 = new System.Windows.Forms.NumericUpDown();
@@ -120,15 +123,31 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.ntxtJDiff1 = new System.Windows.Forms.NumericUpDown();
-            this.ntxtJDiff2 = new System.Windows.Forms.NumericUpDown();
-            this.ntxtJDiff3 = new System.Windows.Forms.NumericUpDown();
-            this.ntxtJDiff4 = new System.Windows.Forms.NumericUpDown();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label22 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnCalcuAward = new System.Windows.Forms.Button();
+            this.btnCalcuFinal = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseDDif)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).BeginInit();
@@ -138,22 +157,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff4)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnParseSource);
             this.groupBox1.Controls.Add(this.txtPurchaseOrg);
-            this.groupBox1.Controls.Add(this.lbMsg);
-            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(6, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(716, 73);
+            this.groupBox1.Size = new System.Drawing.Size(716, 56);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "源数据";
@@ -179,7 +197,7 @@
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(70, 46);
+            this.lbMsg.Location = new System.Drawing.Point(53, 497);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(23, 12);
             this.lbMsg.TabIndex = 0;
@@ -188,7 +206,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 46);
+            this.label2.Location = new System.Drawing.Point(12, 497);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 12);
             this.label2.TabIndex = 0;
@@ -207,7 +225,6 @@
             // 
             this.groupBox2.Controls.Add(this.lbD3_J3);
             this.groupBox2.Controls.Add(this.cbSelfSKUAmount);
-            this.groupBox2.Controls.Add(this.btnCalcu);
             this.groupBox2.Controls.Add(this.btnRefreshConfig);
             this.groupBox2.Controls.Add(this.ntxtD5);
             this.groupBox2.Controls.Add(this.ntxtD4);
@@ -294,9 +311,9 @@
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Location = new System.Drawing.Point(12, 92);
+            this.groupBox2.Location = new System.Drawing.Point(6, 74);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(716, 367);
+            this.groupBox2.Size = new System.Drawing.Size(716, 376);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "参数设定";
@@ -321,17 +338,6 @@
             this.cbSelfSKUAmount.TabIndex = 3;
             this.cbSelfSKUAmount.Text = "自定义SKU个数";
             this.cbSelfSKUAmount.UseVisualStyleBackColor = true;
-            // 
-            // btnCalcu
-            // 
-            this.btnCalcu.Enabled = false;
-            this.btnCalcu.Location = new System.Drawing.Point(600, 93);
-            this.btnCalcu.Name = "btnCalcu";
-            this.btnCalcu.Size = new System.Drawing.Size(102, 44);
-            this.btnCalcu.TabIndex = 2;
-            this.btnCalcu.Text = "计算奖励";
-            this.btnCalcu.UseVisualStyleBackColor = true;
-            this.btnCalcu.Click += new System.EventHandler(this.btnCalcu_Click);
             // 
             // btnRefreshConfig
             // 
@@ -381,7 +387,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(693, 178);
+            this.label18.Location = new System.Drawing.Point(691, 162);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(11, 12);
             this.label18.TabIndex = 0;
@@ -390,7 +396,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(544, 178);
+            this.label17.Location = new System.Drawing.Point(544, 162);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(77, 12);
             this.label17.TabIndex = 0;
@@ -418,7 +424,7 @@
             // ntxtAward
             // 
             this.ntxtAward.DecimalPlaces = 2;
-            this.ntxtAward.Location = new System.Drawing.Point(627, 176);
+            this.ntxtAward.Location = new System.Drawing.Point(627, 160);
             this.ntxtAward.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -432,6 +438,78 @@
             0,
             0,
             0});
+            // 
+            // ntxtJDiff4
+            // 
+            this.ntxtJDiff4.DecimalPlaces = 2;
+            this.ntxtJDiff4.Location = new System.Drawing.Point(461, 160);
+            this.ntxtJDiff4.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtJDiff4.Name = "ntxtJDiff4";
+            this.ntxtJDiff4.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff4.TabIndex = 1;
+            this.ntxtJDiff4.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
+            // 
+            // ntxtJDiff3
+            // 
+            this.ntxtJDiff3.DecimalPlaces = 2;
+            this.ntxtJDiff3.Location = new System.Drawing.Point(390, 160);
+            this.ntxtJDiff3.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtJDiff3.Name = "ntxtJDiff3";
+            this.ntxtJDiff3.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff3.TabIndex = 1;
+            this.ntxtJDiff3.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
+            // 
+            // ntxtJDiff2
+            // 
+            this.ntxtJDiff2.DecimalPlaces = 2;
+            this.ntxtJDiff2.Location = new System.Drawing.Point(319, 160);
+            this.ntxtJDiff2.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtJDiff2.Name = "ntxtJDiff2";
+            this.ntxtJDiff2.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff2.TabIndex = 1;
+            this.ntxtJDiff2.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
+            // 
+            // ntxtJDiff1
+            // 
+            this.ntxtJDiff1.DecimalPlaces = 2;
+            this.ntxtJDiff1.Location = new System.Drawing.Point(248, 160);
+            this.ntxtJDiff1.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.ntxtJDiff1.Name = "ntxtJDiff1";
+            this.ntxtJDiff1.Size = new System.Drawing.Size(60, 21);
+            this.ntxtJDiff1.TabIndex = 1;
+            this.ntxtJDiff1.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
             // 
             // ntxtBaseDDif
             // 
@@ -1158,87 +1236,177 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "第一档";
             // 
-            // ntxtJDiff1
+            // tabControl1
             // 
-            this.ntxtJDiff1.DecimalPlaces = 2;
-            this.ntxtJDiff1.Location = new System.Drawing.Point(248, 160);
-            this.ntxtJDiff1.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.ntxtJDiff1.Name = "ntxtJDiff1";
-            this.ntxtJDiff1.Size = new System.Drawing.Size(60, 21);
-            this.ntxtJDiff1.TabIndex = 1;
-            this.ntxtJDiff1.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            131072});
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(741, 482);
+            this.tabControl1.TabIndex = 2;
             // 
-            // ntxtJDiff2
+            // tabPage1
             // 
-            this.ntxtJDiff2.DecimalPlaces = 2;
-            this.ntxtJDiff2.Location = new System.Drawing.Point(319, 160);
-            this.ntxtJDiff2.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.ntxtJDiff2.Name = "ntxtJDiff2";
-            this.ntxtJDiff2.Size = new System.Drawing.Size(60, 21);
-            this.ntxtJDiff2.TabIndex = 1;
-            this.ntxtJDiff2.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            131072});
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(733, 456);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "订单奖励";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // ntxtJDiff3
+            // tabPage2
             // 
-            this.ntxtJDiff3.DecimalPlaces = 2;
-            this.ntxtJDiff3.Location = new System.Drawing.Point(390, 160);
-            this.ntxtJDiff3.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.ntxtJDiff3.Name = "ntxtJDiff3";
-            this.ntxtJDiff3.Size = new System.Drawing.Size(60, 21);
-            this.ntxtJDiff3.TabIndex = 1;
-            this.ntxtJDiff3.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            131072});
+            this.tabPage2.Controls.Add(this.groupBox4);
+            this.tabPage2.Controls.Add(this.groupBox3);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(733, 456);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "其他";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // ntxtJDiff4
+            // groupBox3
             // 
-            this.ntxtJDiff4.DecimalPlaces = 2;
-            this.ntxtJDiff4.Location = new System.Drawing.Point(461, 160);
-            this.ntxtJDiff4.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.ntxtJDiff4.Name = "ntxtJDiff4";
-            this.ntxtJDiff4.Size = new System.Drawing.Size(60, 21);
-            this.ntxtJDiff4.TabIndex = 1;
-            this.ntxtJDiff4.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            131072});
+            this.groupBox3.Controls.Add(this.button3);
+            this.groupBox3.Controls.Add(this.button2);
+            this.groupBox3.Controls.Add(this.button1);
+            this.groupBox3.Controls.Add(this.textBox3);
+            this.groupBox3.Controls.Add(this.label22);
+            this.groupBox3.Controls.Add(this.textBox2);
+            this.groupBox3.Controls.Add(this.label20);
+            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Controls.Add(this.label19);
+            this.groupBox3.Location = new System.Drawing.Point(6, 18);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(716, 113);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "源数据";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(627, 16);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "上传数据";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(72, 18);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(549, 21);
+            this.textBox1.TabIndex = 1;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(7, 21);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(59, 12);
+            this.label19.TabIndex = 0;
+            this.label19.Text = "库存周转:";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(7, 48);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(59, 12);
+            this.label20.TabIndex = 0;
+            this.label20.Text = "缺货信息:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Enabled = false;
+            this.textBox2.Location = new System.Drawing.Point(72, 45);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(549, 21);
+            this.textBox2.TabIndex = 1;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(627, 43);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "上传数据";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(7, 75);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(59, 12);
+            this.label22.TabIndex = 0;
+            this.label22.Text = "议价奖励:";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Enabled = false;
+            this.textBox3.Location = new System.Drawing.Point(72, 72);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(549, 21);
+            this.textBox3.TabIndex = 1;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(627, 70);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 2;
+            this.button3.Text = "上传数据";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.btnCalcuFinal);
+            this.groupBox4.Controls.Add(this.btnCalcuAward);
+            this.groupBox4.Location = new System.Drawing.Point(6, 138);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(716, 312);
+            this.groupBox4.TabIndex = 2;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "计算";
+            // 
+            // btnCalcuAward
+            // 
+            this.btnCalcuAward.Enabled = false;
+            this.btnCalcuAward.Location = new System.Drawing.Point(9, 21);
+            this.btnCalcuAward.Name = "btnCalcuAward";
+            this.btnCalcuAward.Size = new System.Drawing.Size(102, 56);
+            this.btnCalcuAward.TabIndex = 0;
+            this.btnCalcuAward.Text = "计算订单奖励";
+            this.btnCalcuAward.UseVisualStyleBackColor = true;
+            this.btnCalcuAward.Click += new System.EventHandler(this.btnCalcuAward_Click);
+            // 
+            // btnCalcuFinal
+            // 
+            this.btnCalcuFinal.Location = new System.Drawing.Point(129, 20);
+            this.btnCalcuFinal.Name = "btnCalcuFinal";
+            this.btnCalcuFinal.Size = new System.Drawing.Size(102, 56);
+            this.btnCalcuFinal.TabIndex = 0;
+            this.btnCalcuFinal.Text = "计算最终工资";
+            this.btnCalcuFinal.UseVisualStyleBackColor = true;
+            this.btnCalcuFinal.Click += new System.EventHandler(this.btnCalcuFinal_Click);
             // 
             // Form6
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(736, 469);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.ClientSize = new System.Drawing.Size(765, 517);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.lbMsg);
+            this.Controls.Add(this.label2);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(752, 507);
             this.Name = "Form6";
             this.Text = "订单奖励计算";
             this.Load += new System.EventHandler(this.Form6_Load);
@@ -1249,6 +1417,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtAward)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseDDif)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtBaseD4)).EndInit();
@@ -1258,11 +1430,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ntxtJDiff4)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1319,7 +1494,6 @@
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.CheckBox cbSelfSKUAmount;
         private System.Windows.Forms.Button btnRefreshConfig;
-        private System.Windows.Forms.Button btnCalcu;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbMsg;
         private System.Windows.Forms.Label lbD1_J3_Amount;
@@ -1364,5 +1538,21 @@
         private System.Windows.Forms.NumericUpDown ntxtJDiff3;
         private System.Windows.Forms.NumericUpDown ntxtJDiff2;
         private System.Windows.Forms.NumericUpDown ntxtJDiff1;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button btnCalcuAward;
+        private System.Windows.Forms.Button btnCalcuFinal;
     }
 }

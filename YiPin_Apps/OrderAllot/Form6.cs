@@ -1028,7 +1028,7 @@ namespace OrderAllot
 
                     var enableBtnAct = new Action(() =>
                     {
-                        btnCalcu.Enabled = true;
+                        btnCalcuAward.Enabled = true;
                         btnRefreshConfig.Enabled = true;
 
                         //if (!cbSelfSKUAmount.Checked)
@@ -1060,8 +1060,8 @@ namespace OrderAllot
         }
         #endregion
 
-        #region 计算奖励按钮事件
-        private void btnCalcu_Click(object sender, EventArgs e)
+        #region 计算订单奖励按钮事件
+        private void btnCalcuAward_Click(object sender, EventArgs e)
         {
             var result = new List<_订单奖励>();
             var act = new Action(() =>
@@ -1451,6 +1451,13 @@ namespace OrderAllot
         }
         #endregion
 
+        #region 计算最终工资按钮事件
+        private void btnCalcuFinal_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
         /**************** common ****************/
 
         #region 刷新配置
@@ -1792,6 +1799,8 @@ namespace OrderAllot
             return Math.Round(dou, 2);
         }
         #endregion
+
+ 
 
     }
 }

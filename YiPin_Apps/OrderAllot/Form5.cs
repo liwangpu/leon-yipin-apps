@@ -90,7 +90,7 @@ namespace OrderAllot
                     {
                         using (var excel = new ExcelQueryFactory(str上海库存Path))
                         {
-                         
+
 
                             try
                             {
@@ -111,11 +111,9 @@ namespace OrderAllot
                             }
                             catch (Exception ex)
                             {
-
-                                var aaaa = 1;
+                                var mq = ex.Message;
                             }
 
-                
                         }
                     }
                     if (!string.IsNullOrEmpty(str昆山库存Path))
