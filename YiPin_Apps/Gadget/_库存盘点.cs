@@ -19,8 +19,8 @@ namespace Gadget
 
         private void _库存盘点_Load(object sender, EventArgs e)
         {
-            txtUpJiaoHuo.Text = @"C:\Users\Leon\Desktop\aaa\拣货表.xlsx";
-            txtUpKucun.Text = @"C:\Users\Leon\Desktop\aaa\上海所有库存.xlsx";
+            //txtUpJiaoHuo.Text = @"C:\Users\pulw\Desktop\aaa\拣货.xlsx";
+            //txtUpKucun.Text = @"C:\Users\pulw\Desktop\aaa\上海建议采购.xlsx";
         }
 
         /**************** button event ****************/
@@ -132,6 +132,11 @@ namespace Gadget
 
                 list拣货SKU.ForEach(curSKU =>
                 {
+                    //if (curSKU == "FEDA14A20HP")
+                    //{
+
+                    //}
+
                     /*
                      * 两类sku,一类为CLBA10A94-B,CLBA10A94,其中第一个是第二个的子sku,我们称第一个是父sku
                      * 父sku一般不含中间横线,且一般以数值结尾
@@ -152,15 +157,7 @@ namespace Gadget
                     #region 匹配第二类sku
                     if (string.IsNullOrEmpty(stParentPart))
                     {
-                        var lastChar = curSKU.Substring(curSKU.Length - 1, 1);
-                        try
-                        {
-                            var a = Convert.ToInt32(lastChar);
-                        }
-                        catch (Exception)
-                        {
-                            stParentPart = curSKU.Substring(0, curSKU.Length - 1);
-                        }
+                        stParentPart = CutParent(curSKU);
                     }
                     #endregion
 
@@ -171,7 +168,7 @@ namespace Gadget
                     {
                         #region 第一个默认是拣货单sku
                         {
-                            var defaultItem = refStoreItems.Where(x => x._SKU == stParentPart).FirstOrDefault();
+                            var defaultItem = refStoreItems.Where(x => x._SKU == curSKU).FirstOrDefault();
                             if (defaultItem != null)
                             {
                                 var bExist = list结果信息.Count(x => x._SKU == defaultItem._SKU) > 0;
@@ -183,14 +180,11 @@ namespace Gadget
                                     data._库存数量 = defaultItem._库存数量;
                                     data._占用数量 = defaultItem._占用数量;
                                     data._库位 = defaultItem._库位;
-                                    if (curSKU == stParentPart)
+                                    var ref拣货Item = list拣货信息.Where(x => x._SKU == defaultItem._SKU).FirstOrDefault();
+                                    if (ref拣货Item != null)
                                     {
-                                        var ref拣货Item = list拣货信息.Where(x => x._SKU == curSKU).FirstOrDefault();
-                                        if (ref拣货Item != null)
-                                        {
-                                            data._拣货单数量 = ref拣货Item._拣货单数量;
-                                            data._实际仓库数量 = ref拣货Item._实际仓库数量;
-                                        }
+                                        data._拣货单数量 = ref拣货Item._拣货单数量;
+                                        data._缺货数量 = ref拣货Item._缺货数量;
                                     }
                                     list结果信息.Add(data);
                                 }
@@ -200,7 +194,7 @@ namespace Gadget
 
                         #region 余下的子sku
                         {
-                            var remainItems = refStoreItems.Where(x => x._SKU != stParentPart).ToList();
+                            var remainItems = refStoreItems.Where(x => x._SKU != curSKU).ToList();
                             if (remainItems != null && remainItems.Count > 0)
                             {
                                 foreach (var item in remainItems)
@@ -214,14 +208,11 @@ namespace Gadget
                                         data._库存数量 = item._库存数量;
                                         data._占用数量 = item._占用数量;
                                         data._库位 = item._库位;
-                                        if (curSKU == stParentPart)
+                                        var ref拣货Item = list拣货信息.Where(x => x._SKU == item._SKU).FirstOrDefault();
+                                        if (ref拣货Item != null)
                                         {
-                                            var ref拣货Item = list拣货信息.Where(x => x._SKU == curSKU).FirstOrDefault();
-                                            if (ref拣货Item != null)
-                                            {
-                                                data._拣货单数量 = ref拣货Item._拣货单数量;
-                                                data._实际仓库数量 = ref拣货Item._实际仓库数量;
-                                            }
+                                            data._拣货单数量 = ref拣货Item._拣货单数量;
+                                            data._缺货数量 = ref拣货Item._缺货数量;
                                         }
                                         list结果信息.Add(data);
                                     }
@@ -238,6 +229,32 @@ namespace Gadget
         #endregion
 
         /**************** common method ****************/
+
+        #region 匹配第二 类sku
+        private string CutParent(string strSKU)
+        {
+            var msg = 0;
+            var iCutLength = 0;
+            if (!string.IsNullOrEmpty(strSKU))
+            {
+                for (int idx = strSKU.Length - 1; idx >= 0; idx--)
+                {
+                    var cschar = strSKU.Substring(idx, 1);
+                    var bIsNumber = int.TryParse(cschar, out msg);
+                    if (bIsNumber)
+                    {
+                        break;
+                    }
+                    iCutLength++;
+                }
+            }
+            if (iCutLength > 0)
+            {
+                return strSKU.Substring(0, strSKU.Length - iCutLength);
+            }
+            return strSKU;
+        } 
+        #endregion
 
         #region Export 导出结果表格
         private void Export(List<_导出表> list)
@@ -258,7 +275,8 @@ namespace Gadget
                 sheet1.Cells[1, 3].Value = "占用数量";
                 sheet1.Cells[1, 4].Value = "可用数量";
                 sheet1.Cells[1, 5].Value = "拣货单数量";
-                sheet1.Cells[1, 6].Value = "实际仓库数量";
+                sheet1.Cells[1, 6].Value = "缺货数量";
+                sheet1.Cells[1, 7].Value = "库位";
                 #endregion
 
                 #region 数据行
@@ -270,7 +288,8 @@ namespace Gadget
                     sheet1.Cells[rowIdx, 3].Value = info._占用数量;
                     sheet1.Cells[rowIdx, 4].Value = info._可用数量;
                     sheet1.Cells[rowIdx, 5].Value = info._拣货单数量;
-                    sheet1.Cells[rowIdx, 6].Value = info._实际仓库数量;
+                    sheet1.Cells[rowIdx, 6].Value = info._缺货数量;
+                    sheet1.Cells[rowIdx, 7].Value = info._库位;
                 }
                 #endregion
 
@@ -350,18 +369,40 @@ namespace Gadget
 
         class _拣货表
         {
+            private string strSKU;
             [ExcelColumn("SKU")]
-            public string _SKU { get; set; }
+            public string _SKU
+            {
+                get
+                {
+                    return strSKU;
+                }
+                set
+                {
+                    strSKU = !string.IsNullOrEmpty(value) ? value.Trim() : "";
+                }
+            }
             [ExcelColumn("拣货单数量")]
             public decimal _拣货单数量 { get; set; }
-            [ExcelColumn("实际仓库数量")]
-            public decimal _实际仓库数量 { get; set; }
+            [ExcelColumn("缺货数量")]
+            public decimal _缺货数量 { get; set; }
         }
 
         class _库存表
         {
+            private string strSKU;
             [ExcelColumn("SKU码")]
-            public string _SKU { get; set; }
+            public string _SKU
+            {
+                get
+                {
+                    return strSKU;
+                }
+                set
+                {
+                    strSKU = !string.IsNullOrEmpty(value) ? value.Trim() : "";
+                }
+            }
             [ExcelColumn("库存数量")]
             public decimal _库存数量 { get; set; }
             [ExcelColumn("占用数量")]
@@ -379,7 +420,7 @@ namespace Gadget
             public decimal _占用数量 { get; set; }
             public decimal _可用数量 { get; set; }
             public decimal _拣货单数量 { get; set; }
-            public decimal _实际仓库数量 { get; set; }
+            public decimal _缺货数量 { get; set; }
             public string _库位 { get; set; }
         }
 
