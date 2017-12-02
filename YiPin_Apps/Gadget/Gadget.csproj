@@ -79,6 +79,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_工资计算.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_工资计算.Designer.cs">
+      <DependentUpon>_工资计算.cs</DependentUpon>
+    </Compile>
     <Compile Include="_库存盘点.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +101,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="_工资计算.resx">
+      <DependentUpon>_工资计算.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="_库存盘点.resx">
       <DependentUpon>_库存盘点.cs</DependentUpon>
     </EmbeddedResource>

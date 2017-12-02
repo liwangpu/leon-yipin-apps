@@ -17,32 +17,57 @@ namespace CommonLibs
         public static List<string> GetBuyers()
         {
             var buyers = new List<string>();
-            buyers.Add("鲍祝平");
-            buyers.Add("毕玉");
-            buyers.Add("侯春喜");
-            buyers.Add("王思雅");
-            buyers.Add("曹晨晨");
-            buyers.Add("黄妍妍");
-            buyers.Add("章玲玲");
-            buyers.Add("邵俊丽");
+            buyers.AddRange(GetHeFeiBuyer());
+            buyers.AddRange(GetShangHaiBuyer());
+            return buyers;
+        }
+        #endregion
+
+        #region GetHeFeiBuyer 获取所有合肥采购
+        /// <summary>
+        /// 获取所有合肥采购
+        /// </summary>
+        /// <returns></returns>
+        private static List<string> GetHeFeiBuyer()
+        {
+            var buyers = new List<string>();
             buyers.Add("崔侠梅");
-            buyers.Add("蔡怡雯");
-            buyers.Add("桂娅利");
-            buyers.Add("潘明媛");
-            buyers.Add("秦荧");
-            buyers.Add("邹晓玲");
             buyers.Add("董文丽");
-            buyers.Add("王梦梦");
-            buyers.Add("何萧雪");
+            buyers.Add("曹晨晨");
+            buyers.Add("侯春喜");
             buyers.Add("苏苗雨");
             buyers.Add("王素素");
             buyers.Add("李曼曼");
-            buyers.Add("陈春梦");
-            buyers.Add("周晓悦");
             buyers.Add("袁国梁");
-            buyers.Add("吴海燕");
             buyers.Add("吴倩");
             buyers.Add("韩丽敏");
+            return buyers;
+        }
+        #endregion
+
+        #region GetShangHaiBuyer 获取所有上海采购
+        /// <summary>
+        /// 获取所有上海采购
+        /// </summary>
+        /// <returns></returns>
+        private static List<string> GetShangHaiBuyer()
+        {
+            var buyers = new List<string>();
+            buyers.Add("鲍祝平");
+            buyers.Add("毕玉");
+            buyers.Add("王思雅");
+            buyers.Add("桂娅利");
+            buyers.Add("黄妍妍");
+            buyers.Add("章玲玲");
+            buyers.Add("邵俊丽");
+            buyers.Add("潘明媛");
+            buyers.Add("蔡怡雯");
+            buyers.Add("秦荧");
+            buyers.Add("邹晓玲");
+            buyers.Add("王梦梦");
+            buyers.Add("何萧雪");
+            buyers.Add("周晓悦");
+            buyers.Add("陈春梦");
             return buyers;
         }
         #endregion
@@ -60,6 +85,29 @@ namespace CommonLibs
             bFlag = buyerList.Where(x => x == strName).Count() > 0;
             return bFlag;
         }
+        #endregion
+
+        #region IsSpecBuyerType 判断是否为对应采购类型
+        /// <summary>
+        /// 判断是否为对应采购类型
+        /// </summary>
+        /// <param name="strBuyerName"></param>
+        /// <param name="spec"></param>
+        /// <returns></returns>
+        public static bool IsSpecBuyerType(string strBuyerName, BuyerTypeEnum spec)
+        {
+            if (spec == BuyerTypeEnum.ShangHai)
+            {
+                return GetShangHaiBuyer().Count(x => x == strBuyerName) > 0;
+            }
+
+            if (spec == BuyerTypeEnum.HeFei)
+            {
+                return GetHeFeiBuyer().Count(x => x == strBuyerName) > 0;
+            }
+
+            return false;
+        } 
         #endregion
 
         #region ChangeLowerBuyer 采购员转换
@@ -138,5 +186,15 @@ namespace CommonLibs
             return calAmount;
         }
         #endregion
+
+    }
+
+    /// <summary>
+    /// 采购类型
+    /// </summary>
+    public enum BuyerTypeEnum
+    {
+        ShangHai = 0,
+        HeFei = 1
     }
 }
