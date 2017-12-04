@@ -1,8 +1,10 @@
 ﻿using LinqToExcel.Attributes;
 using System.Text;
 using System;
+using CommonLibs;
 namespace OrderAllot.Maps
 {
+    [ExcelTable("上海/昆山仓库")]
     public class _Form5延时报表
     {
         [ExcelColumn("可用数量")]
@@ -46,6 +48,7 @@ namespace OrderAllot.Maps
 
     }
 
+    [ExcelTable("延时报表")]
     public class _Form5缺货延时报表判断
     {
         private string _sku;

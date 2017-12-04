@@ -228,6 +228,23 @@ namespace Gadget
         }
         #endregion
 
+        #region 导出表格说明
+        private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var strDesc = XlsxHelper.GetDecsipt(typeof(_拣货表), typeof(_库存表));
+
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "记事本|*.txt";//设置文件类型
+            saveFile.Title = "导出说明文件";//设置标题
+            saveFile.AddExtension = true;//是否自动增加所辍名
+            saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                File.WriteAllText(saveFile.FileName, strDesc);
+            }
+        }
+        #endregion
+
         /**************** common method ****************/
 
         #region 匹配第二 类sku
@@ -253,7 +270,7 @@ namespace Gadget
                 return strSKU.Substring(0, strSKU.Length - iCutLength);
             }
             return strSKU;
-        } 
+        }
         #endregion
 
         #region Export 导出结果表格
@@ -367,6 +384,7 @@ namespace Gadget
 
         /**************** common class ****************/
 
+        [ExcelTable("拣货表")]
         class _拣货表
         {
             private string strSKU;
@@ -388,6 +406,7 @@ namespace Gadget
             public decimal _缺货数量 { get; set; }
         }
 
+        [ExcelTable("库存表")]
         class _库存表
         {
             private string strSKU;
@@ -423,6 +442,8 @@ namespace Gadget
             public decimal _缺货数量 { get; set; }
             public string _库位 { get; set; }
         }
+
+
 
     }
 }

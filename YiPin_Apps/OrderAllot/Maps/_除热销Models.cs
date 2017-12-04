@@ -4,6 +4,7 @@ using OrderAllot.Libs;
 using System;
 namespace OrderAllot.Maps
 {
+    [ExcelTable("库存预警/库存信息(两个表都要的列)")]
     public class _除热销_Warning
     {
         private string self供应商;
@@ -179,6 +180,7 @@ namespace OrderAllot.Maps
         public bool IsHot { get; set; }
     }
 
+     [ExcelTable("热销产品")]
     public class _热销产品
     {
         [ExcelColumn("SKU")]

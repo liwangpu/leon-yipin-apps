@@ -40,11 +40,13 @@
             this.btnUpJiaoHuo = new System.Windows.Forms.Button();
             this.txtUpKucun = new System.Windows.Forms.TextBox();
             this.txtUpJiaoHuo = new System.Windows.Forms.TextBox();
+            this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lkDecs);
             this.groupBox1.Controls.Add(this.btnAnalyze);
             this.groupBox1.Controls.Add(this.txtExport);
             this.groupBox1.Controls.Add(this.lbMsg);
@@ -161,6 +163,17 @@
             this.txtUpJiaoHuo.Size = new System.Drawing.Size(183, 21);
             this.txtUpJiaoHuo.TabIndex = 0;
             // 
+            // lkDecs
+            // 
+            this.lkDecs.AutoSize = true;
+            this.lkDecs.Location = new System.Drawing.Point(287, 98);
+            this.lkDecs.Name = "lkDecs";
+            this.lkDecs.Size = new System.Drawing.Size(53, 12);
+            this.lkDecs.TabIndex = 7;
+            this.lkDecs.TabStop = true;
+            this.lkDecs.Text = "表格说明";
+            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
+            // 
             // _库存盘点
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -193,5 +206,6 @@
         private System.Windows.Forms.Button btnUpJiaoHuo;
         private System.Windows.Forms.TextBox txtUpKucun;
         private System.Windows.Forms.TextBox txtUpJiaoHuo;
+        private System.Windows.Forms.LinkLabel lkDecs;
     }
 }

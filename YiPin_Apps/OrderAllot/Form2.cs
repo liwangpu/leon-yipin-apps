@@ -1,4 +1,5 @@
-﻿using LinqToExcel;
+﻿using CommonLibs;
+using LinqToExcel;
 using OfficeOpenXml;
 using OrderAllot.Entities;
 using OrderAllot.Maps;
@@ -84,7 +85,7 @@ namespace OrderAllot
                     });
 
                     //计算完毕,开始导出数据
-                    ExportExcel(workPieceList.OrderByDescending(u=>u._完成单量).ToList());
+                    ExportExcel(workPieceList.OrderByDescending(u => u._完成单量).ToList());
 
                 }, null);
                 #endregion
@@ -95,7 +96,22 @@ namespace OrderAllot
             }
         }
 
+        #region 导出表格说明
+        private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var strDesc = XlsxHelper.GetDecsipt(typeof(OrderState));
 
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "记事本|*.txt";//设置文件类型
+            saveFile.Title = "导出说明文件";//设置标题
+            saveFile.AddExtension = true;//是否自动增加所辍名
+            saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                File.WriteAllText(saveFile.FileName, strDesc);
+            }
+        }
+        #endregion
 
         #region ShowMsg 消息提示
         /// <summary>
@@ -219,5 +235,6 @@ namespace OrderAllot
             }, null);
         }
         #endregion
+
     }
 }

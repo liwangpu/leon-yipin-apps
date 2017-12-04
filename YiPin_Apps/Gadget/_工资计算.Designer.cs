@@ -125,11 +125,18 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.nd合肥采购底薪 = new System.Windows.Forms.NumericUpDown();
+            this.label24 = new System.Windows.Forms.Label();
+            this.nd上海采购底薪 = new System.Windows.Forms.NumericUpDown();
+            this.label23 = new System.Windows.Forms.Label();
             this.btnCalcuFinal = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btn上传未入库 = new System.Windows.Forms.Button();
             this.btn上传议价奖励 = new System.Windows.Forms.Button();
             this.btn上传缺货信息 = new System.Windows.Forms.Button();
             this.btn上传库存周转率 = new System.Windows.Forms.Button();
+            this.txt未入库 = new System.Windows.Forms.TextBox();
+            this.label25 = new System.Windows.Forms.Label();
             this.txt议价奖励 = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.txt缺货信息 = new System.Windows.Forms.TextBox();
@@ -138,13 +145,7 @@
             this.label19 = new System.Windows.Forms.Label();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.nd上海采购底薪 = new System.Windows.Forms.NumericUpDown();
-            this.label24 = new System.Windows.Forms.Label();
-            this.nd合肥采购底薪 = new System.Windows.Forms.NumericUpDown();
-            this.label25 = new System.Windows.Forms.Label();
-            this.txt未入库 = new System.Windows.Forms.TextBox();
-            this.btn上传未入库 = new System.Windows.Forms.Button();
+            this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -167,9 +168,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.ntxtD1)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nd上海采购底薪)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nd合肥采购底薪)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nd上海采购底薪)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -1295,9 +1296,61 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "计算";
             // 
+            // nd合肥采购底薪
+            // 
+            this.nd合肥采购底薪.Location = new System.Drawing.Point(306, 21);
+            this.nd合肥采购底薪.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nd合肥采购底薪.Name = "nd合肥采购底薪";
+            this.nd合肥采购底薪.Size = new System.Drawing.Size(101, 21);
+            this.nd合肥采购底薪.TabIndex = 2;
+            this.nd合肥采购底薪.Value = new decimal(new int[] {
+            1500,
+            0,
+            0,
+            0});
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(217, 23);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(83, 12);
+            this.label24.TabIndex = 1;
+            this.label24.Text = "合肥采购底薪:";
+            // 
+            // nd上海采购底薪
+            // 
+            this.nd上海采购底薪.Location = new System.Drawing.Point(98, 19);
+            this.nd上海采购底薪.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nd上海采购底薪.Name = "nd上海采购底薪";
+            this.nd上海采购底薪.Size = new System.Drawing.Size(101, 21);
+            this.nd上海采购底薪.TabIndex = 2;
+            this.nd上海采购底薪.Value = new decimal(new int[] {
+            3000,
+            0,
+            0,
+            0});
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(9, 21);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(83, 12);
+            this.label23.TabIndex = 1;
+            this.label23.Text = "上海采购底薪:";
+            // 
             // btnCalcuFinal
             // 
-            this.btnCalcuFinal.Location = new System.Drawing.Point(569, 66);
+            this.btnCalcuFinal.Location = new System.Drawing.Point(608, 19);
             this.btnCalcuFinal.Name = "btnCalcuFinal";
             this.btnCalcuFinal.Size = new System.Drawing.Size(102, 56);
             this.btnCalcuFinal.TabIndex = 0;
@@ -1325,6 +1378,16 @@
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "源数据";
+            // 
+            // btn上传未入库
+            // 
+            this.btn上传未入库.Location = new System.Drawing.Point(627, 97);
+            this.btn上传未入库.Name = "btn上传未入库";
+            this.btn上传未入库.Size = new System.Drawing.Size(75, 23);
+            this.btn上传未入库.TabIndex = 2;
+            this.btn上传未入库.Text = "上传数据";
+            this.btn上传未入库.UseVisualStyleBackColor = true;
+            this.btn上传未入库.Click += new System.EventHandler(this.btn上传未入库_Click);
             // 
             // btn上传议价奖励
             // 
@@ -1356,12 +1419,29 @@
             this.btn上传库存周转率.UseVisualStyleBackColor = true;
             this.btn上传库存周转率.Click += new System.EventHandler(this.btn上传库存周转率_Click);
             // 
+            // txt未入库
+            // 
+            this.txt未入库.Enabled = false;
+            this.txt未入库.Location = new System.Drawing.Point(93, 99);
+            this.txt未入库.Name = "txt未入库";
+            this.txt未入库.Size = new System.Drawing.Size(528, 21);
+            this.txt未入库.TabIndex = 1;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(7, 102);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(71, 12);
+            this.label25.TabIndex = 0;
+            this.label25.Text = "审核未入库:";
+            // 
             // txt议价奖励
             // 
             this.txt议价奖励.Enabled = false;
-            this.txt议价奖励.Location = new System.Drawing.Point(72, 72);
+            this.txt议价奖励.Location = new System.Drawing.Point(93, 72);
             this.txt议价奖励.Name = "txt议价奖励";
-            this.txt议价奖励.Size = new System.Drawing.Size(549, 21);
+            this.txt议价奖励.Size = new System.Drawing.Size(528, 21);
             this.txt议价奖励.TabIndex = 1;
             // 
             // label22
@@ -1369,16 +1449,16 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(7, 75);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(59, 12);
+            this.label22.Size = new System.Drawing.Size(71, 12);
             this.label22.TabIndex = 0;
-            this.label22.Text = "议价奖励:";
+            this.label22.Text = "议价绩效表:";
             // 
             // txt缺货信息
             // 
             this.txt缺货信息.Enabled = false;
-            this.txt缺货信息.Location = new System.Drawing.Point(72, 45);
+            this.txt缺货信息.Location = new System.Drawing.Point(93, 45);
             this.txt缺货信息.Name = "txt缺货信息";
-            this.txt缺货信息.Size = new System.Drawing.Size(549, 21);
+            this.txt缺货信息.Size = new System.Drawing.Size(528, 21);
             this.txt缺货信息.TabIndex = 1;
             // 
             // label20
@@ -1386,16 +1466,16 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(7, 48);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(59, 12);
+            this.label20.Size = new System.Drawing.Size(71, 12);
             this.label20.TabIndex = 0;
-            this.label20.Text = "缺货信息:";
+            this.label20.Text = "缺货率报表:";
             // 
             // txt库存周转率
             // 
             this.txt库存周转率.Enabled = false;
-            this.txt库存周转率.Location = new System.Drawing.Point(72, 18);
+            this.txt库存周转率.Location = new System.Drawing.Point(93, 18);
             this.txt库存周转率.Name = "txt库存周转率";
-            this.txt库存周转率.Size = new System.Drawing.Size(549, 21);
+            this.txt库存周转率.Size = new System.Drawing.Size(528, 21);
             this.txt库存周转率.TabIndex = 1;
             // 
             // label19
@@ -1403,9 +1483,9 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(7, 21);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(59, 12);
+            this.label19.Size = new System.Drawing.Size(71, 12);
             this.label19.TabIndex = 0;
-            this.label19.Text = "库存周转:";
+            this.label19.Text = "库存周转率:";
             // 
             // lbMsg
             // 
@@ -1425,90 +1505,23 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "消息:";
             // 
-            // label23
+            // lkDecs
             // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(9, 21);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(83, 12);
-            this.label23.TabIndex = 1;
-            this.label23.Text = "上海采购底薪:";
-            // 
-            // nd上海采购底薪
-            // 
-            this.nd上海采购底薪.Location = new System.Drawing.Point(98, 19);
-            this.nd上海采购底薪.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nd上海采购底薪.Name = "nd上海采购底薪";
-            this.nd上海采购底薪.Size = new System.Drawing.Size(101, 21);
-            this.nd上海采购底薪.TabIndex = 2;
-            this.nd上海采购底薪.Value = new decimal(new int[] {
-            3000,
-            0,
-            0,
-            0});
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(217, 23);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(83, 12);
-            this.label24.TabIndex = 1;
-            this.label24.Text = "合肥采购底薪:";
-            // 
-            // nd合肥采购底薪
-            // 
-            this.nd合肥采购底薪.Location = new System.Drawing.Point(306, 21);
-            this.nd合肥采购底薪.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nd合肥采购底薪.Name = "nd合肥采购底薪";
-            this.nd合肥采购底薪.Size = new System.Drawing.Size(101, 21);
-            this.nd合肥采购底薪.TabIndex = 2;
-            this.nd合肥采购底薪.Value = new decimal(new int[] {
-            1500,
-            0,
-            0,
-            0});
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(7, 102);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(47, 12);
-            this.label25.TabIndex = 0;
-            this.label25.Text = "未入库:";
-            // 
-            // txt未入库
-            // 
-            this.txt未入库.Enabled = false;
-            this.txt未入库.Location = new System.Drawing.Point(72, 99);
-            this.txt未入库.Name = "txt未入库";
-            this.txt未入库.Size = new System.Drawing.Size(549, 21);
-            this.txt未入库.TabIndex = 1;
-            // 
-            // btn上传未入库
-            // 
-            this.btn上传未入库.Location = new System.Drawing.Point(627, 97);
-            this.btn上传未入库.Name = "btn上传未入库";
-            this.btn上传未入库.Size = new System.Drawing.Size(75, 23);
-            this.btn上传未入库.TabIndex = 2;
-            this.btn上传未入库.Text = "上传数据";
-            this.btn上传未入库.UseVisualStyleBackColor = true;
-            this.btn上传未入库.Click += new System.EventHandler(this.btn上传未入库_Click);
+            this.lkDecs.AutoSize = true;
+            this.lkDecs.Location = new System.Drawing.Point(696, 497);
+            this.lkDecs.Name = "lkDecs";
+            this.lkDecs.Size = new System.Drawing.Size(53, 12);
+            this.lkDecs.TabIndex = 6;
+            this.lkDecs.TabStop = true;
+            this.lkDecs.Text = "表格说明";
+            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
             // 
             // _工资计算
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(765, 515);
+            this.Controls.Add(this.lkDecs);
             this.Controls.Add(this.lbMsg);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tabControl1);
@@ -1542,10 +1555,10 @@
             this.tabPage2.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nd合肥采购底薪)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nd上海采购底薪)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nd上海采购底薪)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nd合肥采购底薪)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1670,5 +1683,6 @@
         private System.Windows.Forms.Button btn上传未入库;
         private System.Windows.Forms.TextBox txt未入库;
         private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.LinkLabel lkDecs;
     }
 }

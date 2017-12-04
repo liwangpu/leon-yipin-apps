@@ -1,8 +1,10 @@
-﻿using LinqToExcel.Attributes;
+﻿using CommonLibs;
+using LinqToExcel.Attributes;
 using System.Text;
 
 namespace OrderAllot.Maps
 {
+    [ExcelTable("工作情况")]
     public class OrderState
     {
         [ExcelColumn("采购员")]

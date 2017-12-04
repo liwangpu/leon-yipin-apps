@@ -22,11 +22,11 @@ namespace Gadget
         {
             PurchaseList = new List<_采购流水Model>();
 
-            txtPurchaseOrg.Text = @"C:\Users\Leon\Desktop\All.xlsx";
-            txt库存周转率.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\库存周转率.xlsx";
-            txt缺货信息.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\缺货率报表.xlsx";
-            txt未入库.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\采购已审核未入库.xlsx";
-            txt议价奖励.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\议价绩效.xlsx";
+            //txtPurchaseOrg.Text = @"C:\Users\Leon\Desktop\All.xlsx";
+            //txt库存周转率.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\库存周转率.xlsx";
+            //txt缺货信息.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\缺货率报表.xlsx";
+            //txt未入库.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\采购已审核未入库.xlsx";
+            //txt议价奖励.Text = @"C:\Users\Leon\Desktop\采购工资所需报表\议价绩效.xlsx";
         }
 
         /**************** properties ****************/
@@ -1593,36 +1593,39 @@ namespace Gadget
                         var _库存周转率采购员List = _库存周转率Mappings.Where(x => !string.IsNullOrEmpty(x._采购人)).Select(x => x._采购人).Distinct().ToList();
                         _库存周转率采购员List.ForEach(buyerName =>
                         {
-                            var ref库存周转率 = _库存周转率Mappings.Where(x => x._采购人 == buyerName).ToList();
-
-                            var cur滞销金滞销权重 = new _滞销金滞销权重Model();
-                            cur滞销金滞销权重._采购员 = buyerName;
-
-                            #region 库存周转率>100获取滞销金
+                            if (Helper.IsBuyer(buyerName))
                             {
-                                var list = ref库存周转率.Where(x => x._库存周转天数 > 100);
-                                if (list.Count() > 0)
-                                {
-                                    cur滞销金滞销权重._滞销_周转天数 = list.Sum(x => x._库存周转天数);
-                                    cur滞销金滞销权重._滞销_总金额 = list.Sum(x => x._总金额);
-                                    cur滞销金滞销权重._滞销金 = cur滞销金滞销权重._滞销_总金额 / 1000 * 2;
-                                }
-                            }
-                            #endregion
+                                var ref库存周转率 = _库存周转率Mappings.Where(x => x._采购人 == buyerName).ToList();
 
-                            #region 库存周转率<=100获取滞销权重
-                            {
-                                var list = ref库存周转率.Where(x => x._库存周转天数 <= 100);
-                                if (list.Count() > 0)
-                                {
-                                    cur滞销金滞销权重._权重_周转天数 = list.Sum(x => x._库存周转天数) / list.Count();
-                                    cur滞销金滞销权重._权重 = Culc滞销权重(cur滞销金滞销权重._权重_周转天数);
-                                    cur滞销金滞销权重._权重_总金额 = list.Sum(x => x._总金额);
-                                }
-                            }
-                            #endregion
+                                var cur滞销金滞销权重 = new _滞销金滞销权重Model();
+                                cur滞销金滞销权重._采购员 = buyerName;
 
-                            _滞销金滞销权重List.Add(cur滞销金滞销权重);
+                                #region 库存周转率>100获取滞销金
+                                {
+                                    var list = ref库存周转率.Where(x => x._库存周转天数 > 100);
+                                    if (list.Count() > 0)
+                                    {
+                                        cur滞销金滞销权重._滞销_周转天数 = list.Sum(x => x._库存周转天数) / list.Count();
+                                        cur滞销金滞销权重._滞销_总金额 = list.Sum(x => x._总金额);
+                                        cur滞销金滞销权重._滞销金 = cur滞销金滞销权重._滞销_总金额 / 1000 * 2;
+                                    }
+                                }
+                                #endregion
+
+                                #region 库存周转率<=100获取滞销权重
+                                {
+                                    var list = ref库存周转率.Where(x => x._库存周转天数 <= 100);
+                                    if (list.Count() > 0)
+                                    {
+                                        cur滞销金滞销权重._权重_周转天数 = list.Sum(x => x._库存周转天数) / list.Count();
+                                        cur滞销金滞销权重._权重 = Culc滞销权重(cur滞销金滞销权重._权重_周转天数);
+                                        cur滞销金滞销权重._权重_总金额 = list.Sum(x => x._总金额);
+                                    }
+                                }
+                                #endregion
+
+                                _滞销金滞销权重List.Add(cur滞销金滞销权重);
+                            }
 
                         });
                     }
@@ -1638,24 +1641,29 @@ namespace Gadget
                         var _缺货率采购员List = _缺货率Mappings.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList();
                         _缺货率采购员List.ForEach(buyerName =>
                         {
-                            var ref缺货率 = _缺货率Mappings.Where(x => x._采购员 == buyerName).ToList();
-                            if (ref缺货率.Count > 0)
+                            if (Helper.IsBuyer(buyerName))
                             {
-                                var cur缺货率权重 = new _缺货率权重Model();
-                                cur缺货率权重._采购员 = buyerName;
-
-                                decimal _总交易订单数量 = ref缺货率.Sum(x => x._交易订单数量);
-                                decimal _总缺货订单数量 = ref缺货率.Sum(x => x._缺货订单数量);
-                                decimal _总异常订单数量 = ref缺货率.Sum(x => x._异常订单数量);
-
-                                if (_总交易订单数量 > 0)
+                                var ref缺货率 = _缺货率Mappings.Where(x => x._采购员 == buyerName).ToList();
+                                if (ref缺货率.Count > 0)
                                 {
-                                    var _tmp = Culc缺货率权重(_总缺货订单数量 / _总交易订单数量 * 100);
-                                    cur缺货率权重._缺货率权重 = _tmp[0];
-                                    cur缺货率权重._缺货率奖励 = _tmp[1];
-                                }
+                                    var cur缺货率权重 = new _缺货率权重Model();
+                                    cur缺货率权重._采购员 = buyerName;
 
-                                _缺货率权重奖励List.Add(cur缺货率权重);
+                                    decimal _总交易订单数量 = ref缺货率.Sum(x => x._交易订单数量);
+                                    decimal _总缺货订单数量 = ref缺货率.Sum(x => x._缺货订单数量);
+                                    decimal _总异常订单数量 = ref缺货率.Sum(x => x._异常订单数量);
+
+                                    if (_总交易订单数量 > 0)
+                                    {
+                                        var diff = _总缺货订单数量 / _总交易订单数量 * 100;
+                                        var _tmp = Culc缺货率权重(diff);
+                                        cur缺货率权重._缺货率 = diff;
+                                        cur缺货率权重._缺货率权重 = _tmp[0];
+                                        cur缺货率权重._缺货率奖励 = _tmp[1];
+                                    }
+
+                                    _缺货率权重奖励List.Add(cur缺货率权重);
+                                }
                             }
 
                         });
@@ -1672,13 +1680,16 @@ namespace Gadget
                         var _议价采购员List = _议价奖励appings.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList();
                         _议价采购员List.ForEach(buyerName =>
                         {
-                            var ref议价 = _议价奖励appings.Where(x => x._采购员 == buyerName).FirstOrDefault();
-                            if (ref议价 != null)
+                            if (Helper.IsBuyer(buyerName))
                             {
-                                var curModel = new _议价奖励Model();
-                                curModel._采购员 = buyerName;
-                                curModel._议价 = ref议价._议价;
-                                _议价奖励List.Add(curModel);
+                                var ref议价 = _议价奖励appings.Where(x => x._采购员 == buyerName).FirstOrDefault();
+                                if (ref议价 != null)
+                                {
+                                    var curModel = new _议价奖励Model();
+                                    curModel._采购员 = buyerName;
+                                    curModel._议价 = ref议价._议价;
+                                    _议价奖励List.Add(curModel);
+                                }
                             }
                         });
                     }
@@ -1694,11 +1705,14 @@ namespace Gadget
                         var _未入库采购员List = _未入库Mappings.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList();
                         _未入库采购员List.ForEach(buyerName =>
                         {
-                            var ref未入库 = _未入库Mappings.Where(x => x._采购员 == buyerName).ToList();
-                            var curModel = new _未入库Model();
-                            curModel._采购员 = buyerName;
-                            curModel._未入库金额 = ref未入库.Sum(x => x._未入库金额);
-                            _未入库惩罚List.Add(curModel);
+                            if (Helper.IsBuyer(buyerName))
+                            {
+                                var ref未入库 = _未入库Mappings.Where(x => x._采购员 == buyerName).ToList();
+                                var curModel = new _未入库Model();
+                                curModel._采购员 = buyerName;
+                                curModel._未入库金额 = ref未入库.Sum(x => x._未入库金额);
+                                _未入库惩罚List.Add(curModel);
+                            }
                         });
                     }
                 }
@@ -1856,6 +1870,24 @@ namespace Gadget
         }
         #endregion
 
+        #region 导出表格说明
+        private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var strDesc = XlsxHelper.GetDecsipt(typeof(_采购流水Mapping), typeof(_库存周转率Mapping), typeof(_议价奖励Mapping),
+                  typeof(_未入库Mapping), typeof(_缺货率Mapping));
+
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "记事本|*.txt";//设置文件类型
+            saveFile.Title = "导出说明文件";//设置标题
+            saveFile.AddExtension = true;//是否自动增加所辍名
+            saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                File.WriteAllText(saveFile.FileName, strDesc);
+            }
+        }
+        #endregion
+
         /**************** common method ****************/
 
         #region Culc缺货率权重 计算缺货率权重
@@ -1905,7 +1937,7 @@ namespace Gadget
             {
                 return new decimal[] { 0.6M, 0 };
             }
-            return new decimal[] { 0, 0 };
+            return new decimal[] { 0.6M, 0 };
         }
         #endregion
 
@@ -2090,6 +2122,15 @@ namespace Gadget
         }
         #endregion
 
+        #region Export 导出结果
+        /// <summary>
+        /// 导出结果
+        /// </summary>
+        /// <param name="_工资详情"></param>
+        /// <param name="_订单奖励"></param>
+        /// <param name="_滞销金权重"></param>
+        /// <param name="_缺货率权重"></param>
+        /// <param name="_议价奖励"></param>
         private void Export(List<_工资详情Model> _工资详情, List<_订单奖励Model> _订单奖励, List<_滞销金滞销权重Model> _滞销金权重, List<_缺货率权重Model> _缺货率权重, List<_议价奖励Model> _议价奖励)
         {
             ShowMsg("开始生成表格");
@@ -2108,7 +2149,7 @@ namespace Gadget
                     #region 标题行
                     sheet1.Cells[1, 1].Value = "采购员";
                     sheet1.Cells[1, 2].Value = "底薪";
-                    sheet1.Cells[1, 3].Value = "工作量工资";
+                    sheet1.Cells[1, 3].Value = "制单奖励*总权重";
                     sheet1.Cells[1, 4].Value = "议价绩效";
                     sheet1.Cells[1, 5].Value = "未入库";
                     sheet1.Cells[1, 6].Value = "奖金";
@@ -2137,9 +2178,9 @@ namespace Gadget
                 }
                 #endregion
 
-                #region 工作量工资
+                #region 制单奖励
                 {
-                    var sheet2 = workbox.Worksheets.Add("工作量工资");
+                    var sheet2 = workbox.Worksheets.Add("制单奖励");
 
                     #region 标题行
                     sheet2.Cells[2, 1].Value = "采购员";
@@ -2277,10 +2318,10 @@ namespace Gadget
 
                     sheet3.Cells[2, 1].Value = "采购员";
                     sheet3.Cells[2, 2].Value = "总金额";
-                    sheet3.Cells[2, 3].Value = "库存周转率";
+                    sheet3.Cells[2, 3].Value = "库存周转天数";
                     sheet3.Cells[2, 4].Value = "滞销金";
                     sheet3.Cells[2, 5].Value = "总金额";
-                    sheet3.Cells[2, 6].Value = "库存周转率";
+                    sheet3.Cells[2, 6].Value = "库存周转天数";
                     sheet3.Cells[2, 7].Value = "滞销权重";
                     #endregion
 
@@ -2306,10 +2347,12 @@ namespace Gadget
                 #region 缺货率权重
                 {
                     var sheet4 = workbox.Worksheets.Add("缺货率权重");
+
                     #region 标题行
                     sheet4.Cells[1, 1].Value = "采购员";
-                    sheet4.Cells[1, 2].Value = "缺货率权重";
-                    sheet4.Cells[1, 3].Value = "奖金";
+                    sheet4.Cells[1, 2].Value = "缺货率";
+                    sheet4.Cells[1, 3].Value = "缺货率权重";
+                    sheet4.Cells[1, 4].Value = "奖金";
                     #endregion
 
                     #region 数据行
@@ -2318,8 +2361,9 @@ namespace Gadget
                         var curResult = _缺货率权重[idx];
 
                         sheet4.Cells[rowIdx, 1].Value = curResult._采购员;
-                        sheet4.Cells[rowIdx, 2].Value = curResult._缺货率权重;
-                        sheet4.Cells[rowIdx, 3].Value = curResult._缺货率奖励;
+                        sheet4.Cells[rowIdx, 2].Value = curResult._缺货率;
+                        sheet4.Cells[rowIdx, 3].Value = curResult._缺货率权重;
+                        sheet4.Cells[rowIdx, 4].Value = curResult._缺货率奖励;
 
                         rowIdx++;
 
@@ -2386,6 +2430,8 @@ namespace Gadget
             }, null);
         }
 
+        #endregion
+
         #region ShowMsg 消息提示
         /// <summary>
         /// 消息提示
@@ -2432,6 +2478,7 @@ namespace Gadget
 
         /**************** common class ****************/
 
+        [ExcelTable("采购订单流水表")]
         public class _采购流水Mapping
         {
             private string org采购员;
@@ -2455,9 +2502,9 @@ namespace Gadget
             }
             [ExcelColumn("制单人")]
             public string _制单人 { get; set; }
-
         }
 
+        [ExcelTable("库存周转率报表")]
         public class _库存周转率Mapping
         {
             [ExcelColumn("库存周转天数")]
@@ -2491,6 +2538,7 @@ namespace Gadget
             }
         }
 
+        [ExcelTable("议价绩效表")]
         public class _议价奖励Mapping
         {
             private string org采购员;
@@ -2518,8 +2566,10 @@ namespace Gadget
                     return !string.IsNullOrEmpty(org议价) ? Convert.ToDecimal(org议价) : 0;
                 }
             }
+
         }
 
+        [ExcelTable("审核未入库表")]
         public class _未入库Mapping
         {
             private string org采购员;
@@ -2545,12 +2595,25 @@ namespace Gadget
                     return !string.IsNullOrEmpty(org未入库金额) ? Convert.ToDecimal(org未入库金额) : 0;
                 }
             }
+
         }
 
+        [ExcelTable("缺货率报表")]
         public class _缺货率Mapping
         {
+            private string org采购员;
             [ExcelColumn("采购员")]
-            public string _采购员 { get; set; }
+            public string _采购员
+            {
+                get
+                {
+                    return org采购员;
+                }
+                set
+                {
+                    org采购员 = !string.IsNullOrEmpty(value) ? value.ToString().Trim() : "";
+                }
+            }
 
             [ExcelColumn("交易订单数量")]
             public string org交易订单数量 { get; set; }
@@ -2739,6 +2802,7 @@ namespace Gadget
                     org采购员 = !string.IsNullOrEmpty(value) ? value.ToString().Trim() : "";
                 }
             }
+            public decimal _缺货率 { get; set; }
             public decimal _缺货率权重 { get; set; }
             public decimal _缺货率奖励 { get; set; }
         }
@@ -2820,5 +2884,7 @@ namespace Gadget
             }
             public int _排序 { get; set; }
         }
+
+
     }
 }

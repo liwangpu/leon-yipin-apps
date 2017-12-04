@@ -107,7 +107,7 @@ namespace CommonLibs
             }
 
             return false;
-        } 
+        }
         #endregion
 
         #region ChangeLowerBuyer 采购员转换
@@ -186,6 +186,8 @@ namespace CommonLibs
             return calAmount;
         }
         #endregion
+
+
 
     }
 

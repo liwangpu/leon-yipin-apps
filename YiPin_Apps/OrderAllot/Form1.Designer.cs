@@ -49,12 +49,14 @@
             this.btnUpShangsYj = new System.Windows.Forms.Button();
             this.txtUpKunsStore = new System.Windows.Forms.TextBox();
             this.txtUpShangsYj = new System.Windows.Forms.TextBox();
+            this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lkDecs);
             this.groupBox1.Controls.Add(this.cb30day);
             this.groupBox1.Controls.Add(this.cb15day);
             this.groupBox1.Controls.Add(this.cb5day);
@@ -77,7 +79,7 @@
             this.groupBox1.Controls.Add(this.txtUpShangsYj);
             this.groupBox1.Location = new System.Drawing.Point(12, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(368, 233);
+            this.groupBox1.Size = new System.Drawing.Size(368, 225);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
@@ -278,6 +280,17 @@
             this.txtUpShangsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpShangsYj.TabIndex = 0;
             // 
+            // lkDecs
+            // 
+            this.lkDecs.AutoSize = true;
+            this.lkDecs.Location = new System.Drawing.Point(307, 196);
+            this.lkDecs.Name = "lkDecs";
+            this.lkDecs.Size = new System.Drawing.Size(53, 12);
+            this.lkDecs.TabIndex = 20;
+            this.lkDecs.TabStop = true;
+            this.lkDecs.Text = "表格说明";
+            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -320,6 +333,7 @@
         private System.Windows.Forms.CheckBox cb30day;
         private System.Windows.Forms.CheckBox cb15day;
         private System.Windows.Forms.CheckBox cb5day;
+        private System.Windows.Forms.LinkLabel lkDecs;
     }
 }
 

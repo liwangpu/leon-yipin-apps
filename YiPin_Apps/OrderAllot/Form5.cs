@@ -1,4 +1,5 @@
-﻿using LinqToExcel;
+﻿using CommonLibs;
+using LinqToExcel;
 using OfficeOpenXml;
 using OrderAllot.Maps;
 using System;
@@ -66,6 +67,23 @@ namespace OrderAllot
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
             {
                 txtQueh.Text = OpenFileDialog1.FileName;
+            }
+        }
+        #endregion
+
+        #region 导出表格说明
+        private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var strDesc = XlsxHelper.GetDecsipt(typeof(_Form5延时报表), typeof(_Form5缺货延时报表判断));
+
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "记事本|*.txt";//设置文件类型
+            saveFile.Title = "导出说明文件";//设置标题
+            saveFile.AddExtension = true;//是否自动增加所辍名
+            saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                File.WriteAllText(saveFile.FileName, strDesc);
             }
         }
         #endregion
@@ -421,6 +439,8 @@ namespace OrderAllot
             }, null);
         }
         #endregion
+
+
 
 
     }
