@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace CommonLibs
 {
@@ -187,7 +188,22 @@ namespace CommonLibs
         }
         #endregion
 
-
+        #region CheckCSVFileName 校验csv文件名是否符合规范
+        /// <summary>
+        /// 校验csv文件名是否符合规范
+        /// </summary>
+        /// <param name="strFileName"></param>
+        /// <returns></returns>
+        public static bool CheckCSVFileName(string strFileName)
+        {
+            var strPureFileName = Path.GetFileNameWithoutExtension(strFileName);
+            if (strPureFileName.Contains('.'))
+            {
+                return false;
+            }
+            return true;
+        }
+        #endregion
 
     }
 

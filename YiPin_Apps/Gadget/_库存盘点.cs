@@ -29,14 +29,20 @@ namespace Gadget
         private void btnUpJiaoHuo_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
-            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
-            OpenFileDialog1.Title = "表格信息";//设置标题
+            OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
+            OpenFileDialog1.Title = "CSV 文件";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
             {
-                txtUpJiaoHuo.Text = OpenFileDialog1.FileName;
+                if (Helper.CheckCSVFileName(OpenFileDialog1.FileName))
+                {
+                    txtUpJiaoHuo.Text = OpenFileDialog1.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("csv文件名称不规范,请去掉文件名称中的特殊字符如\".\"等", "温馨提示");
+                }
             }
         }
         #endregion
@@ -45,14 +51,42 @@ namespace Gadget
         private void btnUpKucun_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            //OpenFileDialog1.Filter = "Execl 97-2003工作簿|*.xls|Excel 工作簿|*.xlsx";//设置文件类型
-            OpenFileDialog1.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
-            OpenFileDialog1.Title = "表格信息";//设置标题
+            OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
+            OpenFileDialog1.Title = "CSV 文件";//设置标题
             OpenFileDialog1.Multiselect = false;
             OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
             {
-                txtUpKucun.Text = OpenFileDialog1.FileName;
+                if (Helper.CheckCSVFileName(OpenFileDialog1.FileName))
+                {
+                    txtUpKucun.Text = OpenFileDialog1.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("csv文件名称不规范,请去掉文件名称中的特殊字符如\".\"等", "温馨提示");
+                }
+            }
+        }
+        #endregion
+
+        #region 上传出入库差
+        private void btnChuRuKu_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
+            OpenFileDialog1.Title = "CSV 文件";//设置标题
+            OpenFileDialog1.Multiselect = false;
+            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                if (Helper.CheckCSVFileName(OpenFileDialog1.FileName))
+                {
+                    txtChuRuKu.Text = OpenFileDialog1.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("csv文件名称不规范,请去掉文件名称中的特殊字符如\".\"等", "温馨提示");
+                }
             }
         }
         #endregion
@@ -62,6 +96,7 @@ namespace Gadget
         {
             var list拣货信息 = new List<_拣货表>();
             var list库存信息 = new List<_库存表>();
+            var list出入库差 = new List<_出入库差>();
             var list结果信息 = new List<_导出表>();
 
             #region 读取数据
@@ -71,28 +106,23 @@ namespace Gadget
 
                 var str拣货表Path = txtUpJiaoHuo.Text;
                 var str库存表Path = txtUpKucun.Text;
+                var str出入库差Path = txtChuRuKu.Text;
 
                 #region 读取拣货表
                 if (!string.IsNullOrEmpty(str拣货表Path))
                 {
-                    using (var excel = new ExcelQueryFactory(str拣货表Path))
+                    using (var csv = new ExcelQueryFactory(str拣货表Path))
                     {
-                        //excel.StrictMapping = LinqToExcel.Query.StrictMappingType.ClassStrict;
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
+                        try
                         {
-                            try
-                            {
-                                var tmp = from c in excel.Worksheet<_拣货表>(s)
-                                          where c._SKU != null
-                                          select c;
-                                list拣货信息.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
+                            var tmp = from c in csv.Worksheet<_拣货表>()
+                                      select c;
+                            list拣货信息.AddRange(tmp);
+                        }
+                        catch (Exception ex)
+                        {
+                            ShowMsg(ex.Message);
+                        }
                     }
                 }
                 #endregion
@@ -100,24 +130,37 @@ namespace Gadget
                 #region 读取库存表
                 if (!string.IsNullOrEmpty(str库存表Path))
                 {
-                    using (var excel = new ExcelQueryFactory(str库存表Path))
+                    using (var csv = new ExcelQueryFactory(str库存表Path))
                     {
-                        //excel.StrictMapping = LinqToExcel.Query.StrictMappingType.ClassStrict;
-                        var sheetNames = excel.GetWorksheetNames().ToList();
-                        sheetNames.ForEach(s =>
+                        try
                         {
-                            try
-                            {
-                                var tmp = from c in excel.Worksheet<_库存表>(s)
-                                          where c._SKU != null
-                                          select c;
-                                list库存信息.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        });
+                            var tmp = from c in csv.Worksheet<_库存表>()
+                                      select c;
+                            list库存信息.AddRange(tmp);
+                        }
+                        catch (Exception ex)
+                        {
+                            ShowMsg(ex.Message);
+                        }
+                    }
+                }
+                #endregion
+
+                #region 出入库差
+                if (!string.IsNullOrEmpty(str出入库差Path))
+                {
+                    using (var csv = new ExcelQueryFactory(str出入库差Path))
+                    {
+                        try
+                        {
+                            var tmp = from c in csv.Worksheet<_出入库差>()
+                                      select c;
+                            list出入库差.AddRange(tmp);
+                        }
+                        catch (Exception ex)
+                        {
+                            ShowMsg(ex.Message);
+                        }
                     }
                 }
                 #endregion
@@ -125,11 +168,13 @@ namespace Gadget
             });
             #endregion
 
+            #region 处理数据
             actReadData.BeginInvoke((ob) =>
             {
                 ShowMsg("开始计算数据");
                 var list拣货SKU = list拣货信息.Select(x => x._SKU).Distinct().ToList();
 
+                #region 拣货单匹配子SKU
                 list拣货SKU.ForEach(curSKU =>
                 {
                     //if (curSKU == "FEDA14A20HP")
@@ -222,16 +267,37 @@ namespace Gadget
                         #endregion
                     }
                 });
+                #endregion
+
+                #region 匹配出入库差
+                {
+                    if (list出入库差.Count > 0 && list结果信息.Count > 0)
+                    {
+                        for (int i = 0, len = list结果信息.Count; i < len; i++)
+                        {
+                            var curItem = list结果信息[i];
+                            var refDiff = list出入库差.Where(x => x._SKU == curItem._SKU).FirstOrDefault();
+                            if (refDiff != null)
+                            {
+                                curItem._出库数量 = refDiff._出库数量;
+                                curItem._入库数量 = refDiff._入库数量;
+                                curItem._出入库差值 = refDiff._出入库差值;
+                            }
+                        }
+                    }
+                }
+                #endregion
 
                 Export(list结果信息);
             }, null);
+            #endregion
         }
         #endregion
 
         #region 导出表格说明
         private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var strDesc = XlsxHelper.GetDecsipt(typeof(_拣货表), typeof(_库存表));
+            var strDesc = XlsxHelper.GetDecsipt(typeof(_拣货表), typeof(_库存表), typeof(_出入库差));
 
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "记事本|*.txt";//设置文件类型
@@ -294,6 +360,9 @@ namespace Gadget
                 sheet1.Cells[1, 5].Value = "拣货单数量";
                 sheet1.Cells[1, 6].Value = "缺货数量";
                 sheet1.Cells[1, 7].Value = "库位";
+                sheet1.Cells[1, 8].Value = "入库数量";
+                sheet1.Cells[1, 9].Value = "出库数量";
+                sheet1.Cells[1, 10].Value = "入库数量-出库数量";
                 #endregion
 
                 #region 数据行
@@ -307,6 +376,9 @@ namespace Gadget
                     sheet1.Cells[rowIdx, 5].Value = info._拣货单数量;
                     sheet1.Cells[rowIdx, 6].Value = info._缺货数量;
                     sheet1.Cells[rowIdx, 7].Value = info._库位;
+                    sheet1.Cells[rowIdx, 8].Value = info._入库数量;
+                    sheet1.Cells[rowIdx, 9].Value = info._出库数量;
+                    sheet1.Cells[rowIdx, 10].Value = info._出入库差值;
                 }
                 #endregion
 
@@ -432,6 +504,30 @@ namespace Gadget
             public string _库位 { get; set; }
         }
 
+        [ExcelTable("出入库差")]
+        class _出入库差
+        {
+            private string strSKU;
+            [ExcelColumn("SKU码")]
+            public string _SKU
+            {
+                get
+                {
+                    return strSKU;
+                }
+                set
+                {
+                    strSKU = !string.IsNullOrEmpty(value) ? value.Trim() : "";
+                }
+            }
+            [ExcelColumn("入库数量")]
+            public decimal _入库数量 { get; set; }
+            [ExcelColumn("出库数量")]
+            public decimal _出库数量 { get; set; }
+            [ExcelColumn("入库数量-出库数量")]
+            public decimal _出入库差值 { get; set; }
+        }
+
         class _导出表
         {
             public string _SKU { get; set; }
@@ -441,9 +537,9 @@ namespace Gadget
             public decimal _拣货单数量 { get; set; }
             public decimal _缺货数量 { get; set; }
             public string _库位 { get; set; }
+            public decimal _入库数量 { get; set; }
+            public decimal _出库数量 { get; set; }
+            public decimal _出入库差值 { get; set; }
         }
-
-
-
     }
 }

@@ -18,12 +18,12 @@ namespace OrderAllot
         {
             InitializeComponent();
 
-            //txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\数据11.12\上海-默认发货昆山仓.xlsx";//默认昆山预警
-            //txtUpKsYj.Text = @"C:\Users\Leon\Desktop\数据11.12\昆山建议采购.xlsx";//昆山库存预警
-            //txtUpKsKc.Text = @"C:\Users\Leon\Desktop\数据11.12\昆山所有库存.xlsx";//昆山所有库存
-            //txtUpSHKc.Text = @"C:\Users\Leon\Desktop\数据11.12\上海所有库存.xlsx";//上海所有库存
-            //txtUpHot.Text = @"C:\Users\Leon\Desktop\数据11.12\双十一两天各平台销量.xlsx";
-            //txtUpTmp.Text = @"C:\Users\pulw\Desktop\新的\排除重复单\备货.xls";//临时备货
+            txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\数据\数据\上海-默认昆山仓.xlsx";//默认昆山预警
+            txtUpKsYj.Text = @"C:\Users\Leon\Desktop\数据\数据\昆山建议采购.xlsx";//昆山库存预警
+            txtUpKsKc.Text = @"C:\Users\Leon\Desktop\数据\数据\昆山所有库存.xlsx";//昆山所有库存
+            txtUpSHKc.Text = @"C:\Users\Leon\Desktop\数据\数据\上海所有库存1";//上海所有库存
+            //txtUpHot.Text = @"C:\Users\Leon\Desktop\数据\数据\双十一两天各平台销量.xlsx";
+            //txtUpTmp.Text = @"C:\Users\Leon\Desktop\数据\数据\备货.xls";//临时备货
 
 
         }
@@ -374,10 +374,10 @@ namespace OrderAllot
                         {
                             if (!string.IsNullOrEmpty(cur预警Item._SKU))
                             {
-                                //if (cur预警Item._SKU == "MVPA18B65-FU")
-                                //{
+                                if (cur预警Item._SKU == "TKDQ12Q78-4")
+                                {
 
-                                //}
+                                }
 
                                 if (cur预警Item._建议采购数量 > 0)
                                 {
@@ -455,10 +455,10 @@ namespace OrderAllot
                         {
                             if (!string.IsNullOrEmpty(cur预警Item._SKU))
                             {
-                                //if (cur预警Item._SKU == "MVPA18B65-FU")
-                                //{
+                                if (cur预警Item._SKU == "TKDQ12Q78-4")
+                                {
 
-                                //}
+                                }
                                 if (cur预警Item._建议采购数量 > 0)
                                 {
                                     //共有的sku已经处理,这里只对独有的sku判断
@@ -541,7 +541,7 @@ namespace OrderAllot
                         for (int idx = _最终需要采购的预警.Count - 1; idx >= 0; idx--)
                         {
                             var sh = _最终需要采购的预警[idx];
-                            //if (sh._SKU == "MVPA18B65-FU")
+                            //if (sh._SKU == "TKDR1R09-L")
                             //{
 
                             //}
@@ -584,6 +584,11 @@ namespace OrderAllot
                     for (int idx = _最终需要采购的预警.Count - 1; idx >= 0; idx--)
                     {
                         var curItem = _最终需要采购的预警[idx];
+                        if (curItem._SKU == "TKDQ12Q78-4")
+                        {
+
+                        }
+
                         double _两个仓库可用库存以及采购未入库之和 = 0;//可用库存+可用库存+采购未入库+采购未入库-缺货及未派单
                         double _两个库存下限之和 = 0;//库存下限+库存下限
                         double _缺货以及未派单 = 0;
@@ -602,7 +607,7 @@ namespace OrderAllot
                             _缺货以及未派单 += _昆山仓Item._缺货及未派单数量;
                         }
 
-                        if (_两个仓库可用库存以及采购未入库之和 - _缺货以及未派单 > _两个库存下限之和)
+                        if (_两个仓库可用库存以及采购未入库之和 - _缺货以及未派单 >= _两个库存下限之和)
                         {
                             _最终需要采购的预警.RemoveAt(idx);
                         }

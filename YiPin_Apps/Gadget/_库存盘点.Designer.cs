@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
@@ -40,7 +41,9 @@
             this.btnUpJiaoHuo = new System.Windows.Forms.Button();
             this.txtUpKucun = new System.Windows.Forms.TextBox();
             this.txtUpJiaoHuo = new System.Windows.Forms.TextBox();
-            this.lkDecs = new System.Windows.Forms.LinkLabel();
+            this.txtChuRuKu = new System.Windows.Forms.TextBox();
+            this.btnChuRuKu = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,23 +54,37 @@
             this.groupBox1.Controls.Add(this.txtExport);
             this.groupBox1.Controls.Add(this.lbMsg);
             this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.btnChuRuKu);
             this.groupBox1.Controls.Add(this.btnUpKucun);
             this.groupBox1.Controls.Add(this.btnUpJiaoHuo);
+            this.groupBox1.Controls.Add(this.txtChuRuKu);
             this.groupBox1.Controls.Add(this.txtUpKucun);
             this.groupBox1.Controls.Add(this.txtUpJiaoHuo);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 125);
+            this.groupBox1.Size = new System.Drawing.Size(349, 146);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
             // 
+            // lkDecs
+            // 
+            this.lkDecs.AutoSize = true;
+            this.lkDecs.Location = new System.Drawing.Point(287, 127);
+            this.lkDecs.Name = "lkDecs";
+            this.lkDecs.Size = new System.Drawing.Size(53, 12);
+            this.lkDecs.TabIndex = 7;
+            this.lkDecs.TabStop = true;
+            this.lkDecs.Text = "表格说明";
+            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
+            // 
             // btnAnalyze
             // 
-            this.btnAnalyze.Location = new System.Drawing.Point(266, 69);
+            this.btnAnalyze.Location = new System.Drawing.Point(268, 98);
             this.btnAnalyze.Name = "btnAnalyze";
             this.btnAnalyze.Size = new System.Drawing.Size(75, 23);
             this.btnAnalyze.TabIndex = 5;
@@ -77,7 +94,7 @@
             // 
             // txtExport
             // 
-            this.txtExport.Location = new System.Drawing.Point(76, 69);
+            this.txtExport.Location = new System.Drawing.Point(78, 98);
             this.txtExport.Name = "txtExport";
             this.txtExport.Size = new System.Drawing.Size(183, 21);
             this.txtExport.TabIndex = 4;
@@ -85,7 +102,7 @@
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(74, 98);
+            this.lbMsg.Location = new System.Drawing.Point(74, 127);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(65, 12);
             this.lbMsg.TabIndex = 3;
@@ -94,7 +111,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 72);
+            this.label5.Location = new System.Drawing.Point(9, 101);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 12);
             this.label5.TabIndex = 2;
@@ -121,7 +138,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 98);
+            this.label1.Location = new System.Drawing.Point(9, 127);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 12);
             this.label1.TabIndex = 2;
@@ -163,26 +180,40 @@
             this.txtUpJiaoHuo.Size = new System.Drawing.Size(183, 21);
             this.txtUpJiaoHuo.TabIndex = 0;
             // 
-            // lkDecs
+            // txtChuRuKu
             // 
-            this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(287, 98);
-            this.lkDecs.Name = "lkDecs";
-            this.lkDecs.Size = new System.Drawing.Size(53, 12);
-            this.lkDecs.TabIndex = 7;
-            this.lkDecs.TabStop = true;
-            this.lkDecs.Text = "表格说明";
-            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
+            this.txtChuRuKu.Enabled = false;
+            this.txtChuRuKu.Location = new System.Drawing.Point(76, 70);
+            this.txtChuRuKu.Name = "txtChuRuKu";
+            this.txtChuRuKu.Size = new System.Drawing.Size(183, 21);
+            this.txtChuRuKu.TabIndex = 0;
+            // 
+            // btnChuRuKu
+            // 
+            this.btnChuRuKu.Location = new System.Drawing.Point(265, 69);
+            this.btnChuRuKu.Name = "btnChuRuKu";
+            this.btnChuRuKu.Size = new System.Drawing.Size(75, 23);
+            this.btnChuRuKu.TabIndex = 1;
+            this.btnChuRuKu.Text = "浏览";
+            this.btnChuRuKu.UseVisualStyleBackColor = true;
+            this.btnChuRuKu.Click += new System.EventHandler(this.btnChuRuKu_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 74);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "出入库差";
             // 
             // _库存盘点
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(368, 140);
+            this.ClientSize = new System.Drawing.Size(368, 164);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(384, 178);
-            this.MinimumSize = new System.Drawing.Size(384, 178);
             this.Name = "_库存盘点";
             this.Text = "库存盘点";
             this.Load += new System.EventHandler(this._库存盘点_Load);
@@ -207,5 +238,8 @@
         private System.Windows.Forms.TextBox txtUpKucun;
         private System.Windows.Forms.TextBox txtUpJiaoHuo;
         private System.Windows.Forms.LinkLabel lkDecs;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnChuRuKu;
+        private System.Windows.Forms.TextBox txtChuRuKu;
     }
 }
