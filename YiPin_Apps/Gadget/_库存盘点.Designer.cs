@@ -34,16 +34,16 @@
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnChuRuKu = new System.Windows.Forms.Button();
             this.btnUpKucun = new System.Windows.Forms.Button();
             this.btnUpJiaoHuo = new System.Windows.Forms.Button();
+            this.txtChuRuKu = new System.Windows.Forms.TextBox();
             this.txtUpKucun = new System.Windows.Forms.TextBox();
             this.txtUpJiaoHuo = new System.Windows.Forms.TextBox();
-            this.txtChuRuKu = new System.Windows.Forms.TextBox();
-            this.btnChuRuKu = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,6 +117,15 @@
             this.label5.TabIndex = 2;
             this.label5.Text = "处理文件:";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 74);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "出入库差";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -144,6 +153,16 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "操作消息:";
             // 
+            // btnChuRuKu
+            // 
+            this.btnChuRuKu.Location = new System.Drawing.Point(265, 69);
+            this.btnChuRuKu.Name = "btnChuRuKu";
+            this.btnChuRuKu.Size = new System.Drawing.Size(75, 23);
+            this.btnChuRuKu.TabIndex = 1;
+            this.btnChuRuKu.Text = "浏览";
+            this.btnChuRuKu.UseVisualStyleBackColor = true;
+            this.btnChuRuKu.Click += new System.EventHandler(this.btnChuRuKu_Click);
+            // 
             // btnUpKucun
             // 
             this.btnUpKucun.Location = new System.Drawing.Point(265, 40);
@@ -164,6 +183,14 @@
             this.btnUpJiaoHuo.UseVisualStyleBackColor = true;
             this.btnUpJiaoHuo.Click += new System.EventHandler(this.btnUpJiaoHuo_Click);
             // 
+            // txtChuRuKu
+            // 
+            this.txtChuRuKu.Enabled = false;
+            this.txtChuRuKu.Location = new System.Drawing.Point(76, 70);
+            this.txtChuRuKu.Name = "txtChuRuKu";
+            this.txtChuRuKu.Size = new System.Drawing.Size(183, 21);
+            this.txtChuRuKu.TabIndex = 0;
+            // 
             // txtUpKucun
             // 
             this.txtUpKucun.Enabled = false;
@@ -180,33 +207,6 @@
             this.txtUpJiaoHuo.Size = new System.Drawing.Size(183, 21);
             this.txtUpJiaoHuo.TabIndex = 0;
             // 
-            // txtChuRuKu
-            // 
-            this.txtChuRuKu.Enabled = false;
-            this.txtChuRuKu.Location = new System.Drawing.Point(76, 70);
-            this.txtChuRuKu.Name = "txtChuRuKu";
-            this.txtChuRuKu.Size = new System.Drawing.Size(183, 21);
-            this.txtChuRuKu.TabIndex = 0;
-            // 
-            // btnChuRuKu
-            // 
-            this.btnChuRuKu.Location = new System.Drawing.Point(265, 69);
-            this.btnChuRuKu.Name = "btnChuRuKu";
-            this.btnChuRuKu.Size = new System.Drawing.Size(75, 23);
-            this.btnChuRuKu.TabIndex = 1;
-            this.btnChuRuKu.Text = "浏览";
-            this.btnChuRuKu.UseVisualStyleBackColor = true;
-            this.btnChuRuKu.Click += new System.EventHandler(this.btnChuRuKu_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 74);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 12);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "出入库差";
-            // 
             // _库存盘点
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -214,6 +214,8 @@
             this.ClientSize = new System.Drawing.Size(368, 164);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(384, 202);
+            this.MinimumSize = new System.Drawing.Size(384, 202);
             this.Name = "_库存盘点";
             this.Text = "库存盘点";
             this.Load += new System.EventHandler(this._库存盘点_Load);

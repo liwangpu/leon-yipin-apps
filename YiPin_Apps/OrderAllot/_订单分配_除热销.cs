@@ -18,10 +18,10 @@ namespace OrderAllot
         {
             InitializeComponent();
 
-            txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\数据\数据\上海-默认昆山仓.xlsx";//默认昆山预警
-            txtUpKsYj.Text = @"C:\Users\Leon\Desktop\数据\数据\昆山建议采购.xlsx";//昆山库存预警
-            txtUpKsKc.Text = @"C:\Users\Leon\Desktop\数据\数据\昆山所有库存.xlsx";//昆山所有库存
-            txtUpSHKc.Text = @"C:\Users\Leon\Desktop\数据\数据\上海所有库存1";//上海所有库存
+            //txtUpDfkunsYj.Text = @"C:\Users\Leon\Desktop\数据\数据\上海-默认昆山仓.xlsx";//默认昆山预警
+            //txtUpKsYj.Text = @"C:\Users\Leon\Desktop\数据\数据\昆山建议采购.xlsx";//昆山库存预警
+            //txtUpKsKc.Text = @"C:\Users\Leon\Desktop\数据\数据\昆山所有库存.xlsx";//昆山所有库存
+            //txtUpSHKc.Text = @"C:\Users\Leon\Desktop\数据\数据\上海所有库存1";//上海所有库存
             //txtUpHot.Text = @"C:\Users\Leon\Desktop\数据\数据\双十一两天各平台销量.xlsx";
             //txtUpTmp.Text = @"C:\Users\Leon\Desktop\数据\数据\备货.xls";//临时备货
 
