@@ -88,6 +88,27 @@ namespace CommonLibs
         }
         #endregion
 
+        #region RemoveUnBuyers 去除非采购人员
+        /// <summary>
+        /// 去除非采购人员
+        /// </summary>
+        /// <param name="buyers"></param>
+        /// <returns></returns>
+        public static List<string> RemoveUnBuyers(List<string> buyers)
+        {
+            if (buyers != null)
+            {
+                for (int idx = buyers.Count - 1; idx >= 0; idx--)
+                {
+                    if (!IsBuyer(buyers[idx]))
+                        buyers.RemoveAt(idx);
+                }
+                return buyers;
+            }
+            return new List<string>();
+        } 
+        #endregion
+
         #region IsSpecBuyerType 判断是否为对应采购类型
         /// <summary>
         /// 判断是否为对应采购类型

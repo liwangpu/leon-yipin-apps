@@ -1,13 +1,13 @@
-﻿using LinqToExcel;
+﻿using CommonLibs;
+using LinqToExcel;
+using LinqToExcel.Attributes;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using CommonLibs;
-using LinqToExcel.Attributes;
-using OfficeOpenXml.Style;
 
 
 namespace Gadget
@@ -115,10 +115,13 @@ namespace Gadget
                     model._类目个数 = refRecords.Select(x => x._商品类别).Distinct().Count();
                     model._月销量 = refRecords.Sum(x => x._30天销量);
                     model._月销售额 = refRecords.Sum(x => x._30销售金额);
-                    var _采购员Array = refRecords.Select(x => x._采购员).Distinct().ToArray();
-                    var _开发Array = refRecords.Select(x => x._业绩归属1).Distinct().ToArray();
+                    var _采购员List= refRecords.Select(x => x._采购员).Distinct().ToList();
+                    var _开发Array = refRecords.Select(x => x._业绩归属2).Distinct().ToArray();
                     var _类目Array = refRecords.Select(x => x._商品类别).Distinct().ToArray();
-                    model._采购详细 = _采购员Array.Count() > 0 ? string.Join(",", _采购员Array) : "";
+
+
+
+                    model._采购详细 = _采购员List.Count() > 0 ? string.Join(",", Helper.RemoveUnBuyers(_采购员List).ToArray()) : "";
                     model._开发详细 = _开发Array.Count() > 0 ? string.Join(",", _开发Array) : "";
                     model._类目详细 = _类目Array.Count() > 0 ? string.Join(",", _类目Array) : "";
 
@@ -432,8 +435,8 @@ namespace Gadget
             [ExcelColumn("采购员")]
             public string _采购员 { get; set; }
 
-            [ExcelColumn("业绩归属1")]
-            public string _业绩归属1 { get; set; }
+            [ExcelColumn("业绩归属2")]
+            public string _业绩归属2 { get; set; }
 
             [ExcelColumn("商品成本单价")]
             public decimal _单价 { get; set; }

@@ -29,7 +29,9 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ndLower = new System.Windows.Forms.NumericUpDown();
             this.lkDecs = new System.Windows.Forms.LinkLabel();
+            this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btnAnalyze = new System.Windows.Forms.Button();
@@ -38,8 +40,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btn商品明细 = new System.Windows.Forms.Button();
             this.txt商品明细 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.ndLower = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndLower)).BeginInit();
             this.SuspendLayout();
@@ -64,6 +64,23 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
             // 
+            // ndLower
+            // 
+            this.ndLower.Location = new System.Drawing.Point(75, 95);
+            this.ndLower.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+            this.ndLower.Name = "ndLower";
+            this.ndLower.Size = new System.Drawing.Size(183, 21);
+            this.ndLower.TabIndex = 21;
+            this.ndLower.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            // 
             // lkDecs
             // 
             this.lkDecs.AutoSize = true;
@@ -74,6 +91,15 @@
             this.lkDecs.TabStop = true;
             this.lkDecs.Text = "表格说明";
             this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(31, 80);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(155, 12);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "供应商详情月销量金额下限:";
             // 
             // label6
             // 
@@ -146,38 +172,14 @@
             this.txt商品明细.Size = new System.Drawing.Size(183, 21);
             this.txt商品明细.TabIndex = 0;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 80);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(119, 12);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "供应商详情金额下限:";
-            // 
-            // ndLower
-            // 
-            this.ndLower.Location = new System.Drawing.Point(75, 95);
-            this.ndLower.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-            this.ndLower.Name = "ndLower";
-            this.ndLower.Size = new System.Drawing.Size(183, 21);
-            this.ndLower.TabIndex = 21;
-            this.ndLower.Value = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            // 
             // _商品信息统计
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(376, 167);
             this.Controls.Add(this.groupBox1);
+            this.MaximumSize = new System.Drawing.Size(392, 205);
+            this.MinimumSize = new System.Drawing.Size(392, 205);
             this.Name = "_商品信息统计";
             this.Text = "_商品信息统计";
             this.Load += new System.EventHandler(this._商品信息统计_Load);
