@@ -145,7 +145,7 @@ namespace Gadget
                     model._SKU = dtItem.SKU;
                     model._商品名称 = dtItem._商品名称;
                     model._库位 = dtItem._库位;
-                    model._库存数量 = dtItem._库存数量;
+                    model._可用数量 = dtItem._可用数量;
                     model._日平均销量 = dtItem._平均日销量;
                     model._遗留上海天数 = i遗留上海天数;
 
@@ -214,7 +214,7 @@ namespace Gadget
                     sheet1.Cells[1, 3].Value = "库位";
                     sheet1.Cells[1, 4].Value = "仓库";
                     sheet1.Cells[1, 5].Value = "货架";
-                    sheet1.Cells[1, 6].Value = "库存数量";
+                    sheet1.Cells[1, 6].Value = "可用数量";
                     sheet1.Cells[1, 7].Value = "盘点数量";
                     sheet1.Cells[1, 8].Value = "留在上海数量";
                     sheet1.Cells[1, 9].Value = "移往昆山数量";
@@ -229,7 +229,7 @@ namespace Gadget
                         sheet1.Cells[rowIdx, 3].Value = info._库位;
                         sheet1.Cells[rowIdx, 4].Value = info._仓库;
                         sheet1.Cells[rowIdx, 5].Value = info._货架;
-                        sheet1.Cells[rowIdx, 6].Value = info._库存数量;
+                        sheet1.Cells[rowIdx, 6].Value = info._可用数量;
                         sheet1.Cells[rowIdx, 7].Value = info._盘点数量;
                         sheet1.Cells[rowIdx, 8].Value = info._留在上海数量;
                         sheet1.Cells[rowIdx, 9].Value = info._移往昆山数量;
@@ -252,7 +252,7 @@ namespace Gadget
                         sheet1.Cells[1, 3].Value = "库位";
                         sheet1.Cells[1, 4].Value = "仓库";
                         sheet1.Cells[1, 5].Value = "货架";
-                        sheet1.Cells[1, 6].Value = "库存数量";
+                        sheet1.Cells[1, 6].Value = "可用数量";
                         sheet1.Cells[1, 7].Value = "盘点数量";
                         sheet1.Cells[1, 8].Value = "留在上海数量";
                         sheet1.Cells[1, 9].Value = "移往昆山数量";
@@ -268,7 +268,7 @@ namespace Gadget
                             sheet1.Cells[rowIdx, 3].Value = info._库位;
                             sheet1.Cells[rowIdx, 4].Value = info._仓库;
                             sheet1.Cells[rowIdx, 5].Value = info._货架;
-                            sheet1.Cells[rowIdx, 6].Value = info._库存数量;
+                            sheet1.Cells[rowIdx, 6].Value = info._可用数量;
                             sheet1.Cells[rowIdx, 7].Value = info._盘点数量;
                             sheet1.Cells[rowIdx, 8].Value = info._留在上海数量;
                             sheet1.Cells[rowIdx, 9].Value = info._移往昆山数量;
@@ -398,8 +398,8 @@ namespace Gadget
                 }
             }
 
-            [ExcelColumn("库存数量")]
-            public decimal _库存数量 { get; set; }
+            [ExcelColumn("可用数量")]
+            public decimal _可用数量 { get; set; }
 
             [ExcelColumn("30天销量")]
             public decimal _30天销量 { get; set; }
@@ -447,7 +447,7 @@ namespace Gadget
             public string _SKU { get; set; }
             public string _商品名称 { get; set; }
             public string _库位 { get; set; }
-            public decimal _库存数量 { get; set; }
+            public decimal _可用数量 { get; set; }
             public decimal _盘点数量 { get; set; }
 
             public decimal _遗留上海天数 { get; set; }
@@ -490,7 +490,7 @@ namespace Gadget
                     }
                     else
                     {
-                        tmp = _库存数量 - _留在上海数量;
+                        tmp = _可用数量 - _留在上海数量;
                     }
                     return tmp;
                 }
