@@ -366,10 +366,12 @@ namespace Gadget
                             var bQinQuan = _list侵权产品.Where(x => x.SKU == shItem.SKU).Count() > 0;
                             if (bQinQuan)
                             {
+                                model._备注 = "停售";
                                 _list侵权.Add(model);
                             }
                             else
                             {
+                                model._备注 = "侵权";
                                 _list停售.Add(model);
                             }
                         }
@@ -427,7 +429,7 @@ namespace Gadget
                     sheet1.Cells[1, 4].Value = "上海仓库";
                     sheet1.Cells[1, 5].Value = "上海货架";
                     sheet1.Cells[1, 6].Value = "昆山库位";
-                    sheet1.Cells[1, 7].Value = "库山区域";
+                    sheet1.Cells[1, 7].Value = "昆山区域";
                     sheet1.Cells[1, 8].Value = "可用数量";
                     sheet1.Cells[1, 9].Value = "备注";
                     #endregion
@@ -462,7 +464,7 @@ namespace Gadget
                     sheet1.Cells[1, 4].Value = "上海仓库";
                     sheet1.Cells[1, 5].Value = "上海货架";
                     sheet1.Cells[1, 6].Value = "昆山库位";
-                    sheet1.Cells[1, 7].Value = "库山区域";
+                    sheet1.Cells[1, 7].Value = "昆山区域";
                     sheet1.Cells[1, 8].Value = "可用数量";
                     sheet1.Cells[1, 9].Value = "备注";
                     #endregion
@@ -497,7 +499,7 @@ namespace Gadget
                     sheet1.Cells[1, 4].Value = "上海仓库";
                     sheet1.Cells[1, 5].Value = "上海货架";
                     sheet1.Cells[1, 6].Value = "昆山库位";
-                    sheet1.Cells[1, 7].Value = "库山区域";
+                    sheet1.Cells[1, 7].Value = "昆山区域";
                     sheet1.Cells[1, 8].Value = "可用数量";
                     sheet1.Cells[1, 9].Value = "备注";
                     #endregion
