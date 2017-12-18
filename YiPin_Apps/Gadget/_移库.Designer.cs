@@ -29,27 +29,27 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txt过滤 = new System.Windows.Forms.TextBox();
+            this.txt侵权产品 = new System.Windows.Forms.TextBox();
+            this.txt昆山停售 = new System.Windows.Forms.TextBox();
             this.txt昆山在售 = new System.Windows.Forms.TextBox();
             this.lkDecs = new System.Windows.Forms.LinkLabel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btn侵权产品 = new System.Windows.Forms.Button();
+            this.btn昆山停售 = new System.Windows.Forms.Button();
             this.btn昆山在售 = new System.Windows.Forms.Button();
+            this.btn上海停售 = new System.Windows.Forms.Button();
+            this.txt上海停售 = new System.Windows.Forms.TextBox();
             this.btn上海在售 = new System.Windows.Forms.Button();
             this.txt上海在售 = new System.Windows.Forms.TextBox();
-            this.txt上海停售 = new System.Windows.Forms.TextBox();
-            this.btn上海停售 = new System.Windows.Forms.Button();
-            this.btn昆山停售 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txt昆山停售 = new System.Windows.Forms.TextBox();
-            this.btn侵权产品 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txt侵权产品 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txt过滤 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,6 +83,29 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
             // 
+            // txt过滤
+            // 
+            this.txt过滤.Location = new System.Drawing.Point(75, 163);
+            this.txt过滤.Name = "txt过滤";
+            this.txt过滤.Size = new System.Drawing.Size(183, 21);
+            this.txt过滤.TabIndex = 23;
+            // 
+            // txt侵权产品
+            // 
+            this.txt侵权产品.Enabled = false;
+            this.txt侵权产品.Location = new System.Drawing.Point(75, 135);
+            this.txt侵权产品.Name = "txt侵权产品";
+            this.txt侵权产品.Size = new System.Drawing.Size(183, 21);
+            this.txt侵权产品.TabIndex = 23;
+            // 
+            // txt昆山停售
+            // 
+            this.txt昆山停售.Enabled = false;
+            this.txt昆山停售.Location = new System.Drawing.Point(75, 106);
+            this.txt昆山停售.Name = "txt昆山停售";
+            this.txt昆山停售.Size = new System.Drawing.Size(183, 21);
+            this.txt昆山停售.TabIndex = 23;
+            // 
             // txt昆山在售
             // 
             this.txt昆山在售.Enabled = false;
@@ -102,6 +125,33 @@
             this.lkDecs.Text = "表格说明";
             this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 166);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(59, 12);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "上海仓库:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(10, 139);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(59, 12);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "侵权产品:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(10, 110);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "昆山停售:";
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -110,6 +160,15 @@
             this.label6.Size = new System.Drawing.Size(59, 12);
             this.label6.TabIndex = 6;
             this.label6.Text = "昆山在售:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 81);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(59, 12);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "上海停售:";
             // 
             // label4
             // 
@@ -148,6 +207,26 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "操作消息:";
             // 
+            // btn侵权产品
+            // 
+            this.btn侵权产品.Location = new System.Drawing.Point(264, 134);
+            this.btn侵权产品.Name = "btn侵权产品";
+            this.btn侵权产品.Size = new System.Drawing.Size(75, 23);
+            this.btn侵权产品.TabIndex = 1;
+            this.btn侵权产品.Text = "浏览";
+            this.btn侵权产品.UseVisualStyleBackColor = true;
+            this.btn侵权产品.Click += new System.EventHandler(this.btn侵权产品_Click);
+            // 
+            // btn昆山停售
+            // 
+            this.btn昆山停售.Location = new System.Drawing.Point(264, 105);
+            this.btn昆山停售.Name = "btn昆山停售";
+            this.btn昆山停售.Size = new System.Drawing.Size(75, 23);
+            this.btn昆山停售.TabIndex = 1;
+            this.btn昆山停售.Text = "浏览";
+            this.btn昆山停售.UseVisualStyleBackColor = true;
+            this.btn昆山停售.Click += new System.EventHandler(this.btn昆山停售_Click);
+            // 
             // btn昆山在售
             // 
             this.btn昆山在售.Location = new System.Drawing.Point(264, 47);
@@ -157,6 +236,24 @@
             this.btn昆山在售.Text = "浏览";
             this.btn昆山在售.UseVisualStyleBackColor = true;
             this.btn昆山在售.Click += new System.EventHandler(this.btn昆山在售_Click);
+            // 
+            // btn上海停售
+            // 
+            this.btn上海停售.Location = new System.Drawing.Point(264, 76);
+            this.btn上海停售.Name = "btn上海停售";
+            this.btn上海停售.Size = new System.Drawing.Size(75, 23);
+            this.btn上海停售.TabIndex = 1;
+            this.btn上海停售.Text = "浏览";
+            this.btn上海停售.UseVisualStyleBackColor = true;
+            this.btn上海停售.Click += new System.EventHandler(this.btn上海停售_Click);
+            // 
+            // txt上海停售
+            // 
+            this.txt上海停售.Enabled = false;
+            this.txt上海停售.Location = new System.Drawing.Point(75, 78);
+            this.txt上海停售.Name = "txt上海停售";
+            this.txt上海停售.Size = new System.Drawing.Size(183, 21);
+            this.txt上海停售.TabIndex = 0;
             // 
             // btn上海在售
             // 
@@ -176,109 +273,14 @@
             this.txt上海在售.Size = new System.Drawing.Size(183, 21);
             this.txt上海在售.TabIndex = 0;
             // 
-            // txt上海停售
-            // 
-            this.txt上海停售.Enabled = false;
-            this.txt上海停售.Location = new System.Drawing.Point(75, 78);
-            this.txt上海停售.Name = "txt上海停售";
-            this.txt上海停售.Size = new System.Drawing.Size(183, 21);
-            this.txt上海停售.TabIndex = 0;
-            // 
-            // btn上海停售
-            // 
-            this.btn上海停售.Location = new System.Drawing.Point(264, 76);
-            this.btn上海停售.Name = "btn上海停售";
-            this.btn上海停售.Size = new System.Drawing.Size(75, 23);
-            this.btn上海停售.TabIndex = 1;
-            this.btn上海停售.Text = "浏览";
-            this.btn上海停售.UseVisualStyleBackColor = true;
-            this.btn上海停售.Click += new System.EventHandler(this.btn上海停售_Click);
-            // 
-            // btn昆山停售
-            // 
-            this.btn昆山停售.Location = new System.Drawing.Point(264, 105);
-            this.btn昆山停售.Name = "btn昆山停售";
-            this.btn昆山停售.Size = new System.Drawing.Size(75, 23);
-            this.btn昆山停售.TabIndex = 1;
-            this.btn昆山停售.Text = "浏览";
-            this.btn昆山停售.UseVisualStyleBackColor = true;
-            this.btn昆山停售.Click += new System.EventHandler(this.btn昆山停售_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 81);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 12);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "上海停售:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 110);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 12);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "昆山停售:";
-            // 
-            // txt昆山停售
-            // 
-            this.txt昆山停售.Enabled = false;
-            this.txt昆山停售.Location = new System.Drawing.Point(75, 106);
-            this.txt昆山停售.Name = "txt昆山停售";
-            this.txt昆山停售.Size = new System.Drawing.Size(183, 21);
-            this.txt昆山停售.TabIndex = 23;
-            // 
-            // btn侵权产品
-            // 
-            this.btn侵权产品.Location = new System.Drawing.Point(264, 134);
-            this.btn侵权产品.Name = "btn侵权产品";
-            this.btn侵权产品.Size = new System.Drawing.Size(75, 23);
-            this.btn侵权产品.TabIndex = 1;
-            this.btn侵权产品.Text = "浏览";
-            this.btn侵权产品.UseVisualStyleBackColor = true;
-            this.btn侵权产品.Click += new System.EventHandler(this.btn侵权产品_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(10, 139);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(59, 12);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "侵权产品:";
-            // 
-            // txt侵权产品
-            // 
-            this.txt侵权产品.Enabled = false;
-            this.txt侵权产品.Location = new System.Drawing.Point(75, 135);
-            this.txt侵权产品.Name = "txt侵权产品";
-            this.txt侵权产品.Size = new System.Drawing.Size(183, 21);
-            this.txt侵权产品.TabIndex = 23;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 166);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(59, 12);
-            this.label7.TabIndex = 6;
-            this.label7.Text = "上海仓库:";
-            // 
-            // txt过滤
-            // 
-            this.txt过滤.Location = new System.Drawing.Point(75, 163);
-            this.txt过滤.Name = "txt过滤";
-            this.txt过滤.Size = new System.Drawing.Size(183, 21);
-            this.txt过滤.TabIndex = 23;
-            // 
             // _移库
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(372, 242);
             this.Controls.Add(this.groupBox1);
+            this.MaximumSize = new System.Drawing.Size(388, 280);
+            this.MinimumSize = new System.Drawing.Size(388, 280);
             this.Name = "_移库";
             this.Text = "_移库";
             this.Load += new System.EventHandler(this._移库_Load);
