@@ -19,11 +19,11 @@ namespace Gadget
 
         private void _移库_Load(object sender, EventArgs e)
         {
-            txt上海在售.Text = @"C:\Users\Leon\Desktop\aa\上海在售.csv";
-            txt昆山在售.Text = @"C:\Users\Leon\Desktop\aa\昆山在售.csv";
-            txt上海停售.Text = @"C:\Users\Leon\Desktop\aa\上海停售.csv";
-            txt昆山停售.Text = @"C:\Users\Leon\Desktop\aa\昆山停售.csv";
-            txt侵权产品.Text = @"C:\Users\Leon\Desktop\aa\侵权.csv";
+            //txt上海在售.Text = @"C:\Users\Leon\Desktop\aa\上海在售.csv";
+            //txt昆山在售.Text = @"C:\Users\Leon\Desktop\aa\昆山在售.csv";
+            //txt上海停售.Text = @"C:\Users\Leon\Desktop\aa\上海停售.csv";
+            //txt昆山停售.Text = @"C:\Users\Leon\Desktop\aa\昆山停售.csv";
+            //txt侵权产品.Text = @"C:\Users\Leon\Desktop\aa\侵权.csv";
 
         }
 
