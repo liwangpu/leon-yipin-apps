@@ -20,7 +20,6 @@ namespace Gadget
             //Application.Run(new _商品信息统计());//商品信息统计
             //Application.Run(new _分库盘点());//分库盘点
             //Application.Run(new _移库());//移库
-
             Application.Run(new _产品销量统计());//产品销量统计
 
             //Application.Run(new _测试());//
