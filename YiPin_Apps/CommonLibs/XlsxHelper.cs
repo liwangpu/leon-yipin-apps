@@ -50,6 +50,19 @@ namespace CommonLibs
             return builder.ToString();
         }
         #endregion
+
+        //public static byte[] RtpExcel(params List<RtpBase>[] tables)
+        //{
+        //    var buffer = new byte[0];
+        //    foreach (var table in tables)
+        //    {
+        //        var typ = table.GetType();
+        //        //var list = table as List<typ>;
+
+
+        //    }
+        //    return buffer;
+        //}
     }
 
     /// <summary>
@@ -65,4 +78,33 @@ namespace CommonLibs
         }
         public string TableName { get { return _strTableName; } }
     }
+
+    /// <summary>
+    /// 导出表格特性
+    /// </summary>
+    public class RptTableAttribute : Attribute
+    {
+        private string _strTableName;
+
+        public RptTableAttribute(string strTableName)
+        {
+            _strTableName = strTableName;
+        }
+        public string TableName { get { return _strTableName; } }
+    }
+
+    /// <summary>
+    /// 导出表格列特性
+    /// </summary>
+    public class RtpColumnAttribute : Attribute
+    {
+        private string _strColumnName;
+
+        public RtpColumnAttribute(string strColumnName)
+        {
+            _strColumnName = strColumnName;
+        }
+        public string ColumnName { get { return _strColumnName; } }
+    }
+
 }

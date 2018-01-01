@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.cb30day = new System.Windows.Forms.CheckBox();
             this.cb15day = new System.Windows.Forms.CheckBox();
             this.cb5day = new System.Windows.Forms.CheckBox();
@@ -58,7 +59,6 @@
             this.txtUpKsKc = new System.Windows.Forms.TextBox();
             this.txtUpKsYj = new System.Windows.Forms.TextBox();
             this.txtUpDfkunsYj = new System.Windows.Forms.TextBox();
-            this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).BeginInit();
             this.SuspendLayout();
@@ -101,6 +101,17 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
+            // 
+            // lkDecs
+            // 
+            this.lkDecs.AutoSize = true;
+            this.lkDecs.Location = new System.Drawing.Point(325, 258);
+            this.lkDecs.Name = "lkDecs";
+            this.lkDecs.Size = new System.Drawing.Size(53, 12);
+            this.lkDecs.TabIndex = 21;
+            this.lkDecs.TabStop = true;
+            this.lkDecs.Text = "表格说明";
+            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
             // 
             // cb30day
             // 
@@ -379,17 +390,6 @@
             this.txtUpDfkunsYj.Size = new System.Drawing.Size(183, 21);
             this.txtUpDfkunsYj.TabIndex = 0;
             // 
-            // lkDecs
-            // 
-            this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(325, 258);
-            this.lkDecs.Name = "lkDecs";
-            this.lkDecs.Size = new System.Drawing.Size(53, 12);
-            this.lkDecs.TabIndex = 21;
-            this.lkDecs.TabStop = true;
-            this.lkDecs.Text = "表格说明";
-            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
-            // 
             // _订单分配_除热销
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -400,6 +400,7 @@
             this.MinimumSize = new System.Drawing.Size(425, 343);
             this.Name = "_订单分配_除热销";
             this.Text = "订单分配(除热销)";
+            this.Load += new System.EventHandler(this._订单分配_除热销_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NtxtAmount)).EndInit();

@@ -28,6 +28,12 @@ namespace OrderAllot
 
         }
 
+        private void _订单分配_除热销_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
 
         #region 上传默认昆山预警订单
         private void btnUpDfkunsYj_Click(object sender, EventArgs e)
@@ -983,6 +989,7 @@ namespace OrderAllot
             }
         }
         #endregion
+
 
 
 
