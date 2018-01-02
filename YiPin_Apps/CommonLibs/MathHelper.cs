@@ -16,14 +16,17 @@ namespace CommonLibs
         /// <param name="outlierRatio"></param>
         /// <param name="expectation"></param>
         /// <returns></returns>
-        public decimal SumKickOutlier(List<decimal> dataList, out List<decimal> kickList, OutlierRatio outlierRatio, decimal expectation = 0.01m)
+        public static decimal SumKickOutlier(List<decimal> dataList, out List<decimal> kickList, out decimal stdev
+            , out decimal lowLimit, out decimal upLimit, OutlierRatio outlierRatio, decimal expectation = 0.01m)
         {
             //标准差
-            var stdev = CalculateStdDev(dataList);
-            var lowLimit = (expectation - stdev * (int)outlierRatio);
-            var upLimit = (expectation + stdev * (int)outlierRatio);
-            kickList = dataList.Where(x => x < lowLimit || x > upLimit).Select(x => x).ToList();
-            return dataList.Where(x => x >= lowLimit && x <= upLimit).Select(x => x).Sum();
+            stdev = CalculateStdDev(dataList);
+            var rlowLimit = (expectation - stdev * (int)outlierRatio);
+            var rupLimit = (expectation + stdev * (int)outlierRatio);
+            kickList = dataList.Where(x => x < rlowLimit || x > rupLimit).Select(x => x).ToList();
+            lowLimit = rlowLimit;
+            upLimit = rupLimit;
+            return dataList.Where(x => x >= rlowLimit && x <= rupLimit).Select(x => x).Sum();
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace CommonLibs
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        private decimal CalculateStdDev(List<decimal> values)
+        private static decimal CalculateStdDev(List<decimal> values)
         {
             decimal ret = 0;
             if (values.Count() > 0)

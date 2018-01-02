@@ -22,8 +22,10 @@ namespace Gadget
             //Application.Run(new _移库());//移库
             //Application.Run(new _产品销量统计());//产品销量统计
             //Application.Run(new _排除侵权());//排除侵权
-            Application.Run(new _排除侵权_订单分配());//排除侵权_订单分配
-            
+            //Application.Run(new _排除侵权_订单分配());//排除侵权_订单分配
+            Application.Run(new _采购订单配货());//采购订单配货
+
+
             //Application.Run(new _测试());//
         }
     }
