@@ -43,8 +43,8 @@ namespace Gadget
 
             var outlist = new List<decimal>();
 
-            var helper = new MathHelper();
-            var sum = helper.SumKickOutlier(list, out outlist, OutlierRatio.Twice);
+            //var helper = new MathHelper();
+            //var sum = helper.SumKickOutlier(list, out outlist, OutlierRatio.Twice);
 
             
 
