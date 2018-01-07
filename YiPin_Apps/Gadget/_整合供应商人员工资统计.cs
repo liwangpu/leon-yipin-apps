@@ -21,13 +21,13 @@ namespace Gadget
 
         private void _整合供应商人员工资统计_Load(object sender, EventArgs e)
         {
-            txt停售退货Path.Text = @"C:\Users\Leon\Desktop\工资\停售退货.csv";
-            txt滞销退货Path.Text = @"C:\Users\Leon\Desktop\工资\滞销退货.csv";
-            txt缺货率Path.Text = @"C:\Users\Leon\Desktop\工资\缺货率.csv";
-            txt上月入库时间差Path.Text = @"C:\Users\Leon\Desktop\工资\11月份入库时间差.csv";
-            txt当月入库时间差Path.Text = @"C:\Users\Leon\Desktop\工资\12月份入库时间差.csv";
-            txt压价信息Path.Text = @"C:\Users\Leon\Desktop\工资\压价详情.csv";
-            txt组员分配Path.Text = @"C:\Users\Leon\Desktop\工资\组员分配.csv";
+            //txt停售退货Path.Text = @"C:\Users\Leon\Desktop\工资\停售退货.csv";
+            //txt滞销退货Path.Text = @"C:\Users\Leon\Desktop\工资\滞销退货.csv";
+            //txt缺货率Path.Text = @"C:\Users\Leon\Desktop\工资\缺货率.csv";
+            //txt上月入库时间差Path.Text = @"C:\Users\Leon\Desktop\工资\11月份入库时间差.csv";
+            //txt当月入库时间差Path.Text = @"C:\Users\Leon\Desktop\工资\12月份入库时间差.csv";
+            //txt压价信息Path.Text = @"C:\Users\Leon\Desktop\工资\压价详情.csv";
+            //txt组员分配Path.Text = @"C:\Users\Leon\Desktop\工资\组员分配.csv";
 
 
         }

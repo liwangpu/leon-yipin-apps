@@ -20,16 +20,16 @@ namespace Gadget
 
         private void _产品销量统计_Load(object sender, EventArgs e)
         {
-            //dtp开发起始时间.Value = Convert.ToDateTime(string.Format("{0}-01-01", DateTime.Now.Year));
-            //dtp开发截止时间.Value = Convert.ToDateTime(string.Format("{0}-{1}-01", DateTime.Now.Year, DateTime.Now.Month - 3 > 0 ? DateTime.Now.Month - 3 : 1));
+            dtp开发起始时间.Value = Convert.ToDateTime(string.Format("{0}-01-01", DateTime.Now.Year));
+            dtp开发截止时间.Value = Convert.ToDateTime(string.Format("{0}-{1}-01", DateTime.Now.Year, DateTime.Now.Month - 3 > 0 ? DateTime.Now.Month - 3 : 1));
 
 
 
-            dtp开发起始时间.Value = Convert.ToDateTime(string.Format("2017-01-01"));
-            dtp开发截止时间.Value = Convert.ToDateTime(string.Format("2018-02-01"));
-            txt在售商品信息.Text = @"C:\Users\pulw\Desktop\产品统计\在售.csv";
-            txt停售商品信息.Text = @"C:\Users\pulw\Desktop\产品统计\停售.csv";
-            txt各平台销量一览表.Text = @"C:\Users\pulw\Desktop\产品统计\10到12月销量.csv";
+            //dtp开发起始时间.Value = Convert.ToDateTime(string.Format("2017-01-01"));
+            //dtp开发截止时间.Value = Convert.ToDateTime(string.Format("2018-02-01"));
+            //txt在售商品信息.Text = @"C:\Users\pulw\Desktop\产品统计\在售.csv";
+            //txt停售商品信息.Text = @"C:\Users\pulw\Desktop\产品统计\停售.csv";
+            //txt各平台销量一览表.Text = @"C:\Users\pulw\Desktop\产品统计\10到12月销量.csv";
 
 
 
