@@ -70,6 +70,7 @@ namespace Gadget.Libs
         public static void ReadCSVFile<T>(string strCSVPath, ref List<T> list, ref string strError)
             where T : class,new()
         {
+            strError = string.Empty;
             if (!string.IsNullOrEmpty(strCSVPath))
             {
                 using (var csv = new ExcelQueryFactory(strCSVPath))
@@ -86,7 +87,7 @@ namespace Gadget.Libs
                     }
                 }
             }
-        } 
+        }
         #endregion
     }
 }
