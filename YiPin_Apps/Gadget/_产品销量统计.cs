@@ -27,9 +27,9 @@ namespace Gadget
 
             dtp开发起始时间.Value = Convert.ToDateTime(string.Format("2017-01-01"));
             dtp开发截止时间.Value = Convert.ToDateTime(string.Format("2018-02-01"));
-            txt在售商品信息.Text = @"C:\Users\Leon\Desktop\产品统计\在售.csv";
-            txt停售商品信息.Text = @"C:\Users\Leon\Desktop\产品统计\停售.csv";
-            txt各平台销量一览表.Text = @"C:\Users\Leon\Desktop\产品统计\10到12月销量.csv";
+            txt在售商品信息.Text = @"C:\Users\pulw\Desktop\产品统计\在售.csv";
+            txt停售商品信息.Text = @"C:\Users\pulw\Desktop\产品统计\停售.csv";
+            txt各平台销量一览表.Text = @"C:\Users\pulw\Desktop\产品统计\10到12月销量.csv";
 
 
 
@@ -206,15 +206,15 @@ namespace Gadget
                         if (!bRemove)
                         {
 
-                            if (curItem.SKU == "LGDP6P39-B-6SP")
-                            {
+                            //if (curItem.SKU == "LGDP6P39-B-6SP")
+                            //{
 
-                            }
+                            //}
 
-                            if (curItem.SKU == "LGDP6P09-R")
-                            {
+                            //if (curItem.SKU == "LGDP6P09-R")
+                            //{
 
-                            }
+                            //}
 
                             volumeStore.AddSaleVolume(curItem._开发, curItem.SKU, curItem._总销量);
                         }
@@ -1019,25 +1019,38 @@ namespace Gadget
             /// <returns></returns>
             static string CutParent(string strSKU)
             {
-                var msg = 0;
-                var iCutLength = 0;
-                if (!string.IsNullOrEmpty(strSKU))
+                if (strSKU.Contains("-"))
                 {
-                    for (int idx = strSKU.Length - 1; idx >= 0; idx--)
+                    //sku含有 "-" 第一个"-"前的都是主sku
+                    var idx = strSKU.IndexOf("-");
+                    if (idx != -1)
                     {
-                        var cschar = strSKU.Substring(idx, 1);
-                        var bIsNumber = int.TryParse(cschar, out msg);
-                        if (bIsNumber)
-                        {
-                            break;
-                        }
-                        iCutLength++;
+                        return strSKU.Substring(0, idx);
                     }
                 }
-                if (iCutLength > 0)
+                else
                 {
-                    return strSKU.Substring(0, strSKU.Length - iCutLength);
+                    var msg = 0;
+                    var iCutLength = 0;
+                    if (!string.IsNullOrEmpty(strSKU))
+                    {
+                        for (int idx = strSKU.Length - 1; idx >= 0; idx--)
+                        {
+                            var cschar = strSKU.Substring(idx, 1);
+                            var bIsNumber = int.TryParse(cschar, out msg);
+                            if (bIsNumber)
+                            {
+                                break;
+                            }
+                            iCutLength++;
+                        }
+                    }
+                    if (iCutLength > 0)
+                    {
+                        return strSKU.Substring(0, strSKU.Length - iCutLength);
+                    }
                 }
+
                 return strSKU;
             }
 
