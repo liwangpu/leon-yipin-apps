@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderAllot", "OrderAllot\OrderAllot.csproj", "{8878D759-1372-42EF-9BE0-77BAB2ED170C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "订单分配", "订单分配", "{2D0BAAA0-CD9F-45B6-BB91-1EC6B796181F}"
@@ -12,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibs", "CommonLibs\CommonLibs.csproj", "{A1249099-AE74-4C44-AE37-BF54E8875086}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gadget", "Gadget\Gadget.csproj", "{992A5234-5869-4844-8820-21956768D414}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "已编译", "已编译", "{0E614F27-7C33-4842-9E3B-1418522B9200}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
