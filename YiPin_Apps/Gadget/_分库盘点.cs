@@ -138,7 +138,7 @@ namespace Gadget
                 {
                     //if (dtItem.SKU=="DNFD12D46-S2")
                     //{
-                        
+
                     //}
 
                     var model = new _分析结果Model();
@@ -148,6 +148,10 @@ namespace Gadget
                     model._可用数量 = dtItem._可用数量;
                     model._日平均销量 = dtItem._平均日销量;
                     model._遗留上海天数 = i遗留上海天数;
+
+                    model._单位 = dtItem._单位;
+                    model._库存数量 = dtItem._库存数量;
+                    model._占用数量 = dtItem._占用数量;
 
                     var ref盘点Item = list盘点结果.Where(x => x.SKU == dtItem.SKU).FirstOrDefault();
                     if (ref盘点Item != null)
@@ -168,7 +172,8 @@ namespace Gadget
                     }
                 });
 
-                Export(list导出结果.OrderBy(x => x._库位).ToList());
+                var tmpp = list导出结果.OrderBy(x => x._库位).ToList();
+                Export(tmpp.Where(x => x._盘点数量 == 0).ToList(), tmpp.Where(x => x._盘点数量 != 0).ToList());
             }, null);
             #endregion
         }
@@ -194,12 +199,13 @@ namespace Gadget
         /**************** common method ****************/
 
         #region Export 导出结果表格
-        private void Export(List<_分析结果Model> list)
+        private void Export(List<_分析结果Model> notCulcList, List<_分析结果Model> culcList)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
+            var buffer1 = new byte[0];
 
-            #region 数据表
+            #region 未盘点数据表
             using (ExcelPackage package = new ExcelPackage())
             {
                 var workbox = package.Workbook;
@@ -211,28 +217,30 @@ namespace Gadget
                     #region 标题行
                     sheet1.Cells[1, 1].Value = "SKU";
                     sheet1.Cells[1, 2].Value = "商品名称";
-                    sheet1.Cells[1, 3].Value = "库位";
-                    sheet1.Cells[1, 4].Value = "仓库";
-                    sheet1.Cells[1, 5].Value = "货架";
-                    sheet1.Cells[1, 6].Value = "可用数量";
-                    sheet1.Cells[1, 7].Value = "盘点数量";
-                    sheet1.Cells[1, 8].Value = "留在上海数量";
-                    sheet1.Cells[1, 9].Value = "移往昆山数量";
+                    sheet1.Cells[1, 3].Value = "单位";
+                    sheet1.Cells[1, 4].Value = "库位";
+                    sheet1.Cells[1, 5].Value = "仓库";
+                    sheet1.Cells[1, 6].Value = "货架";
+                    sheet1.Cells[1, 7].Value = "库存数量";
+                    sheet1.Cells[1, 8].Value = "占用数量";
+                    sheet1.Cells[1, 9].Value = "可用数量";
+                    sheet1.Cells[1, 10].Value = "盘点数量";
                     #endregion
 
                     #region 数据行
-                    for (int idx = 0, rowIdx = 2, len = list.Count; idx < len; idx++, rowIdx++)
+                    for (int idx = 0, rowIdx = 2, len = notCulcList.Count; idx < len; idx++, rowIdx++)
                     {
-                        var info = list[idx];
+                        var info = notCulcList[idx];
                         sheet1.Cells[rowIdx, 1].Value = info._SKU;
                         sheet1.Cells[rowIdx, 2].Value = info._商品名称;
-                        sheet1.Cells[rowIdx, 3].Value = info._库位;
-                        sheet1.Cells[rowIdx, 4].Value = info._仓库;
-                        sheet1.Cells[rowIdx, 5].Value = info._货架;
-                        sheet1.Cells[rowIdx, 6].Value = info._可用数量;
-                        sheet1.Cells[rowIdx, 7].Value = info._盘点数量;
-                        sheet1.Cells[rowIdx, 8].Value = info._留在上海数量;
-                        sheet1.Cells[rowIdx, 9].Value = info._移往昆山数量;
+                        sheet1.Cells[rowIdx, 3].Value = info._单位;
+                        sheet1.Cells[rowIdx, 4].Value = info._库位;
+                        sheet1.Cells[rowIdx, 5].Value = info._仓库;
+                        sheet1.Cells[rowIdx, 6].Value = info._货架;
+                        sheet1.Cells[rowIdx, 7].Value = info._库存数量;
+                        sheet1.Cells[rowIdx, 8].Value = info._占用数量;
+                        sheet1.Cells[rowIdx, 9].Value = info._可用数量;
+                        //sheet1.Cells[rowIdx, 8].Value = info._盘点数量;
                     }
                     #endregion
 
@@ -241,7 +249,7 @@ namespace Gadget
 
                 #region 分表
                 {
-                    var storeNames = list.Select(x => x._仓库).Distinct().ToList();
+                    var storeNames = notCulcList.Select(x => x._仓库).Distinct().ToList();
                     storeNames.ForEach(storeName =>
                     {
                         var sheet1 = workbox.Worksheets.Add(!string.IsNullOrEmpty(storeName) ? storeName : "空仓库");
@@ -249,29 +257,32 @@ namespace Gadget
                         #region 标题行
                         sheet1.Cells[1, 1].Value = "SKU";
                         sheet1.Cells[1, 2].Value = "商品名称";
-                        sheet1.Cells[1, 3].Value = "库位";
-                        sheet1.Cells[1, 4].Value = "仓库";
-                        sheet1.Cells[1, 5].Value = "货架";
-                        sheet1.Cells[1, 6].Value = "可用数量";
-                        sheet1.Cells[1, 7].Value = "盘点数量";
-                        sheet1.Cells[1, 8].Value = "留在上海数量";
-                        sheet1.Cells[1, 9].Value = "移往昆山数量";
+                        sheet1.Cells[1, 3].Value = "单位";
+                        sheet1.Cells[1, 4].Value = "库位";
+                        sheet1.Cells[1, 5].Value = "仓库";
+                        sheet1.Cells[1, 6].Value = "货架";
+                        sheet1.Cells[1, 7].Value = "库存数量";
+                        sheet1.Cells[1, 8].Value = "占用数量";
+                        sheet1.Cells[1, 9].Value = "可用数量";
+                        sheet1.Cells[1, 10].Value = "盘点数量";
+
                         #endregion
 
                         #region 数据行
-                        var refList = list.Where(x => x._仓库 == storeName).ToList();
+                        var refList = notCulcList.Where(x => x._仓库 == storeName).ToList();
                         for (int idx = 0, rowIdx = 2, len = refList.Count; idx < len; idx++, rowIdx++)
                         {
                             var info = refList[idx];
                             sheet1.Cells[rowIdx, 1].Value = info._SKU;
                             sheet1.Cells[rowIdx, 2].Value = info._商品名称;
-                            sheet1.Cells[rowIdx, 3].Value = info._库位;
-                            sheet1.Cells[rowIdx, 4].Value = info._仓库;
-                            sheet1.Cells[rowIdx, 5].Value = info._货架;
-                            sheet1.Cells[rowIdx, 6].Value = info._可用数量;
-                            sheet1.Cells[rowIdx, 7].Value = info._盘点数量;
-                            sheet1.Cells[rowIdx, 8].Value = info._留在上海数量;
-                            sheet1.Cells[rowIdx, 9].Value = info._移往昆山数量;
+                            sheet1.Cells[rowIdx, 3].Value = info._单位;
+                            sheet1.Cells[rowIdx, 4].Value = info._库位;
+                            sheet1.Cells[rowIdx, 5].Value = info._仓库;
+                            sheet1.Cells[rowIdx, 6].Value = info._货架;
+                            sheet1.Cells[rowIdx, 7].Value = info._库存数量;
+                            sheet1.Cells[rowIdx, 8].Value = info._占用数量;
+                            sheet1.Cells[rowIdx, 9].Value = info._可用数量;
+                            //sheet1.Cells[rowIdx, 8].Value = info._盘点数量;
                         }
                         #endregion
                     });
@@ -279,6 +290,97 @@ namespace Gadget
                 #endregion
 
                 buffer = package.GetAsByteArray();
+            }
+            #endregion
+
+            #region 已盘点数据表
+            if (culcList.Count > 0)
+            {
+                using (ExcelPackage package = new ExcelPackage())
+                {
+                    var workbox = package.Workbook;
+
+                    #region 汇总表
+                    {
+                        var sheet1 = workbox.Worksheets.Add("所有");
+
+                        #region 标题行
+                        sheet1.Cells[1, 1].Value = "SKU";
+                        sheet1.Cells[1, 2].Value = "商品名称";
+                        sheet1.Cells[1, 3].Value = "单位";
+                        sheet1.Cells[1, 4].Value = "库位";
+                        sheet1.Cells[1, 5].Value = "仓库";
+                        sheet1.Cells[1, 6].Value = "货架";
+                        sheet1.Cells[1, 7].Value = "库存数量";
+                        sheet1.Cells[1, 8].Value = "占用数量";
+                        sheet1.Cells[1, 9].Value = "可用数量";
+                        sheet1.Cells[1, 10].Value = "盘点数量";
+                        #endregion
+
+                        #region 数据行
+                        for (int idx = 0, rowIdx = 2, len = culcList.Count; idx < len; idx++, rowIdx++)
+                        {
+                            var info = culcList[idx];
+                            sheet1.Cells[rowIdx, 1].Value = info._SKU;
+                            sheet1.Cells[rowIdx, 2].Value = info._商品名称;
+                            sheet1.Cells[rowIdx, 3].Value = info._单位;
+                            sheet1.Cells[rowIdx, 4].Value = info._库位;
+                            sheet1.Cells[rowIdx, 5].Value = info._仓库;
+                            sheet1.Cells[rowIdx, 6].Value = info._货架;
+                            sheet1.Cells[rowIdx, 7].Value = info._库存数量;
+                            sheet1.Cells[rowIdx, 8].Value = info._占用数量;
+                            sheet1.Cells[rowIdx, 9].Value = info._可用数量;
+                            sheet1.Cells[rowIdx, 10].Value = info._盘点数量;
+                        }
+                        #endregion
+
+                    }
+                    #endregion
+
+                    #region 分表
+                    {
+                        var storeNames = culcList.Select(x => x._仓库).Distinct().ToList();
+                        storeNames.ForEach(storeName =>
+                        {
+                            var sheet1 = workbox.Worksheets.Add(!string.IsNullOrEmpty(storeName) ? storeName : "空仓库");
+
+                            #region 标题行
+                            sheet1.Cells[1, 1].Value = "SKU";
+                            sheet1.Cells[1, 2].Value = "商品名称";
+                            sheet1.Cells[1, 3].Value = "单位";
+                            sheet1.Cells[1, 4].Value = "库位";
+                            sheet1.Cells[1, 5].Value = "仓库";
+                            sheet1.Cells[1, 6].Value = "货架";
+                            sheet1.Cells[1, 7].Value = "库存数量";
+                            sheet1.Cells[1, 8].Value = "占用数量";
+                            sheet1.Cells[1, 9].Value = "可用数量";
+                            sheet1.Cells[1, 10].Value = "盘点数量";
+
+                            #endregion
+
+                            #region 数据行
+                            var refList = culcList.Where(x => x._仓库 == storeName).ToList();
+                            for (int idx = 0, rowIdx = 2, len = refList.Count; idx < len; idx++, rowIdx++)
+                            {
+                                var info = refList[idx];
+                                sheet1.Cells[rowIdx, 1].Value = info._SKU;
+                                sheet1.Cells[rowIdx, 2].Value = info._商品名称;
+                                sheet1.Cells[rowIdx, 3].Value = info._单位;
+                                sheet1.Cells[rowIdx, 4].Value = info._库位;
+                                sheet1.Cells[rowIdx, 5].Value = info._仓库;
+                                sheet1.Cells[rowIdx, 6].Value = info._货架;
+                                sheet1.Cells[rowIdx, 7].Value = info._库存数量;
+                                sheet1.Cells[rowIdx, 8].Value = info._占用数量;
+                                sheet1.Cells[rowIdx, 9].Value = info._可用数量;
+                                sheet1.Cells[rowIdx, 10].Value = info._盘点数量;
+                            }
+                            #endregion
+                        });
+                    }
+                    #endregion
+
+                    buffer1 = package.GetAsByteArray();
+                }
             }
             #endregion
 
@@ -292,14 +394,27 @@ namespace Gadget
                 if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
                 {
                     var FileName = saveFile.FileName;//得到文件路径   
-                    var saveFilName = Path.GetFileNameWithoutExtension(FileName);
-
+                    var pureFilName = Path.GetFileNameWithoutExtension(FileName);
+                    var tmp = FileName.Split(new string[] { pureFilName }, StringSplitOptions.RemoveEmptyEntries);
+                    var notCulcPath = Path.Combine(tmp[0], pureFilName + "_未盘点.xlsx");
+                    var culcPath = Path.Combine(tmp[0], pureFilName + "已盘点.xlsx");
                     txtExport.Text = FileName;
                     var len = buffer.Length;
-                    using (var fs = File.Create(FileName, len))
+                    using (var fs = File.Create(notCulcPath, len))
                     {
                         fs.Write(buffer, 0, len);
                     }
+
+                    var len1 = buffer1.Length;
+                    if (len1 > 0)
+                    {
+                        using (var fs = File.Create(culcPath, len1))
+                        {
+                            fs.Write(buffer1, 0, len1);
+                        }
+                    }
+
+
                     ShowMsg("表格生成完毕");
                 }
             }, null);
@@ -385,6 +500,9 @@ namespace Gadget
                 }
             }
 
+            [ExcelColumn("单位")]
+            public string _单位 { get; set; }
+
             [ExcelColumn("库位")]
             public string _库位
             {
@@ -400,6 +518,12 @@ namespace Gadget
 
             [ExcelColumn("可用数量")]
             public decimal _可用数量 { get; set; }
+
+            [ExcelColumn("占用数量")]
+            public decimal _占用数量 { get; set; }
+
+            [ExcelColumn("库存数量")]
+            public decimal _库存数量 { get; set; }
 
             [ExcelColumn("30天销量")]
             public decimal _30天销量 { get; set; }
@@ -425,7 +549,7 @@ namespace Gadget
         {
             private string orgSKU;
 
-            [ExcelColumn("SKU码")]
+            [ExcelColumn("SKU")]
             public string SKU
             {
                 get
@@ -438,7 +562,7 @@ namespace Gadget
                 }
             }
 
-            [ExcelColumn("数量")]
+            [ExcelColumn("盘点数量")]
             public decimal _数量 { get; set; }
         }
 
@@ -446,10 +570,12 @@ namespace Gadget
         {
             public string _SKU { get; set; }
             public string _商品名称 { get; set; }
+            public string _单位 { get; set; }
             public string _库位 { get; set; }
             public decimal _可用数量 { get; set; }
             public decimal _盘点数量 { get; set; }
-
+            public decimal _占用数量 { get; set; }
+            public decimal _库存数量 { get; set; }
             public decimal _遗留上海天数 { get; set; }
             public decimal _日平均销量 { get; set; }
 
@@ -460,7 +586,7 @@ namespace Gadget
                     var tmp = "";
                     if (!string.IsNullOrEmpty(_库位))
                     {
-                        tmp = _库位.Substring(0, 2);
+                        tmp = _库位.Substring(0, 1);
                     }
                     return tmp;
                 }
@@ -479,32 +605,31 @@ namespace Gadget
                 }
             }
 
-            public decimal _移往昆山数量
-            {
-                get
-                {
-                    decimal tmp = 0;
-                    if (_盘点数量 != 0)
-                    {
-                        tmp = _盘点数量 - _留在上海数量;
-                    }
-                    else
-                    {
-                        tmp = _可用数量 - _留在上海数量;
-                    }
-                    return tmp;
-                }
-            }
+            //public decimal _移往昆山数量
+            //{
+            //    get
+            //    {
+            //        decimal tmp = 0;
+            //        if (_盘点数量 != 0)
+            //        {
+            //            tmp = _盘点数量 - _留在上海数量;
+            //        }
+            //        else
+            //        {
+            //            tmp = _可用数量 - _留在上海数量;
+            //        }
+            //        return tmp;
+            //    }
+            //}
 
-            public decimal _留在上海数量
-            {
-                get
-                {
-                    return Math.Round(_遗留上海天数 * _日平均销量, 0);
-                }
-            }
+            //public decimal _留在上海数量
+            //{
+            //    get
+            //    {
+            //        return Math.Round(_遗留上海天数 * _日平均销量, 0);
+            //    }
+            //}
         }
-
 
     }
 }
