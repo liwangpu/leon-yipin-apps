@@ -26,7 +26,7 @@ namespace Gadget
             //Application.Run(new _采购订单配货());//采购订单配货
             //Application.Run(new _整合供应商人员工资统计());//整合供应商人员工资统计
 
-
+            //Application.Run(new Form1());
             //Application.Run(new _测试());//
         }
     }
