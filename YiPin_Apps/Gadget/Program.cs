@@ -25,7 +25,8 @@ namespace Gadget
             //Application.Run(new _排除侵权_订单分配());//排除侵权_订单分配
             //Application.Run(new _采购订单配货());//采购订单配货
             //Application.Run(new _整合供应商人员工资统计());//整合供应商人员工资统计
-            Application.Run(new _点货绩效());//点货绩效
+            //Application.Run(new _点货绩效());//点货绩效
+            Application.Run(new _库存积压详情());//库存积压详情
             //Application.Run(new Form1());
             //Application.Run(new _测试());//
         }
