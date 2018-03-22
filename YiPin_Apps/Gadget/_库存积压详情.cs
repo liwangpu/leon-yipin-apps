@@ -5,7 +5,6 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -74,6 +73,7 @@ namespace Gadget
         #region 处理
         private void btn处理_Click(object sender, EventArgs e)
         {
+            btn处理.Enabled = false;
             var list库存周转率 = new List<_库存周转率Mapping>();
             var list入库明细 = new List<_入库明细Mapping>();
             var list滞销情况汇总 = new List<_滞销情况汇总Model>();
@@ -286,7 +286,8 @@ namespace Gadget
                                      _采购员 = cv._采购员,
                                      _业绩归属2 = cv._业绩归属2,
                                      _是否停售 = cv._是否停售,
-                                     _开发时间 = cv._开发时间
+                                     _开发时间 = cv._开发时间,
+                                     _周转天数 = cv._库存周转天数
                                  }).Where(x => x._积压天数 >= ndp积压天数.Value && x._采购员 != "李玲玲" && !string.IsNullOrEmpty(x._采购员)).ToList();
                     list库存积压详情.AddRange(query);
                 }
@@ -469,6 +470,7 @@ namespace Gadget
                         sheet1.Cells[1, 6].Value = "业绩归属2";
                         sheet1.Cells[1, 7].Value = "是否停售";
                         sheet1.Cells[1, 8].Value = "开发时间";
+                        sheet1.Cells[1, 9].Value = "周转天数";
                         #endregion
 
                         #region 数据行
@@ -483,6 +485,7 @@ namespace Gadget
                             sheet1.Cells[rowIdx, 6].Value = info._业绩归属2;
                             sheet1.Cells[rowIdx, 7].Value = info._是否停售 ? "是" : "";
                             sheet1.Cells[rowIdx, 8].Value = info._开发时间 != null ? ((DateTime)info._开发时间).ToString("yyyy/MM/dd") : "";
+                            sheet1.Cells[rowIdx, 9].Value = info._周转天数;
                         }
                         #endregion
 
@@ -777,7 +780,7 @@ namespace Gadget
                     //        fs.Write(buffer1, 0, len1);
                     //    }
                     //}
-
+                    btn处理.Enabled = true;
                     ShowMsg("表格生成完毕");
                 }
             }, null);
@@ -968,6 +971,7 @@ namespace Gadget
             public string _业绩归属2 { get; set; }
             public bool _是否停售 { get; set; }
             public DateTime? _开发时间 { get; set; }
+            public decimal _周转天数 { get; set; }
         }
 
         class _库存积压统计Model
