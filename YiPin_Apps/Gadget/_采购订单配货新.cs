@@ -12,15 +12,16 @@ using System.Windows.Forms;
 
 namespace Gadget
 {
-    public partial class _采购订单配货 : Form
+    public partial class _采购订单配货新 : Form
     {
-        public _采购订单配货()
+        public _采购订单配货新()
         {
             InitializeComponent();
         }
-        private void _采购订单配货_Load(object sender, EventArgs e)
+
+        private void _采购订单配货新_Load(object sender, EventArgs e)
         {
-            //txt建议采购.Text = @"C:\Users\Leon\Desktop\3.10\3月10号建议采购.csv";
+            txt建议采购.Text = @"C:\Users\Leon\Desktop\3.10\3月10号建议采购.csv";
         }
 
         /**************** button event ****************/
@@ -55,10 +56,8 @@ namespace Gadget
             #region 处理数据
             actReadData.BeginInvoke((obj) =>
             {
-                var list销量差降详情 = new List<_销量差降详情>();
-                var list异常单详情 = new List<_异常单详情>();
                 var list订单分配 = new List<_订单分配>();
-                var list处理对比表 = new List<_处理对比表>();
+                var list分析详情 = new List<_分析详情>();
 
                 list建议采购.ForEach(_建议采购Item =>
                 {
@@ -72,44 +71,27 @@ namespace Gadget
 
                     //输入销量差,获取建议采购数量
                     _建议采购Item._销量差 = d销量差;
+                    model._Qty = _建议采购Item._建议采购数量;
 
-
-                    var _d异常单销量和 = 0m;
-                    if (_建议采购Item._上下半月销量差 >= d销量差)
+                    #region 销量分析详情
                     {
-                        var DifModel = new _销量差降详情();
-
-                        //if (_建议采购Item.SKU=="MVPA1C47")
-                        //{
-                            
-                        //}
-
-                        DifModel.SKU = _建议采购Item.SKU;
-                        DifModel._上半月销量 = _建议采购Item._上半月销量;
-                        DifModel._下半月销量 = _建议采购Item._下半月销量;
-                        list销量差降详情.Add(DifModel);
-
-
-
-                        var ComModel = new _处理对比表();
-                        ComModel.SKU = _建议采购Item.SKU;
-                        ComModel._原建议采购数量 = _建议采购Item._如果按之前的算法建议采购数量;
-                        ComModel._处理后建议采购数量 = _建议采购Item._建议采购数量 - _d异常单销量和;
-
-                        if (ComModel._差值 != 0)
-                            list处理对比表.Add(ComModel);
+                        var detailModel = new _分析详情();
+                        detailModel._SKU = _建议采购Item.SKU;
+                        detailModel._建议采购数量 = _建议采购Item._建议采购数量;
+                        detailModel._如果按之前的算法建议采购数量 = _建议采购Item._如果按之前的算法建议采购数量;
+                        detailModel._普源_建议采购数量 = _建议采购Item._普源_建议采购数量;
+                        detailModel._销量是否上升 = _建议采购Item._销量是否上升;
+                        detailModel._以5天乘以3对比15天销量上升的量 = _建议采购Item._销量是否上升 ? _建议采购Item._5天销量 * 3 - _建议采购Item._15天销量 : 0;
+                        list分析详情.Add(detailModel);
                     }
-
-                    model._Qty = _建议采购Item._建议采购数量 - _d异常单销量和;
+                    #endregion
 
                     if (model._Qty > 0)
                         list订单分配.Add(model);
                 });
 
-                ExportExcel(list订单分配.OrderByDescending(x => x._供应商).ToList()
-                    , list销量差降详情.OrderByDescending(x => x._销量差).ToList()
-                    , list异常单详情,
-                    list处理对比表.OrderByDescending(x => x._差值).ToList());
+
+                ExportExcel(list订单分配.OrderByDescending(x => x._供应商).ToList(), list分析详情.OrderByDescending(x => x._普源_建议采购数量).ToList());
             }, null);
             #endregion
 
@@ -130,7 +112,7 @@ namespace Gadget
         /// 导出Excel表格
         /// </summary>
         /// <param name="orders"></param>
-        private void ExportExcel(List<_订单分配> orders, List<_销量差降详情> list销量差, List<_异常单详情> list异常单详情, List<_处理对比表> list处理对比表)
+        private void ExportExcel(List<_订单分配> orders, List<_分析详情> detail)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
@@ -274,92 +256,31 @@ namespace Gadget
                 {
                     var workbox = package.Workbook;
 
+                    var sheet1 = workbox.Worksheets.Add("Sheet1");
 
-                    #region 销量差详情
-                    {
-                        var sheet1 = workbox.Worksheets.Add("销量差详情");
-
-                        #region 标题行
-                        sheet1.Cells[1, 1].Value = "SKU";
-                        sheet1.Cells[1, 2].Value = "上半月销量";
-                        sheet1.Cells[1, 3].Value = "下半月销量";
-                        sheet1.Cells[1, 4].Value = "销量差";
-                        sheet1.Cells[1, 5].Value = "变动";
-                        #endregion
-
-                        #region 数据行
-                        for (int idx = 0, rowIdx = 2, len = list销量差.Count; idx < len; idx++)
-                        {
-                            var curOrder = list销量差[idx];
-                            sheet1.Cells[rowIdx, 1].Value = curOrder.SKU;
-                            sheet1.Cells[rowIdx, 2].Value = curOrder._上半月销量;
-                            sheet1.Cells[rowIdx, 3].Value = curOrder._下半月销量;
-                            sheet1.Cells[rowIdx, 4].Value = curOrder._销量差;
-                            sheet1.Cells[rowIdx, 5].Value = curOrder._变化情况;
-
-                            rowIdx++;
-                        }
-                        #endregion
-                    }
+                    #region 标题行
+                    sheet1.Cells[1, 1].Value = "SKU";
+                    sheet1.Cells[1, 2].Value = "原先算法建议采购";
+                    sheet1.Cells[1, 3].Value = "普源建议采购";
+                    sheet1.Cells[1, 4].Value = "数据分析后建议采购";
+                    sheet1.Cells[1, 5].Value = "销售是否上升";
+                    sheet1.Cells[1, 6].Value = "5天销量*3-15天销量的差";
+                    sheet1.Cells[1, 7].Value = "数据分析后建议采购-普源建议";
                     #endregion
 
-                    #region 异常单详情
+                    #region 数据行
+                    for (int idx = 0, rowIdx = 2, len = detail.Count; idx < len; idx++, rowIdx++)
                     {
-                        var sheet1 = workbox.Worksheets.Add("异常单详情");
+                        var curOrder = detail[idx];
+                        sheet1.Cells[rowIdx, 1].Value = curOrder._SKU;
+                        sheet1.Cells[rowIdx, 2].Value = curOrder._如果按之前的算法建议采购数量;
+                        sheet1.Cells[rowIdx, 3].Value = curOrder._普源_建议采购数量;
+                        sheet1.Cells[rowIdx, 4].Value = curOrder._建议采购数量;
+                        sheet1.Cells[rowIdx, 5].Value = curOrder._销量是否上升 ? "是" : "";
+                        sheet1.Cells[rowIdx, 7].Value = curOrder._建议采购数量 - curOrder._普源_建议采购数量;
 
-                        #region 标题行
-                        sheet1.Cells[1, 1].Value = "SKU";
-                        sheet1.Cells[1, 2].Value = "标准差";
-                        sheet1.Cells[1, 3].Value = "下边界";
-                        sheet1.Cells[1, 4].Value = "上边界";
-                        sheet1.Cells[1, 5].Value = "异常值";
-                        sheet1.Cells[1, 6].Value = "异常单个数";
-                        sheet1.Cells[1, 7].Value = "所有订单";
-                        sheet1.Cells[1, 8].Value = "所有订单个数";
-                        #endregion
-
-                        #region 数据行
-                        for (int idx = 0, rowIdx = 2, len = list异常单详情.Count; idx < len; idx++)
-                        {
-                            var curOrder = list异常单详情[idx];
-                            sheet1.Cells[rowIdx, 1].Value = curOrder.SKU;
-                            sheet1.Cells[rowIdx, 2].Value = curOrder._标准差;
-                            sheet1.Cells[rowIdx, 3].Value = curOrder._下边界;
-                            sheet1.Cells[rowIdx, 4].Value = curOrder._上边界;
-                            sheet1.Cells[rowIdx, 5].Value = curOrder._异常值;
-                            sheet1.Cells[rowIdx, 6].Value = curOrder._异常单个数;
-                            sheet1.Cells[rowIdx, 7].Value = curOrder._所有订单;
-                            sheet1.Cells[rowIdx, 8].Value = curOrder._销售单个数;
-                            rowIdx++;
-                        }
-                        #endregion
-                    }
-                    #endregion
-
-                    #region 处理对比详情
-                    {
-                        var sheet1 = workbox.Worksheets.Add("处理对比详情");
-
-                        #region 标题行
-                        sheet1.Cells[1, 1].Value = "SKU";
-                        sheet1.Cells[1, 2].Value = "原建议采购数量";
-                        sheet1.Cells[1, 3].Value = "现在建议采购数量";
-                        sheet1.Cells[1, 4].Value = "差值";
-                        sheet1.Cells[1, 5].Value = "采购情况";
-                        #endregion
-
-                        #region 数据行
-                        for (int idx = 0, rowIdx = 2, len = list处理对比表.Count; idx < len; idx++)
-                        {
-                            var curOrder = list处理对比表[idx];
-                            sheet1.Cells[rowIdx, 1].Value = curOrder.SKU;
-                            sheet1.Cells[rowIdx, 2].Value = curOrder._原建议采购数量;
-                            sheet1.Cells[rowIdx, 3].Value = curOrder._处理后建议采购数量;
-                            sheet1.Cells[rowIdx, 4].Value = curOrder._差值;
-                            sheet1.Cells[rowIdx, 5].Value = curOrder._采购情况;
-                            rowIdx++;
-                        }
-                        #endregion
+                        if (curOrder._销量是否上升)
+                            sheet1.Cells[rowIdx, 6].Value = curOrder._以5天乘以3对比15天销量上升的量;
                     }
                     #endregion
 
@@ -469,12 +390,14 @@ namespace Gadget
         }
         #endregion
 
+
         /**************** common class ****************/
 
         [ExcelTable("各平台近期销量表")]
         class _建议采购
         {
             private string _SKU;
+            private bool _销量上升;
 
             [ExcelColumn("SKU码")]
             public string SKU
@@ -525,14 +448,8 @@ namespace Gadget
             [ExcelColumn("采购到货天数")]
             public decimal _采购到货天数 { get; set; }
 
-             [ExcelColumn("建议采购数量")]
+            [ExcelColumn("建议采购数量")]
             public decimal _普源_建议采购数量 { get; set; }
-
-            public decimal _上半月销量 { get { return _30天销量 - _15天销量; } }
-
-            public decimal _下半月销量 { get { return _15天销量; } }
-
-            public decimal _上下半月销量差 { get { return _下半月销量 - _上半月销量; } }
 
             public decimal _全月日平均销量
             {
@@ -543,27 +460,19 @@ namespace Gadget
                 }
             }
 
-            public decimal _下半月日平均销量
-            {
-                get
-                {
-                    var tmp = (_15天销量 / 15);
-                    return tmp != 0 ? tmp : 0;
-                }
-            }
-
             public decimal _销量差 { get; set; }
             public decimal _平均日销量
             {
                 get
                 {
-                    if (_上下半月销量差 >= _销量差)
+                    if (_5天销量 * 3 > _15天销量)
                     {
-                        return _下半月日平均销量;
+                        _销量上升 = true;
+                        return _全月日平均销量;
                     }
                     else
                     {
-                        return _全月日平均销量;
+                        return _5天销量 > 0 ? _5天销量 / 5 : 0;
                     }
                 }
             }
@@ -588,6 +497,8 @@ namespace Gadget
                 }
             }
 
+            public bool _销量是否上升 { get { return _销量上升; } }
+
         }
 
         class _订单分配
@@ -609,77 +520,15 @@ namespace Gadget
             public double _对应供应商采购金额 { get; set; }
         }
 
-        class _销量差降详情
+        class _分析详情
         {
-            public string SKU { get; set; }
-
-            public decimal _上半月销量 { get; set; }
-
-            public decimal _下半月销量 { get; set; }
-
-            public decimal _销量差
-            {
-                get
-                {
-                    var tmp = _下半月销量 - _上半月销量;
-                    return tmp > 0 ? tmp : -tmp;
-                }
-            }
-
-            public string _变化情况
-            {
-                get
-                {
-                    var tmp = _下半月销量 - _上半月销量;
-                    return tmp > 0 ? "上升" : "下降";
-                }
-            }
+            public string _SKU { get; set; }
+            public decimal _如果按之前的算法建议采购数量 { get; set; }
+            public decimal _建议采购数量 { get; set; }
+            public decimal _普源_建议采购数量 { get; set; }
+            public decimal _以5天乘以3对比15天销量上升的量 { get; set; }
+            public bool _销量是否上升 { get; set; }
         }
 
-        class _异常单详情
-        {
-            public string SKU { get; set; }
-
-            public decimal _标准差 { get; set; }
-
-            public decimal _下边界 { get; set; }
-
-            public decimal _上边界 { get; set; }
-
-            public string _异常值 { get; set; }
-
-            public int _异常单个数 { get; set; }
-
-            public string _所有订单 { get; set; }
-
-            public int _销售单个数 { get; set; }
-        }
-
-        class _处理对比表
-        {
-            public string SKU { get; set; }
-
-            public decimal _原建议采购数量 { get; set; }
-
-            public decimal _处理后建议采购数量 { get; set; }
-
-            public decimal _差值
-            {
-                get
-                {
-                    var tmp = _原建议采购数量 - _处理后建议采购数量;
-                    return tmp > 0 ? tmp : -tmp;
-                }
-            }
-
-            public string _采购情况
-            {
-                get
-                {
-                    var tmp = _原建议采购数量 - _处理后建议采购数量;
-                    return tmp > 0 ? "采购量减少" : "采购量增加";
-                }
-            }
-        }
     }
 }

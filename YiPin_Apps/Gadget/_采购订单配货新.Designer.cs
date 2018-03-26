@@ -1,6 +1,6 @@
 ﻿namespace Gadget
 {
-    partial class _采购订单配货
+    partial class _采购订单配货新
     {
         /// <summary>
         /// Required designer variable.
@@ -28,60 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btn建议采购 = new System.Windows.Forms.Button();
-            this.txt建议采购 = new System.Windows.Forms.TextBox();
+            this.lkDecs = new System.Windows.Forms.LinkLabel();
+            this.lbMsg = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.nup上下半月销量差 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
-            this.lkDecs = new System.Windows.Forms.LinkLabel();
-            this.lbMsg = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btn建议采购 = new System.Windows.Forms.Button();
+            this.txt建议采购 = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nup上下半月销量差)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // lkDecs
             // 
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.btn建议采购);
-            this.groupBox1.Controls.Add(this.txt建议采购);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 55);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "数据上传";
+            this.lkDecs.AutoSize = true;
+            this.lkDecs.Location = new System.Drawing.Point(308, 136);
+            this.lkDecs.Name = "lkDecs";
+            this.lkDecs.Size = new System.Drawing.Size(53, 12);
+            this.lkDecs.TabIndex = 15;
+            this.lkDecs.TabStop = true;
+            this.lkDecs.Text = "表格说明";
+            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
             // 
-            // label2
+            // lbMsg
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "建议采购:";
+            this.lbMsg.AutoSize = true;
+            this.lbMsg.Location = new System.Drawing.Point(81, 136);
+            this.lbMsg.Name = "lbMsg";
+            this.lbMsg.Size = new System.Drawing.Size(65, 12);
+            this.lbMsg.TabIndex = 14;
+            this.lbMsg.Text = "待上传文件";
             // 
-            // btn建议采购
+            // label1
             // 
-            this.btn建议采购.Location = new System.Drawing.Point(260, 13);
-            this.btn建议采购.Name = "btn建议采购";
-            this.btn建议采购.Size = new System.Drawing.Size(75, 23);
-            this.btn建议采购.TabIndex = 1;
-            this.btn建议采购.Text = "浏览";
-            this.btn建议采购.UseVisualStyleBackColor = true;
-            this.btn建议采购.Click += new System.EventHandler(this.btn建议采购_Click);
-            // 
-            // txt建议采购
-            // 
-            this.txt建议采购.Enabled = false;
-            this.txt建议采购.Location = new System.Drawing.Point(71, 15);
-            this.txt建议采购.Name = "txt建议采购";
-            this.txt建议采购.Size = new System.Drawing.Size(183, 21);
-            this.txt建议采购.TabIndex = 0;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 136);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 12);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "操作消息:";
             // 
             // groupBox2
             // 
@@ -91,7 +81,7 @@
             this.groupBox2.Location = new System.Drawing.Point(12, 73);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(349, 60);
-            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "参数设定";
             // 
@@ -135,55 +125,64 @@
             this.label9.TabIndex = 2;
             this.label9.Text = "上下半月销量差:";
             // 
-            // lkDecs
+            // groupBox1
             // 
-            this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(308, 136);
-            this.lkDecs.Name = "lkDecs";
-            this.lkDecs.Size = new System.Drawing.Size(53, 12);
-            this.lkDecs.TabIndex = 10;
-            this.lkDecs.TabStop = true;
-            this.lkDecs.Text = "表格说明";
-            this.lkDecs.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lkDecs_LinkClicked);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.btn建议采购);
+            this.groupBox1.Controls.Add(this.txt建议采购);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(349, 55);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "数据上传";
             // 
-            // lbMsg
+            // label2
             // 
-            this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(81, 136);
-            this.lbMsg.Name = "lbMsg";
-            this.lbMsg.Size = new System.Drawing.Size(65, 12);
-            this.lbMsg.TabIndex = 9;
-            this.lbMsg.Text = "待上传文件";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(59, 12);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "建议采购:";
             // 
-            // label1
+            // btn建议采购
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 136);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 12);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "操作消息:";
+            this.btn建议采购.Location = new System.Drawing.Point(260, 13);
+            this.btn建议采购.Name = "btn建议采购";
+            this.btn建议采购.Size = new System.Drawing.Size(75, 23);
+            this.btn建议采购.TabIndex = 1;
+            this.btn建议采购.Text = "浏览";
+            this.btn建议采购.UseVisualStyleBackColor = true;
+            this.btn建议采购.Click += new System.EventHandler(this.btn建议采购_Click);
             // 
-            // _采购订单配货
+            // txt建议采购
+            // 
+            this.txt建议采购.Enabled = false;
+            this.txt建议采购.Location = new System.Drawing.Point(71, 15);
+            this.txt建议采购.Name = "txt建议采购";
+            this.txt建议采购.Size = new System.Drawing.Size(183, 21);
+            this.txt建议采购.TabIndex = 0;
+            // 
+            // _采购订单配货新
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(378, 191);
+            this.ClientSize = new System.Drawing.Size(375, 163);
             this.Controls.Add(this.lkDecs);
             this.Controls.Add(this.lbMsg);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.MaximumSize = new System.Drawing.Size(394, 229);
-            this.MinimumSize = new System.Drawing.Size(394, 229);
-            this.Name = "_采购订单配货";
-            this.Text = "采购订单配货";
-            this.Load += new System.EventHandler(this._采购订单配货_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.MaximumSize = new System.Drawing.Size(391, 201);
+            this.MinimumSize = new System.Drawing.Size(391, 201);
+            this.Name = "_采购订单配货新";
+            this.Text = "_采购订单配货新";
+            this.Load += new System.EventHandler(this._采购订单配货新_Load);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nup上下半月销量差)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,16 +190,16 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btn建议采购;
-        private System.Windows.Forms.TextBox txt建议采购;
+        private System.Windows.Forms.LinkLabel lkDecs;
+        private System.Windows.Forms.Label lbMsg;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnAnalyze;
         private System.Windows.Forms.NumericUpDown nup上下半月销量差;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.LinkLabel lkDecs;
-        private System.Windows.Forms.Label lbMsg;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btn建议采购;
+        private System.Windows.Forms.TextBox txt建议采购;
     }
 }
