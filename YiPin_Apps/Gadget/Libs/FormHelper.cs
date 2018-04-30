@@ -18,7 +18,8 @@ namespace Gadget.Libs
         /// 弹出对话框获取CSV文件路径到TextBox
         /// </summary>
         /// <param name="txtbox"></param>
-        public static void GetCSVPath(TextBox txtbox)
+        /// <param name="callback"></param>
+        public static void GetCSVPath(TextBox txtbox, Action callback = null)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
             OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
@@ -30,6 +31,8 @@ namespace Gadget.Libs
                 if (Helper.CheckCSVFileName(OpenFileDialog1.FileName))
                 {
                     txtbox.Text = OpenFileDialog1.FileName;
+                    if (callback != null)
+                        callback();
                 }
                 else
                 {
@@ -68,7 +71,7 @@ namespace Gadget.Libs
         /// <param name="list"></param>
         /// <param name="strError"></param>
         public static void ReadCSVFile<T>(string strCSVPath, ref List<T> list, ref string strError)
-            where T : class,new()
+            where T : class, new()
         {
             strError = string.Empty;
             if (!string.IsNullOrEmpty(strCSVPath))
