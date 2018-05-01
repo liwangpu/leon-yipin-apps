@@ -1,17 +1,14 @@
 ﻿using CommonLibs;
 using Gadget.Libs;
-using LinqToExcel;
 using LinqToExcel.Attributes;
+using Newtonsoft.Json;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using Newtonsoft.Json;
 using System.Text;
-using System.Globalization;
+using System.Windows.Forms;
 
 namespace Gadget
 {
@@ -51,6 +48,15 @@ namespace Gadget
             }
         }
 
+        private string MonthFlag
+        {
+            get
+            {
+                var currentTime = dtp绩效时间.Value;
+                return currentTime.ToString("yyyy-MM");
+            }
+        }
+
         private DateTime CulcTime = new DateTime();
 
         private List<_拣货人员配置信息> _人员负责库位信息;
@@ -62,14 +68,13 @@ namespace Gadget
 
         private void _配货绩效_Load(object sender, EventArgs e)
         {
-            //var dat = DateTime.ParseExact("15:06", "hh:mm", System.Globalization.CultureInfo.CurrentCulture);
 
             _人员负责库位信息 = new List<_拣货人员配置信息>();
             if (!Directory.Exists(Folder人员配置))
                 Directory.CreateDirectory(Folder人员配置);
             if (!Directory.Exists(Folder拣货绩效))
                 Directory.CreateDirectory(Folder拣货绩效);
-
+            //加载缓存人员配置文件
             if (File.Exists(FileName拣货人员配置缓存文件))
             {
                 using (var fs = new StreamReader(FileName拣货人员配置缓存文件, Encoding.UTF8))
@@ -78,6 +83,8 @@ namespace Gadget
                     _人员负责库位信息 = JsonConvert.DeserializeObject<List<_拣货人员配置信息>>(json);
                 }
             }
+            //
+            RefreshCache();
         }
 
         /**************** button event ****************/
@@ -211,7 +218,7 @@ namespace Gadget
                                 if (refTime != null)
                                 {
                                     refTime.CulcTime = CulcTime;
-                                    var mm = refTime._拣货总时间 .TotalMinutes % 60;
+                                    var mm = refTime._拣货总时间.TotalMinutes % 60;
                                     var hh = (refTime._拣货总时间.TotalMinutes - mm) / 60;
                                     md._总时长 = string.Format("{0}:{1}:00", hh > 9 ? "" + hh : "0" + hh, mm > 9 ? "" + mm : "0" + mm);
                                     md._分钟 = refTime._拣货总时间.TotalMinutes;
@@ -226,8 +233,7 @@ namespace Gadget
                             ShowMsg("开始存储当天绩效");
                             Cache当天绩效(list最终绩效);
                             ShowMsg("当天绩效存储完毕");
-
-                            ExportExcel(list最终绩效);
+                            ExportExcel(list最终绩效);          
                         }
                     }
                     ShowMsg(strError);
@@ -241,11 +247,64 @@ namespace Gadget
         }
         #endregion
 
+        #region 计算全月绩效
         private void btn全月绩效_Click(object sender, EventArgs e)
         {
 
-        }
+            var folder = Path.Combine(Folder拣货绩效, MonthFlag);
+            var cacheFiles = Directory.EnumerateFiles(Path.Combine(Folder拣货绩效, MonthFlag));
+            if (cacheFiles != null && cacheFiles.Count() > 0)
+            {
+                btn全月绩效.Enabled = false;
+                var list = new List<_配货绩效结果>();
+                foreach (var item in cacheFiles)
+                {
+                    using (var fs = new StreamReader(item, Encoding.UTF8))
+                    {
+                        var json = fs.ReadToEnd();
+                        list.AddRange(JsonConvert.DeserializeObject<List<_配货绩效结果>>(json));
+                    }
+                }
+                var datas = new List<_配货绩效结果>();
+                var expNames = list.Select(x => x._业绩归属人).Distinct().ToList();
+                expNames.ForEach(n =>
+                {
+                    if (!string.IsNullOrWhiteSpace(n))
+                    {
+                        var md = new _配货绩效结果();
+                        md._业绩归属人 = n;
+                        md._购买总数量 = list.Where(x => x._业绩归属人 == n).Select(x => x._购买总数量).Sum();
+                        md._拣货单张数 = list.Where(x => x._业绩归属人 == n).Select(x => x._拣货单张数).Sum();
+                        //md._总时长 = list.Where(x => x._业绩归属人 == n).Select(x => x._总时长).Sum();
+                        md._分钟 = list.Where(x => x._业绩归属人 == n).Select(x => x._分钟).Sum();
+                        var mm = md._分钟 % 60;
+                        var hh = (md._分钟 - mm) / 60;
+                        md._总时长 = string.Format("{0}:{1}:00", hh > 9 ? "" + hh : "0" + hh, mm > 9 ? "" + mm : "0" + mm);
+                        datas.Add(md);
+                    }
+                });
+                ExportExcel(datas);
+                btn全月绩效.Enabled = true;
+            }
+        } 
+        #endregion
 
+        #region 导出历史绩效
+        private void 导出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var fn = lsbCache.SelectedItem.ToString();
+            var fileName = Path.Combine(Folder拣货绩效, MonthFlag, fn);
+            if (File.Exists(fileName))
+            {
+                using (var fs = new StreamReader(fileName, Encoding.UTF8))
+                {
+                    var json = fs.ReadToEnd();
+                    var list = JsonConvert.DeserializeObject<List<_配货绩效结果>>(json);
+                    ExportExcel(list);
+                }
+            }
+        }
+        #endregion
 
         #region 导出表格说明事件
         private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -256,11 +315,11 @@ namespace Gadget
 
         /**************** common method ****************/
 
+        #region 导出表格
         private void ExportExcel(List<_配货绩效结果> list拣货绩效)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
-
 
             #region 订单分配
             using (ExcelPackage package = new ExcelPackage())
@@ -310,7 +369,6 @@ namespace Gadget
             }
             #endregion
 
-
             InvokeMainForm((obj) =>
             {
 
@@ -339,11 +397,13 @@ namespace Gadget
                     }
 
                     ShowMsg("表格生成完毕");
-                    btn当天绩效.Enabled = true;
-                    btn全月绩效.Enabled = true;
+                    RefreshCache();
                 }
+                btn当天绩效.Enabled = true;
+                btn全月绩效.Enabled = true;
             }, null);
         }
+        #endregion
 
         #region 存储拣货人员配置
         private void Cache拣货人员配置()
@@ -362,7 +422,10 @@ namespace Gadget
             var ct = CulcTime;
             var dateFlag = string.Format("{0}-{1}", ct.Month, ct.Day);
             var json = JsonConvert.SerializeObject(result);
-            var fileName = Path.Combine(Folder拣货绩效, dateFlag + ".json");
+            var folder = Path.Combine(Folder拣货绩效, MonthFlag);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+            var fileName = Path.Combine(Folder拣货绩效, MonthFlag, dateFlag + ".json");
             using (var fs = new StreamWriter(fileName, false, Encoding.UTF8))
             {
                 fs.Write(json);
@@ -410,6 +473,26 @@ namespace Gadget
             else
             {
                 act.Invoke(obj);
+            }
+        }
+        #endregion
+
+        #region 刷新缓存信息
+        private void RefreshCache()
+        {
+            var list = new List<string>();
+            var folder = Path.Combine(Folder拣货绩效, MonthFlag);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+            var cacheFiles = Directory.EnumerateFiles(folder);
+            if (cacheFiles != null && cacheFiles.Count() > 0)
+            {
+                foreach (var item in cacheFiles)
+                {
+                    var fn = Path.GetFileName(item);
+                    list.Add(fn);
+                }
+                lsbCache.DataSource = list;
             }
         }
         #endregion
@@ -554,9 +637,9 @@ namespace Gadget
                     var _吃饭一小时 = new TimeSpan(1, 0, 0);
                     var _吃饭起始时间 = new DateTime(CulcTime.Year, CulcTime.Month, CulcTime.Day, 12, 0, 0);
                     var _吃饭结束时间 = new DateTime(CulcTime.Year, CulcTime.Month, CulcTime.Day, 13, 0, 0);
-                    if (_拣货单开始时间 < _吃饭起始时间&& _拣货单结束时间> _吃饭结束时间)
+                    if (_拣货单开始时间 < _吃饭起始时间 && _拣货单结束时间 > _吃饭结束时间)
                     {
-                        return _拣货单结束时间 - _拣货单开始时间- _吃饭一小时;
+                        return _拣货单结束时间 - _拣货单开始时间 - _吃饭一小时;
                     }
                     return _拣货单结束时间 - _拣货单开始时间;
                 }
@@ -620,7 +703,7 @@ namespace Gadget
             {
                 get
                 {
-                    return Math.Round(_拣货单张数 / _分钟, 2);
+                    return Math.Round(_拣货单张数 / _分钟, 4);
                 }
             }
 
@@ -628,7 +711,7 @@ namespace Gadget
             {
                 get
                 {
-                    return Math.Round(_购买总数量 / _分钟, 2);
+                    return Math.Round(_购买总数量 / _分钟, 4);
                 }
             }
 
@@ -638,7 +721,7 @@ namespace Gadget
                 {
                     var mm = _分钟 % 60;
                     var hh = (_分钟 - mm) / 60;
-                    return hh + Math.Round(mm / 60, 2);
+                    return hh + Math.Round(mm / 60, 4);
                 }
             }
 
@@ -646,7 +729,7 @@ namespace Gadget
             {
                 get
                 {
-                    return Math.Round(_拣货单张数 / _小时, 2);
+                    return Math.Round(_拣货单张数 / _小时, 4);
                 }
             }
 
@@ -654,7 +737,7 @@ namespace Gadget
             {
                 get
                 {
-                    return Math.Round(_购买总数量 / _小时, 2);
+                    return Math.Round(_购买总数量 / _小时, 4);
                 }
             }
 
@@ -664,7 +747,7 @@ namespace Gadget
                 {
                     //= 拣货单每小时 / 208 * 0.75 + 个数每小时 / 1186 * 0.25
 
-                    return Math.Round(_拣货单每小时 / 208 * 0.75 + _个数每小时 / 1186 * 0.25, 2);
+                    return Math.Round(_拣货单每小时 / 208 * 0.75 + _个数每小时 / 1186 * 0.25, 4);
                 }
             }
 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dtp绩效时间 = new System.Windows.Forms.DateTimePicker();
             this.lbMsg = new System.Windows.Forms.Label();
@@ -44,10 +45,13 @@
             this.btn上传拣货单 = new System.Windows.Forms.Button();
             this.txt拣货单 = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lsbCache = new System.Windows.Forms.ListBox();
             this.txt拣货人员配置 = new System.Windows.Forms.TextBox();
+            this.cmn下载缓存 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.cmn下载缓存.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -205,21 +209,23 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.listBox1);
+            this.groupBox2.Controls.Add(this.lsbCache);
             this.groupBox2.Location = new System.Drawing.Point(12, 149);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(457, 204);
+            this.groupBox2.Size = new System.Drawing.Size(497, 204);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "缓存信息";
             // 
-            // listBox1
+            // lsbCache
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(6, 20);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(443, 172);
-            this.listBox1.TabIndex = 0;
+            this.lsbCache.ContextMenuStrip = this.cmn下载缓存;
+            this.lsbCache.FormattingEnabled = true;
+            this.lsbCache.ItemHeight = 12;
+            this.lsbCache.Location = new System.Drawing.Point(6, 20);
+            this.lsbCache.Name = "lsbCache";
+            this.lsbCache.Size = new System.Drawing.Size(485, 172);
+            this.lsbCache.TabIndex = 0;
             // 
             // txt拣货人员配置
             // 
@@ -228,6 +234,21 @@
             this.txt拣货人员配置.Size = new System.Drawing.Size(14, 21);
             this.txt拣货人员配置.TabIndex = 9;
             this.txt拣货人员配置.Visible = false;
+            // 
+            // cmn下载缓存
+            // 
+            this.cmn下载缓存.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.导出ToolStripMenuItem});
+            this.cmn下载缓存.Name = "cmn下载缓存";
+            this.cmn下载缓存.Size = new System.Drawing.Size(181, 48);
+            this.cmn下载缓存.Text = "导出";
+            // 
+            // 导出ToolStripMenuItem
+            // 
+            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
+            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.导出ToolStripMenuItem.Text = "导出";
+            this.导出ToolStripMenuItem.Click += new System.EventHandler(this.导出ToolStripMenuItem_Click);
             // 
             // _配货绩效
             // 
@@ -243,6 +264,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.cmn下载缓存.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,7 +277,7 @@
         private System.Windows.Forms.Button btn上传拣货单;
         private System.Windows.Forms.TextBox txt拣货单;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lsbCache;
         private System.Windows.Forms.Button btn当天绩效;
         private System.Windows.Forms.Button btn全月绩效;
         private System.Windows.Forms.Button btn库位人员配置;
@@ -268,5 +290,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DateTimePicker dtp绩效时间;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ContextMenuStrip cmn下载缓存;
+        private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
     }
 }
