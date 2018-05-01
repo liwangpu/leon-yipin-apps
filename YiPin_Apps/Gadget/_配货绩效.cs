@@ -92,7 +92,6 @@ namespace Gadget
         #region 上传拣货单
         private void btn上传拣货单_Click(object sender, EventArgs e)
         {
-            var list拣货数据 = new List<_拣货单>();
             FormHelper.GetCSVPath(txt拣货单);
         }
         #endregion
@@ -170,7 +169,7 @@ namespace Gadget
                 #region 读取数据
                 var actReadData = new Action(() =>
                 {
-                    ShowMsg("开始计算当天绩效信息");
+                    ShowMsg("开始读取当天绩效信息");
                     FormHelper.ReadCSVFile(txt拣货单.Text, ref list拣货单, ref strError);
                     FormHelper.ReadCSVFile(txt拣货时间.Text, ref list拣货时间, ref strError);
                 });

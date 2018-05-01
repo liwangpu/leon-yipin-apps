@@ -46,9 +46,9 @@
             this.txt拣货单 = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lsbCache = new System.Windows.Forms.ListBox();
-            this.txt拣货人员配置 = new System.Windows.Forms.TextBox();
             this.cmn下载缓存 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txt拣货人员配置 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.cmn下载缓存.SuspendLayout();
@@ -81,7 +81,7 @@
             // 
             this.dtp绩效时间.Location = new System.Drawing.Point(69, 78);
             this.dtp绩效时间.Name = "dtp绩效时间";
-            this.dtp绩效时间.Size = new System.Drawing.Size(141, 21);
+            this.dtp绩效时间.Size = new System.Drawing.Size(166, 21);
             this.dtp绩效时间.TabIndex = 14;
             // 
             // lbMsg
@@ -115,7 +115,7 @@
             // 
             // btn库位人员配置
             // 
-            this.btn库位人员配置.Location = new System.Drawing.Point(216, 76);
+            this.btn库位人员配置.Location = new System.Drawing.Point(241, 76);
             this.btn库位人员配置.Name = "btn库位人员配置";
             this.btn库位人员配置.Size = new System.Drawing.Size(88, 23);
             this.btn库位人员配置.TabIndex = 3;
@@ -125,7 +125,7 @@
             // 
             // btn全月绩效
             // 
-            this.btn全月绩效.Location = new System.Drawing.Point(310, 76);
+            this.btn全月绩效.Location = new System.Drawing.Point(335, 76);
             this.btn全月绩效.Name = "btn全月绩效";
             this.btn全月绩效.Size = new System.Drawing.Size(75, 23);
             this.btn全月绩效.TabIndex = 3;
@@ -136,7 +136,7 @@
             // btn当天绩效
             // 
             this.btn当天绩效.Enabled = false;
-            this.btn当天绩效.Location = new System.Drawing.Point(391, 76);
+            this.btn当天绩效.Location = new System.Drawing.Point(416, 76);
             this.btn当天绩效.Name = "btn当天绩效";
             this.btn当天绩效.Size = new System.Drawing.Size(75, 23);
             this.btn当天绩效.TabIndex = 3;
@@ -173,7 +173,7 @@
             // 
             // btn上传拣货时间
             // 
-            this.btn上传拣货时间.Location = new System.Drawing.Point(393, 47);
+            this.btn上传拣货时间.Location = new System.Drawing.Point(416, 47);
             this.btn上传拣货时间.Name = "btn上传拣货时间";
             this.btn上传拣货时间.Size = new System.Drawing.Size(75, 23);
             this.btn上传拣货时间.TabIndex = 1;
@@ -186,12 +186,12 @@
             this.txt拣货时间.Enabled = false;
             this.txt拣货时间.Location = new System.Drawing.Point(71, 49);
             this.txt拣货时间.Name = "txt拣货时间";
-            this.txt拣货时间.Size = new System.Drawing.Size(314, 21);
+            this.txt拣货时间.Size = new System.Drawing.Size(339, 21);
             this.txt拣货时间.TabIndex = 0;
             // 
             // btn上传拣货单
             // 
-            this.btn上传拣货单.Location = new System.Drawing.Point(393, 18);
+            this.btn上传拣货单.Location = new System.Drawing.Point(416, 18);
             this.btn上传拣货单.Name = "btn上传拣货单";
             this.btn上传拣货单.Size = new System.Drawing.Size(75, 23);
             this.btn上传拣货单.TabIndex = 1;
@@ -204,7 +204,7 @@
             this.txt拣货单.Enabled = false;
             this.txt拣货单.Location = new System.Drawing.Point(71, 20);
             this.txt拣货单.Name = "txt拣货单";
-            this.txt拣货单.Size = new System.Drawing.Size(316, 21);
+            this.txt拣货单.Size = new System.Drawing.Size(339, 21);
             this.txt拣货单.TabIndex = 0;
             // 
             // groupBox2
@@ -227,6 +227,21 @@
             this.lsbCache.Size = new System.Drawing.Size(485, 172);
             this.lsbCache.TabIndex = 0;
             // 
+            // cmn下载缓存
+            // 
+            this.cmn下载缓存.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.导出ToolStripMenuItem});
+            this.cmn下载缓存.Name = "cmn下载缓存";
+            this.cmn下载缓存.Size = new System.Drawing.Size(101, 26);
+            this.cmn下载缓存.Text = "导出";
+            // 
+            // 导出ToolStripMenuItem
+            // 
+            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
+            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.导出ToolStripMenuItem.Text = "导出";
+            this.导出ToolStripMenuItem.Click += new System.EventHandler(this.导出ToolStripMenuItem_Click);
+            // 
             // txt拣货人员配置
             // 
             this.txt拣货人员配置.Location = new System.Drawing.Point(455, 3);
@@ -234,21 +249,6 @@
             this.txt拣货人员配置.Size = new System.Drawing.Size(14, 21);
             this.txt拣货人员配置.TabIndex = 9;
             this.txt拣货人员配置.Visible = false;
-            // 
-            // cmn下载缓存
-            // 
-            this.cmn下载缓存.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.导出ToolStripMenuItem});
-            this.cmn下载缓存.Name = "cmn下载缓存";
-            this.cmn下载缓存.Size = new System.Drawing.Size(181, 48);
-            this.cmn下载缓存.Text = "导出";
-            // 
-            // 导出ToolStripMenuItem
-            // 
-            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.导出ToolStripMenuItem.Text = "导出";
-            this.导出ToolStripMenuItem.Click += new System.EventHandler(this.导出ToolStripMenuItem_Click);
             // 
             // _配货绩效
             // 
@@ -258,6 +258,9 @@
             this.Controls.Add(this.txt拣货人员配置);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(537, 399);
+            this.MinimumSize = new System.Drawing.Size(537, 399);
             this.Name = "_配货绩效";
             this.Text = "配货绩效";
             this.Load += new System.EventHandler(this._配货绩效_Load);
