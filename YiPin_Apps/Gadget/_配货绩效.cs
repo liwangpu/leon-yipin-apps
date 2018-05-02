@@ -159,85 +159,92 @@ namespace Gadget
         {
             if (_人员负责库位信息 != null && _人员负责库位信息.Count > 0)
             {
-                CulcTime = dtp绩效时间.Value;
-                btn当天绩效.Enabled = false;
-                btn全月绩效.Enabled = false;
-                var strError = string.Empty;
-                var list拣货单 = new List<_拣货单>();
-                var list拣货时间 = new List<_拣货时间>();
-                var list最终绩效 = new List<_配货绩效结果>();
-                #region 读取数据
-                var actReadData = new Action(() =>
+                try
                 {
-                    ShowMsg("开始读取当天绩效信息");
-                    FormHelper.ReadCSVFile(txt拣货单.Text, ref list拣货单, ref strError);
-                    FormHelper.ReadCSVFile(txt拣货时间.Text, ref list拣货时间, ref strError);
-                });
-                #endregion
-
-                #region 处理数据
-                actReadData.BeginInvoke((obj) =>
-                {
-                    ShowMsg("绩效数据读取完毕,即将开始计算");
-
-                    if (list拣货单.Count > 0)
+                    CulcTime = dtp绩效时间.Value;
+                    btn当天绩效.Enabled = false;
+                    btn全月绩效.Enabled = false;
+                    var strError = string.Empty;
+                    var list拣货单 = new List<_拣货单>();
+                    var list拣货时间 = new List<_拣货时间>();
+                    var list最终绩效 = new List<_配货绩效结果>();
+                    #region 读取数据
+                    var actReadData = new Action(() =>
                     {
-                        var allEmpNames = _人员负责库位信息.Select(x => x._姓名).Distinct().ToList();
-                        allEmpNames.ForEach(name =>
-                        {
-                            if (!string.IsNullOrEmpty(name))
-                            {
-                                var md = new _配货绩效结果();
-                                md._业绩归属人 = name;
-                                var _订单详情数据 = new List<_订单详情数据>();
+                        ShowMsg("开始读取当天绩效信息");
+                        FormHelper.ReadCSVFile(txt拣货单.Text, ref list拣货单, ref strError);
+                        FormHelper.ReadCSVFile(txt拣货时间.Text, ref list拣货时间, ref strError);
+                    });
+                    #endregion
 
-                                #region 抽取详细信息
+                    #region 处理数据
+                    actReadData.BeginInvoke((obj) =>
+                    {
+                        ShowMsg("绩效数据读取完毕,即将开始计算");
+
+                        if (list拣货单.Count > 0)
+                        {
+                            var allEmpNames = _人员负责库位信息.Select(x => x._姓名).Distinct().ToList();
+                            allEmpNames.ForEach(name =>
+                            {
+                                if (!string.IsNullOrEmpty(name))
                                 {
-                                    var refLh = (from it in list拣货单
-                                                 join s in _人员负责库位信息 on it._库位号 equals s.管理库位
-                                                 where s._姓名 == name
-                                                 select it._拣货明细).ToList();
-                                    foreach (List<string> item in refLh)
+                                    var md = new _配货绩效结果();
+                                    md._业绩归属人 = name;
+                                    var _订单详情数据 = new List<_订单详情数据>();
+
+                                    #region 抽取详细信息
                                     {
-                                        foreach (var it in item)
+                                        var refLh = (from it in list拣货单
+                                                     join s in _人员负责库位信息 on it._库位号 equals s.管理库位
+                                                     where s._姓名 == name
+                                                     select it._拣货明细).ToList();
+                                        foreach (List<string> item in refLh)
                                         {
-                                            var arr = it.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-                                            var detail = new _订单详情数据();
-                                            detail.SKU = arr[0].Trim();
-                                            detail.Amount = Convert.ToDouble(arr[1]);
-                                            _订单详情数据.Add(detail);
+                                            foreach (var it in item)
+                                            {
+                                                var arr = it.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+                                                var detail = new _订单详情数据();
+                                                detail.SKU = arr[0].Trim();
+                                                detail.Amount = Convert.ToDouble(arr[1]);
+                                                _订单详情数据.Add(detail);
+                                            }
                                         }
                                     }
-                                }
-                                #endregion
+                                    #endregion
 
-                                var refTime = list拣货时间.Where(x => x._姓名 == name).FirstOrDefault();
-                                md._拣货单张数 = _订单详情数据.Select(x => x.SKU).Distinct().Count();
-                                md._购买总数量 = _订单详情数据.Select(x => x.Amount).Sum();
-                                if (refTime != null)
-                                {
-                                    refTime.CulcTime = CulcTime;
-                                    var mm = refTime._拣货总时间.TotalMinutes % 60;
-                                    var hh = (refTime._拣货总时间.TotalMinutes - mm) / 60;
-                                    md._总时长 = string.Format("{0}:{1}:00", hh > 9 ? "" + hh : "0" + hh, mm > 9 ? "" + mm : "0" + mm);
-                                    md._分钟 = refTime._拣货总时间.TotalMinutes;
-                                }
+                                    var refTime = list拣货时间.Where(x => x._姓名 == name).FirstOrDefault();
+                                    md._拣货单张数 = _订单详情数据.Select(x => x.SKU).Distinct().Count();
+                                    md._购买总数量 = _订单详情数据.Select(x => x.Amount).Sum();
+                                    if (refTime != null)
+                                    {
+                                        refTime.CulcTime = CulcTime;
+                                        var mm = refTime._拣货总时间.TotalMinutes % 60;
+                                        var hh = (refTime._拣货总时间.TotalMinutes - mm) / 60;
+                                        md._总时长 = string.Format("{0}:{1}:00", hh > 9 ? "" + hh : "0" + hh, mm > 9 ? "" + mm : "0" + mm);
+                                        md._分钟 = refTime._拣货总时间.TotalMinutes;
+                                    }
 
-                                list最终绩效.Add(md);
+                                    list最终绩效.Add(md);
+                                }
+                            });
+
+                            if (list最终绩效.Count > 0)
+                            {
+                                ShowMsg("开始存储当天绩效");
+                                Cache当天绩效(list最终绩效);
+                                ShowMsg("当天绩效存储完毕");
+                                ExportExcel(list最终绩效);
                             }
-                        });
-
-                        if (list最终绩效.Count > 0)
-                        {
-                            ShowMsg("开始存储当天绩效");
-                            Cache当天绩效(list最终绩效);
-                            ShowMsg("当天绩效存储完毕");
-                            ExportExcel(list最终绩效);          
                         }
-                    }
-                    ShowMsg(strError);
-                }, null);
-                #endregion
+                        ShowMsg(strError);
+                    }, null);
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+                    ShowMsg(ex.Message);
+                }
             }
             else
             {
@@ -285,7 +292,7 @@ namespace Gadget
                 ExportExcel(datas);
                 btn全月绩效.Enabled = true;
             }
-        } 
+        }
         #endregion
 
         #region 导出历史绩效
@@ -612,9 +619,13 @@ namespace Gadget
                 get
                 {
                     var dtString = _Str拣货单开始时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
-                    var arr = dtString.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                    var ct = CulcTime;
-                    return new DateTime(ct.Year, ct.Month, ct.Day, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
+                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (arr.Length > 0)
+                    {
+                        var ct = CulcTime;
+                        return new DateTime(ct.Year, ct.Month, ct.Day, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
+                    }
+                    return DateTime.MinValue;
                 }
             }
 
@@ -623,9 +634,13 @@ namespace Gadget
                 get
                 {
                     var dtString = _Str拣货单结束时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
-                    var arr = dtString.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                    var ct = CulcTime;
-                    return new DateTime(ct.Year, ct.Month, ct.Day, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
+                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (arr.Length > 0)
+                    {
+                        var ct = CulcTime;
+                        return new DateTime(ct.Year, ct.Month, ct.Day, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
+                    }
+                    return DateTime.MinValue;
                 }
             }
 
@@ -767,6 +782,24 @@ namespace Gadget
         {
             public string SKU { get; set; }
             public double Amount { get; set; }
+        }
+
+        class DateHelper
+        {
+            /// <summary>
+            /// csv读取时间的时候会自动加上日期部分,造成系统异常
+            /// </summary>
+            /// <param name="str"></param>
+            /// <returns></returns>
+            public static string GetPureTimeString(string str)
+            {
+                if (str.IndexOf('/') > 0)
+                {
+                    var idx = str.IndexOf(' ');
+                    return str.Substring(idx, str.Length - idx);
+                }
+                return str;
+            }
         }
     }
 }

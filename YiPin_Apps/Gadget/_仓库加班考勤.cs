@@ -200,17 +200,23 @@ namespace Gadget
                     var days = list加班绩效[0]._加班时长.Count + 3;
                     for (int column = 3, idx = 1; column < days; column++, idx++)
                     {
-                        sheet1.Column(column).Width = 5;//设置列宽
-                        using (var rng = sheet1.Cells[2, column, 3, column])
-                        {
-                            rng.Value = idx;
-                            rng.Merge = true;
-                            rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;//水平居中
-                            rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;//垂直居中
-                        }
                         var ct = dtp考勤时间.Value;
                         var dateStr = string.Format("{0}-{1}-{2}", ct.Year, ct.Month > 9 ? "" + ct.Month : "0" + ct.Month, idx > 9 ? "" + idx : "0" + idx);
-                        sheet1.Cells[1, column].Value = Day[Convert.ToInt32(Convert.ToDateTime(dateStr).DayOfWeek.ToString("d"))].ToString();
+                        var date = DateTime.MinValue;
+                        var isValid = DateTime.TryParse(dateStr,out date);
+                        if (isValid)
+                        {
+                            sheet1.Column(column).Width = 5;//设置列宽
+                            using (var rng = sheet1.Cells[2, column, 3, column])
+                            {
+                                rng.Value = idx;
+                                rng.Merge = true;
+                                rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;//水平居中
+                                rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;//垂直居中
+                            }
+
+                            sheet1.Cells[1, column].Value = Day[Convert.ToInt32(Convert.ToDateTime(dateStr).DayOfWeek.ToString("d"))].ToString();
+                        }    
                     }
 
                     using (var rng = sheet1.Cells[1, days, 2, days + 2])
