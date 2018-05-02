@@ -90,6 +90,7 @@ namespace Gadget
 
                     //}
                     var list = new List<double>();
+                    var _list打卡情况 = new List<string>();
                     for (int nnn = 0, count = cur._加班信息.Count; nnn < count; nnn++)
                     {
                         var timeStr = !string.IsNullOrWhiteSpace(cur._加班信息[nnn]) ? cur._加班信息[nnn].Trim() : "";
@@ -141,13 +142,16 @@ namespace Gadget
                                 }
                             }
                             list.Add(total);
+                            _list打卡情况.Add("已打卡");
                         }
                         else
                         {
+                            _list打卡情况.Add("未打卡");
                             list.Add(0);
                         }
                     }
                     md._加班时长 = list;
+                    md._打卡情况 = _list打卡情况;
                     list加班绩效.Add(md);
                 }
                 ExportExcel(list加班绩效);
@@ -203,7 +207,7 @@ namespace Gadget
                         var ct = dtp考勤时间.Value;
                         var dateStr = string.Format("{0}-{1}-{2}", ct.Year, ct.Month > 9 ? "" + ct.Month : "0" + ct.Month, idx > 9 ? "" + idx : "0" + idx);
                         var date = DateTime.MinValue;
-                        var isValid = DateTime.TryParse(dateStr,out date);
+                        var isValid = DateTime.TryParse(dateStr, out date);
                         if (isValid)
                         {
                             sheet1.Column(column).Width = 5;//设置列宽
@@ -216,7 +220,7 @@ namespace Gadget
                             }
 
                             sheet1.Cells[1, column].Value = Day[Convert.ToInt32(Convert.ToDateTime(dateStr).DayOfWeek.ToString("d"))].ToString();
-                        }    
+                        }
                     }
 
                     using (var rng = sheet1.Cells[1, days, 2, days + 2])
@@ -272,12 +276,19 @@ namespace Gadget
                     sheet1.Cells[rowIdx + 1, 2].Value = "请假";
                     sheet1.Cells[rowIdx + 2, 2].Value = "加班";
 
+                    var _i请假总计 = 0;
                     for (int nnn = 0, nlen = curOrder._加班时长.Count; nnn < nlen; nnn++)
                     {
                         sheet1.Cells[rowIdx + 2, 3 + nnn].Value = curOrder._加班时长[nnn];
+
+                        if (sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日" && curOrder._打卡情况[nnn] == "未打卡")
+                        {
+                            _i请假总计++;
+                            sheet1.Cells[rowIdx + 1, 3 + nnn].Value = 1;
+                        }
                     }
                     sheet1.Cells[rowIdx + 2, 3 + curOrder._加班时长.Count].Value = curOrder._加班时长.Sum();
-
+                    sheet1.Cells[rowIdx + 1, 3 + curOrder._加班时长.Count].Value = _i请假总计;
                     rowIdx += 3;
                 }
                 #endregion
@@ -392,6 +403,7 @@ namespace Gadget
             public int _员工序号 { get; set; }
             public string _姓名 { get; set; }
             public List<double> _加班时长 { get; set; }
+            public List<string> _打卡情况 { get; set; }
         }
 
     }
