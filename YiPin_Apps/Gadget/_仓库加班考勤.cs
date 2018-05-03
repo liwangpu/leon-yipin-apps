@@ -281,7 +281,7 @@ namespace Gadget
                     {
                         sheet1.Cells[rowIdx + 2, 3 + nnn].Value = curOrder._加班时长[nnn];
 
-                        if (sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日" && curOrder._打卡情况[nnn] == "未打卡")
+                        if (sheet1.Cells[1, 3 + nnn].Value != null && sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日" && curOrder._打卡情况[nnn] == "未打卡")
                         {
                             _i请假总计++;
                             sheet1.Cells[rowIdx + 1, 3 + nnn].Value = 1;
