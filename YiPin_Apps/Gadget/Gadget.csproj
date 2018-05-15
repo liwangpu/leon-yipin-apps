@@ -94,17 +94,17 @@
     <Compile Include="Tests\FormCore.Designer.cs">
       <DependentUpon>FormCore.cs</DependentUpon>
     </Compile>
-    <Compile Include="_仓库加班考勤.cs">
+    <Compile Include="_乱单绩效.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_仓库加班考勤.Designer.cs">
-      <DependentUpon>_仓库加班考勤.cs</DependentUpon>
+    <Compile Include="_乱单绩效.Designer.cs">
+      <DependentUpon>_乱单绩效.cs</DependentUpon>
     </Compile>
-    <Compile Include="_配货绩效.cs">
+    <Compile Include="_点货绩效.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_配货绩效.Designer.cs">
-      <DependentUpon>_配货绩效.cs</DependentUpon>
+    <Compile Include="_点货绩效.Designer.cs">
+      <DependentUpon>_点货绩效.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -119,11 +119,11 @@
     <EmbeddedResource Include="Tests\FormCore.resx">
       <DependentUpon>FormCore.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="_仓库加班考勤.resx">
-      <DependentUpon>_仓库加班考勤.cs</DependentUpon>
+    <EmbeddedResource Include="_乱单绩效.resx">
+      <DependentUpon>_乱单绩效.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="_配货绩效.resx">
-      <DependentUpon>_配货绩效.cs</DependentUpon>
+    <EmbeddedResource Include="_点货绩效.resx">
+      <DependentUpon>_点货绩效.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
