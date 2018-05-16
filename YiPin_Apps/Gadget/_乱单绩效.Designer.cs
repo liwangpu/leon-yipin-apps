@@ -92,6 +92,7 @@
             // 
             // btn乱单绩效
             // 
+            this.btn乱单绩效.Enabled = false;
             this.btn乱单绩效.Location = new System.Drawing.Point(338, 76);
             this.btn乱单绩效.Name = "btn乱单绩效";
             this.btn乱单绩效.Size = new System.Drawing.Size(75, 23);
@@ -160,6 +161,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(450, 161);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(466, 200);
+            this.MinimumSize = new System.Drawing.Size(466, 200);
             this.Name = "_乱单绩效";
             this.Text = "乱单绩效";
             this.Load += new System.EventHandler(this._乱单绩效_Load);

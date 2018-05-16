@@ -47,6 +47,7 @@ namespace Gadget
 
         private void btn乱单绩效_Click(object sender, EventArgs e)
         {
+            btn乱单绩效.Enabled = false;
             var list商品明细 = new List<_商品明细信息>();
             var list库位明细 = new List<_库位明细信息>();
 
@@ -304,7 +305,8 @@ namespace Gadget
                         }
 
                         ShowMsg("表格生成完毕");
-                        //btnAnalyze.Enabled = true;
+                        btn乱单绩效.Enabled = true;
+
                     }
                 }, null);
         }
