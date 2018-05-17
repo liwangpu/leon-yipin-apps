@@ -34,14 +34,16 @@ namespace CommonLibs
             var buyers = new List<string>();
             buyers.Add("崔侠梅");
             buyers.Add("董文丽");
-            buyers.Add("曹晨晨");
+            buyers.Add("钱巧玉");
             buyers.Add("侯春喜");
             buyers.Add("苏苗雨");
-            buyers.Add("王素素");
+            buyers.Add("唐汉成");
             buyers.Add("李曼曼");
             buyers.Add("袁国梁");
             buyers.Add("吴倩");
             buyers.Add("韩丽敏");
+            buyers.Add("王庆飞");
+            buyers.Add("王微");
             return buyers;
         }
         #endregion
@@ -65,9 +67,9 @@ namespace CommonLibs
             buyers.Add("蔡怡雯");
             buyers.Add("秦荧");
             buyers.Add("邹晓玲");
-            buyers.Add("王梦梦");
+            buyers.Add("李亚楠");
             buyers.Add("何萧雪");
-            buyers.Add("周晓悦");
+            buyers.Add("徐周红");
             buyers.Add("陈春梦");
             return buyers;
         }
