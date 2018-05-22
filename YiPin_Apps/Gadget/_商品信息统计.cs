@@ -1,4 +1,5 @@
 ﻿using CommonLibs;
+using Gadget.Libs;
 using LinqToExcel;
 using LinqToExcel.Attributes;
 using OfficeOpenXml;
@@ -30,18 +31,14 @@ namespace Gadget
         #region 上传商品明细事件
         private void btn商品明细_Click(object sender, EventArgs e)
         {
-            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
-            OpenFileDialog1.Title = "CSV 文件";//设置标题
-            OpenFileDialog1.Multiselect = false;
-            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
-            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
-            {
-                if (Helper.CheckCSVFileName(OpenFileDialog1.FileName))
-                    txt商品明细.Text = OpenFileDialog1.FileName;
-                else
-                    MessageBox.Show("csv文件名称不规范,请去掉文件名称中的特殊字符如\".\"等", "温馨提示");
-            }
+            FormHelper.GetCSVPath(txt商品明细);
+        }
+        #endregion
+
+        #region 上传采购员
+        private void btnUploadBuyer_Click(object sender, EventArgs e)
+        {
+            FormHelper.GetCSVPath(txtBuyer);
         }
         #endregion
 
@@ -55,32 +52,43 @@ namespace Gadget
             var _类目统计List = new List<_类目统计Model>();
             var _供应商统计List = new List<_供应商统计Model>();
             var _供应商详情List = new List<_供应商统计Model>();
-
+            var _采购员列表List = new List<string>();
             #region 读取数据
             var analyzeAct = new Action(() =>
             {
-                ShowMsg("开始读取表格数据");
-                #region 读取商品明细
-                {
-                    var strCSVPath = txt商品明细.Text;
-                    if (!string.IsNullOrEmpty(strCSVPath))
-                    {
-                        using (var csv = new ExcelQueryFactory(strCSVPath))
-                        {
-                            try
-                            {
-                                var tmp = from c in csv.Worksheet<_商品明细Mapping>()
-                                          select c;
-                                _商品明细List.AddRange(tmp);
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-                        }
-                    }
-                }
-                #endregion
+                //ShowMsg("开始读取表格数据");
+                //#region 读取商品明细
+                //{
+                //    var strCSVPath = txt商品明细.Text;
+                //    if (!string.IsNullOrEmpty(strCSVPath))
+                //    {
+                //        using (var csv = new ExcelQueryFactory(strCSVPath))
+                //        {
+                //            try
+                //            {
+                //                var tmp = from c in csv.Worksheet<_商品明细Mapping>()
+                //                          select c;
+                //                _商品明细List.AddRange(tmp);
+                //            }
+                //            catch (Exception ex)
+                //            {
+                //                ShowMsg(ex.Message);
+                //            }
+                //        }
+                //    }
+                //}
+                //#endregion
+
+                var strMsg = string.Empty;
+                ShowMsg("开始读取商品明细数据");
+                FormHelper.ReadCSVFile<_商品明细Mapping>(txt商品明细.Text, ref _商品明细List, ref strMsg);
+
+                var tmp = new List<_采购员Mapping>();
+                ShowMsg("开始读取采购员数据");
+                FormHelper.ReadCSVFile<_采购员Mapping>(txtBuyer.Text, ref tmp, ref strMsg);
+                ShowMsg(strMsg);
+
+                _采购员列表List = tmp.Select(x => x._采购员).Distinct().ToList();
             });
             #endregion
 
@@ -115,13 +123,14 @@ namespace Gadget
                     model._类目个数 = refRecords.Select(x => x._商品类别).Distinct().Count();
                     model._月销量 = refRecords.Sum(x => x._30天销量);
                     model._月销售额 = refRecords.Sum(x => x._30销售金额);
-                    var _采购员List= refRecords.Select(x => x._采购员).Distinct().ToList();
+                    var _采购员List = refRecords.Select(x => x._采购员).Distinct().ToList();
                     var _开发Array = refRecords.Select(x => x._业绩归属2).Distinct().ToArray();
                     var _类目Array = refRecords.Select(x => x._商品类别).Distinct().ToArray();
 
 
 
-                    model._采购详细 = _采购员List.Count() > 0 ? string.Join(",", Helper.RemoveUnBuyers(_采购员List).ToArray()) : "";
+                    //model._采购详细 = _采购员List.Count() > 0 ? string.Join(",", Helper.RemoveUnBuyers(_采购员List).ToArray()) : "";
+                    model._采购详细 = _采购员List.Count() > 0 ? string.Join(",", Helper.RemoveUnBuyersByList(_采购员List, _采购员列表List).ToArray()) : "";
                     model._开发详细 = _开发Array.Count() > 0 ? string.Join(",", _开发Array) : "";
                     model._类目详细 = _类目Array.Count() > 0 ? string.Join(",", _类目Array) : "";
 
@@ -483,6 +492,13 @@ namespace Gadget
             }
         }
 
+        [ExcelTable("采购员")]
+        class _采购员Mapping
+        {
+            [ExcelColumn("采购员")]
+            public string _采购员 { get; set; }
+        }
+
         class _供应商类目详情
         {
             public string _类目名称 { get; set; }
@@ -490,5 +506,7 @@ namespace Gadget
             public decimal _月销量 { get; set; }
             public decimal _月销售额 { get; set; }
         }
+
+
     }
 }

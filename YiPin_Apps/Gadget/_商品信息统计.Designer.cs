@@ -40,6 +40,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btn商品明细 = new System.Windows.Forms.Button();
             this.txt商品明细 = new System.Windows.Forms.TextBox();
+            this.txtBuyer = new System.Windows.Forms.TextBox();
+            this.btnUploadBuyer = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndLower)).BeginInit();
             this.SuspendLayout();
@@ -50,23 +53,26 @@
             this.groupBox1.Controls.Add(this.lkDecs);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.btnAnalyze);
             this.groupBox1.Controls.Add(this.txtExport);
             this.groupBox1.Controls.Add(this.lbMsg);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.btnUploadBuyer);
             this.groupBox1.Controls.Add(this.btn商品明细);
+            this.groupBox1.Controls.Add(this.txtBuyer);
             this.groupBox1.Controls.Add(this.txt商品明细);
             this.groupBox1.Location = new System.Drawing.Point(12, 7);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(357, 154);
+            this.groupBox1.Size = new System.Drawing.Size(357, 165);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
             // 
             // ndLower
             // 
-            this.ndLower.Location = new System.Drawing.Point(75, 95);
+            this.ndLower.Location = new System.Drawing.Point(75, 113);
             this.ndLower.Maximum = new decimal(new int[] {
             1410065407,
             2,
@@ -84,7 +90,7 @@
             // lkDecs
             // 
             this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(286, 131);
+            this.lkDecs.Location = new System.Drawing.Point(286, 137);
             this.lkDecs.Name = "lkDecs";
             this.lkDecs.Size = new System.Drawing.Size(53, 12);
             this.lkDecs.TabIndex = 20;
@@ -95,7 +101,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 80);
+            this.label2.Location = new System.Drawing.Point(31, 98);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(155, 12);
             this.label2.TabIndex = 6;
@@ -104,7 +110,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(31, 52);
+            this.label6.Location = new System.Drawing.Point(31, 77);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 12);
             this.label6.TabIndex = 6;
@@ -121,7 +127,7 @@
             // 
             // btnAnalyze
             // 
-            this.btnAnalyze.Location = new System.Drawing.Point(265, 47);
+            this.btnAnalyze.Location = new System.Drawing.Point(264, 72);
             this.btnAnalyze.Name = "btnAnalyze";
             this.btnAnalyze.Size = new System.Drawing.Size(75, 23);
             this.btnAnalyze.TabIndex = 5;
@@ -131,7 +137,7 @@
             // 
             // txtExport
             // 
-            this.txtExport.Location = new System.Drawing.Point(75, 47);
+            this.txtExport.Location = new System.Drawing.Point(75, 74);
             this.txtExport.Name = "txtExport";
             this.txtExport.Size = new System.Drawing.Size(183, 21);
             this.txtExport.TabIndex = 4;
@@ -139,7 +145,7 @@
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(73, 131);
+            this.lbMsg.Location = new System.Drawing.Point(73, 137);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(65, 12);
             this.lbMsg.TabIndex = 3;
@@ -148,7 +154,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 131);
+            this.label1.Location = new System.Drawing.Point(7, 137);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 12);
             this.label1.TabIndex = 2;
@@ -172,14 +178,39 @@
             this.txt商品明细.Size = new System.Drawing.Size(183, 21);
             this.txt商品明细.TabIndex = 0;
             // 
+            // txtBuyer
+            // 
+            this.txtBuyer.Enabled = false;
+            this.txtBuyer.Location = new System.Drawing.Point(75, 47);
+            this.txtBuyer.Name = "txtBuyer";
+            this.txtBuyer.Size = new System.Drawing.Size(183, 21);
+            this.txtBuyer.TabIndex = 0;
+            // 
+            // btnUploadBuyer
+            // 
+            this.btnUploadBuyer.Location = new System.Drawing.Point(264, 45);
+            this.btnUploadBuyer.Name = "btnUploadBuyer";
+            this.btnUploadBuyer.Size = new System.Drawing.Size(75, 23);
+            this.btnUploadBuyer.TabIndex = 1;
+            this.btnUploadBuyer.Text = "浏览";
+            this.btnUploadBuyer.UseVisualStyleBackColor = true;
+            this.btnUploadBuyer.Click += new System.EventHandler(this.btnUploadBuyer_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(19, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "采购员:";
+            // 
             // _商品信息统计
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(376, 167);
+            this.ClientSize = new System.Drawing.Size(375, 177);
             this.Controls.Add(this.groupBox1);
-            this.MaximumSize = new System.Drawing.Size(392, 205);
-            this.MinimumSize = new System.Drawing.Size(392, 205);
             this.Name = "_商品信息统计";
             this.Text = "_商品信息统计";
             this.Load += new System.EventHandler(this._商品信息统计_Load);
@@ -204,5 +235,8 @@
         private System.Windows.Forms.TextBox txt商品明细;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown ndLower;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnUploadBuyer;
+        private System.Windows.Forms.TextBox txtBuyer;
     }
 }

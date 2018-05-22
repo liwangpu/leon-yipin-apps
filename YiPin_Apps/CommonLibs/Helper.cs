@@ -108,6 +108,30 @@ namespace CommonLibs
                 return buyers;
             }
             return new List<string>();
+        }
+        #endregion
+
+        #region RemoveUnBuyersByList 根据输入的采购排除人员信息
+        /// <summary>
+        /// 根据输入的采购排除人员信息
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="buyers"></param>
+        /// <returns></returns>
+        public static List<string> RemoveUnBuyersByList(List<string> list, List<string> buyers)
+        {
+            if (buyers != null && buyers.Count > 0)
+            {
+                for (int idx = list.Count - 1; idx >= 0; idx--)
+                {
+                    var curName = list[idx];
+                    var bFlag = buyers.Where(x => x == curName).Count() > 0;
+                    if (!bFlag)
+                        list.RemoveAt(idx);
+                }
+                return list;
+            }
+            return new List<string>();
         } 
         #endregion
 
