@@ -33,16 +33,16 @@
             this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.txtExport = new System.Windows.Forms.TextBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btn商品明细 = new System.Windows.Forms.Button();
-            this.txt商品明细 = new System.Windows.Forms.TextBox();
-            this.txtBuyer = new System.Windows.Forms.TextBox();
             this.btnUploadBuyer = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.btn商品明细 = new System.Windows.Forms.Button();
+            this.txtBuyer = new System.Windows.Forms.TextBox();
+            this.txt商品明细 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ndLower)).BeginInit();
             this.SuspendLayout();
@@ -116,6 +116,15 @@
             this.label6.TabIndex = 6;
             this.label6.Text = "结果:";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(19, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "采购员:";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -160,32 +169,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "操作消息:";
             // 
-            // btn商品明细
-            // 
-            this.btn商品明细.Location = new System.Drawing.Point(264, 18);
-            this.btn商品明细.Name = "btn商品明细";
-            this.btn商品明细.Size = new System.Drawing.Size(75, 23);
-            this.btn商品明细.TabIndex = 1;
-            this.btn商品明细.Text = "浏览";
-            this.btn商品明细.UseVisualStyleBackColor = true;
-            this.btn商品明细.Click += new System.EventHandler(this.btn商品明细_Click);
-            // 
-            // txt商品明细
-            // 
-            this.txt商品明细.Enabled = false;
-            this.txt商品明细.Location = new System.Drawing.Point(75, 20);
-            this.txt商品明细.Name = "txt商品明细";
-            this.txt商品明细.Size = new System.Drawing.Size(183, 21);
-            this.txt商品明细.TabIndex = 0;
-            // 
-            // txtBuyer
-            // 
-            this.txtBuyer.Enabled = false;
-            this.txtBuyer.Location = new System.Drawing.Point(75, 47);
-            this.txtBuyer.Name = "txtBuyer";
-            this.txtBuyer.Size = new System.Drawing.Size(183, 21);
-            this.txtBuyer.TabIndex = 0;
-            // 
             // btnUploadBuyer
             // 
             this.btnUploadBuyer.Location = new System.Drawing.Point(264, 45);
@@ -196,14 +179,31 @@
             this.btnUploadBuyer.UseVisualStyleBackColor = true;
             this.btnUploadBuyer.Click += new System.EventHandler(this.btnUploadBuyer_Click);
             // 
-            // label3
+            // btn商品明细
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 50);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(47, 12);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "采购员:";
+            this.btn商品明细.Location = new System.Drawing.Point(264, 18);
+            this.btn商品明细.Name = "btn商品明细";
+            this.btn商品明细.Size = new System.Drawing.Size(75, 23);
+            this.btn商品明细.TabIndex = 1;
+            this.btn商品明细.Text = "浏览";
+            this.btn商品明细.UseVisualStyleBackColor = true;
+            this.btn商品明细.Click += new System.EventHandler(this.btn商品明细_Click);
+            // 
+            // txtBuyer
+            // 
+            this.txtBuyer.Enabled = false;
+            this.txtBuyer.Location = new System.Drawing.Point(75, 47);
+            this.txtBuyer.Name = "txtBuyer";
+            this.txtBuyer.Size = new System.Drawing.Size(183, 21);
+            this.txtBuyer.TabIndex = 0;
+            // 
+            // txt商品明细
+            // 
+            this.txt商品明细.Enabled = false;
+            this.txt商品明细.Location = new System.Drawing.Point(75, 20);
+            this.txt商品明细.Name = "txt商品明细";
+            this.txt商品明细.Size = new System.Drawing.Size(183, 21);
+            this.txt商品明细.TabIndex = 0;
             // 
             // _商品信息统计
             // 
@@ -211,6 +211,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 177);
             this.Controls.Add(this.groupBox1);
+            this.MaximumSize = new System.Drawing.Size(391, 216);
+            this.MinimumSize = new System.Drawing.Size(391, 216);
             this.Name = "_商品信息统计";
             this.Text = "_商品信息统计";
             this.Load += new System.EventHandler(this._商品信息统计_Load);
