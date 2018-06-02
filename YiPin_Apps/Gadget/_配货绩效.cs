@@ -319,6 +319,13 @@ namespace Gadget
         }
         #endregion
 
+        #region 刷新缓存信息
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshCache();
+        } 
+        #endregion
+
         /**************** common method ****************/
 
         #region 导出表格
@@ -619,6 +626,7 @@ namespace Gadget
                 get
                 {
                     var dtString = _Str拣货单开始时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
+
                     var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
                     if (arr.Length > 0)
                     {
@@ -793,7 +801,7 @@ namespace Gadget
             /// <returns></returns>
             public static string GetPureTimeString(string str)
             {
-                if (str.IndexOf('/') > 0)
+                if (str.IndexOf('/') > 0|| str.IndexOf('-') > 0)
                 {
                     var idx = str.IndexOf(' ');
                     return str.Substring(idx, str.Length - idx);
@@ -801,6 +809,7 @@ namespace Gadget
                 return str;
             }
         }
+
 
     }
 }

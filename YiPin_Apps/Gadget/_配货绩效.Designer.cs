@@ -49,6 +49,7 @@
             this.cmn下载缓存 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txt拣货人员配置 = new System.Windows.Forms.TextBox();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.cmn下载缓存.SuspendLayout();
@@ -61,6 +62,7 @@
             this.groupBox1.Controls.Add(this.lkDecs);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.btn库位人员配置);
+            this.groupBox1.Controls.Add(this.btnRefresh);
             this.groupBox1.Controls.Add(this.btn全月绩效);
             this.groupBox1.Controls.Add(this.btn当天绩效);
             this.groupBox1.Controls.Add(this.label4);
@@ -96,7 +98,7 @@
             // lkDecs
             // 
             this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(391, 111);
+            this.lkDecs.Location = new System.Drawing.Point(438, 111);
             this.lkDecs.Name = "lkDecs";
             this.lkDecs.Size = new System.Drawing.Size(53, 12);
             this.lkDecs.TabIndex = 11;
@@ -250,6 +252,16 @@
             this.txt拣货人员配置.TabIndex = 9;
             this.txt拣货人员配置.Visible = false;
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(241, 102);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 3;
+            this.btnRefresh.Text = "刷新";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // _配货绩效
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -295,5 +307,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ContextMenuStrip cmn下载缓存;
         private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }
