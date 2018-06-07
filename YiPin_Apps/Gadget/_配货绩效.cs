@@ -204,10 +204,14 @@ namespace Gadget
                                             foreach (var it in item)
                                             {
                                                 var arr = it.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-                                                var detail = new _订单详情数据();
-                                                detail.SKU = arr[0].Trim();
-                                                detail.Amount = Convert.ToDouble(arr[1]);
-                                                _订单详情数据.Add(detail);
+                                                if (arr.Length >=2)
+                                                {
+                                                    var detail = new _订单详情数据();
+                                                    detail.SKU = arr[0].Trim();
+                                                    detail.Amount = Convert.ToDouble(arr[1]);
+                                                    _订单详情数据.Add(detail);
+                                                }
+
                                             }
                                         }
                                     }
@@ -323,7 +327,7 @@ namespace Gadget
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             RefreshCache();
-        } 
+        }
         #endregion
 
         /**************** common method ****************/
@@ -801,7 +805,7 @@ namespace Gadget
             /// <returns></returns>
             public static string GetPureTimeString(string str)
             {
-                if (str.IndexOf('/') > 0|| str.IndexOf('-') > 0)
+                if (str.IndexOf('/') > 0 || str.IndexOf('-') > 0)
                 {
                     var idx = str.IndexOf(' ');
                     return str.Substring(idx, str.Length - idx);
