@@ -21,7 +21,7 @@ namespace Gadget
 
         private void _采购订单配货新_Load(object sender, EventArgs e)
         {
-            txt建议采购.Text = @"C:\Users\Leon\Desktop\3.10\3月10号建议采购.csv";
+            //txt建议采购.Text = @"C:\Users\Leon\Desktop\3.10\3月10号建议采购.csv";
         }
 
         /**************** button event ****************/
