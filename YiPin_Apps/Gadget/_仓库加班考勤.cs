@@ -2,6 +2,8 @@
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,7 +19,8 @@ namespace Gadget
 
         private void _仓库加班考勤_Load(object sender, EventArgs e)
         {
-
+            //txt考勤.Text = @"C:\Users\Leon\Desktop\1_标准报表 - 有异常 - 副本.xlsx";
+            //btn计算考勤.Enabled = true;
         }
 
         /**************** button event ****************/
@@ -85,27 +88,25 @@ namespace Gadget
                     md._员工序号 = cur._员工序号;
                     md._姓名 = cur._姓名;
 
-                    //if (md._姓名 == "吴赞")
+                    //if (md._姓名 == "赵燕宁")
                     //{
 
                     //}
                     var list = new List<double>();
                     var _list打卡情况 = new List<string>();
+                    var _list打卡异常情况 = new List<string>();
                     for (int nnn = 0, count = cur._加班信息.Count; nnn < count; nnn++)
                     {
                         var timeStr = !string.IsNullOrWhiteSpace(cur._加班信息[nnn]) ? cur._加班信息[nnn].Trim() : "";
                         if (!string.IsNullOrWhiteSpace(timeStr))
                         {
-
-                            //if (nnn == 8)
-                            //{
-
-                            //}
+                            var bLackClock = false;
                             double total = 0;
                             var d上班时间 = Convert.ToDateTime("2018-08-08 09:00:00");
                             var d下班时间 = Convert.ToDateTime("2018-08-08 17:30:00");
                             //上班时间加班
                             {
+                                var aaa = timeStr.Substring(0, 5);
                                 var startStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(0, 5));
                                 var startTime = Convert.ToDateTime(startStr);
                                 var timespan = (d上班时间 - startTime).TotalMinutes;
@@ -117,13 +118,18 @@ namespace Gadget
                                     if (mm >= 55)
                                         total += 1;
                                 }
+
+                                if (startTime > Convert.ToDateTime("2018-08-08 12:00:00"))
+                                    bLackClock = true;
                             }
+                            //bLackClock = false;
                             //下班时间加班
                             {
-                                if (timeStr.Length > 5)
+                                if (timeStr.Length >= 5)
                                 {
                                     var _d包饭时间 = Convert.ToDateTime("2018-08-08 21:00:00");
-                                    var endStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(5, 5));
+                                    //var endStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(5, 5));
+                                    var endStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(timeStr.Length - 5, 5));
                                     var endTime = Convert.ToDateTime(endStr);
                                     var timespan = (endTime - d下班时间).TotalMinutes;
                                     if (timespan >= 55)
@@ -139,20 +145,30 @@ namespace Gadget
                                         if (endTime >= _d包饭时间)
                                             total -= 0.5;
                                     }
+                                    if (endTime < Convert.ToDateTime("2018-08-08 17:29:00"))
+                                        bLackClock = true;
                                 }
                             }
                             list.Add(total);
                             _list打卡情况.Add("已打卡");
+                            _list打卡异常情况.Add(bLackClock ? "异常" : string.Empty);
                         }
                         else
                         {
                             _list打卡情况.Add("未打卡");
+                            _list打卡异常情况.Add(string.Empty);
                             list.Add(0);
                         }
                     }
                     md._加班时长 = list;
                     md._打卡情况 = _list打卡情况;
+                    md._打卡情况异常情况 = _list打卡异常情况;
                     list加班绩效.Add(md);
+
+                    //if (md._姓名 == "赵燕宁")
+                    //{
+                    //    list加班绩效.Add(md);
+                    //}
                 }
                 ExportExcel(list加班绩效);
             }, null);
@@ -279,16 +295,28 @@ namespace Gadget
                     var _i请假总计 = 0;
                     for (int nnn = 0, nlen = curOrder._加班时长.Count; nnn < nlen; nnn++)
                     {
-                        sheet1.Cells[rowIdx + 2, 3 + nnn].Value = curOrder._加班时长[nnn];
+                        var bOverTime = false;
 
                         if (sheet1.Cells[1, 3 + nnn].Value != null && sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日" && curOrder._打卡情况[nnn] == "未打卡")
                         {
                             _i请假总计++;
                             sheet1.Cells[rowIdx + 1, 3 + nnn].Value = 1;
+                            bOverTime = true;
+
+                        }
+                        if (!bOverTime)
+                            sheet1.Cells[rowIdx + 2, 3 + nnn].Value = curOrder._加班时长[nnn];
+
+
+                        if (curOrder._打卡情况异常情况[nnn] == "异常"&& sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日")
+                        {
+                            sheet1.Cells[rowIdx + 2, 3 + nnn].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            sheet1.Cells[rowIdx + 2, 3 + nnn].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
                         }
                     }
-                    sheet1.Cells[rowIdx + 2, 3 + curOrder._加班时长.Count].Value = curOrder._加班时长.Sum();
+
                     sheet1.Cells[rowIdx + 1, 3 + curOrder._加班时长.Count].Value = _i请假总计;
+                    sheet1.Cells[rowIdx + 2, 3 + curOrder._加班时长.Count].Value = curOrder._加班时长.Sum();
                     rowIdx += 3;
                 }
                 #endregion
@@ -396,6 +424,7 @@ namespace Gadget
             public int _员工序号 { get; set; }
             public string _姓名 { get; set; }
             public List<string> _加班信息 { get; set; }
+            public List<string> _打卡情况异常情况 { get; set; }
         }
 
         class _加班绩效
@@ -404,6 +433,7 @@ namespace Gadget
             public string _姓名 { get; set; }
             public List<double> _加班时长 { get; set; }
             public List<string> _打卡情况 { get; set; }
+            public List<string> _打卡情况异常情况 { get; set; }
         }
 
     }
