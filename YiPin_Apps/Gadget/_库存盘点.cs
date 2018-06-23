@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLibs;
 using LinqToExcel.Attributes;
+using OfficeOpenXml.Style;
 
 namespace Gadget
 {
@@ -19,8 +20,8 @@ namespace Gadget
 
         private void _库存盘点_Load(object sender, EventArgs e)
         {
-            //txtUpJiaoHuo.Text = @"C:\Users\pulw\Desktop\aaa\拣货.xlsx";
-            //txtUpKucun.Text = @"C:\Users\pulw\Desktop\aaa\上海建议采购.xlsx";
+            //txtUpJiaoHuo.Text = @"C:\Users\Leon\Desktop\demo\拣货单.csv";
+            //txtUpKucun.Text = @"C:\Users\Leon\Desktop\demo\6-15昆山仓全部库存.csv";
         }
 
         /**************** button event ****************/
@@ -94,11 +95,12 @@ namespace Gadget
         #region 数据处理
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
+
             var list拣货信息 = new List<_拣货表>();
             var list库存信息 = new List<_库存表>();
             var list出入库差 = new List<_出入库差>();
             var list结果信息 = new List<_导出表>();
-
+            btnAnalyze.Enabled = false;
             #region 读取数据
             var actReadData = new Action(() =>
             {
@@ -221,6 +223,8 @@ namespace Gadget
                                 {
                                     var data = new _导出表();
                                     data._SKU = defaultItem._SKU;
+                                    data._商品名称 = defaultItem._商品名称;
+                                    data._单位 = defaultItem._单位;
                                     data._可用数量 = defaultItem._可用数量;
                                     data._库存数量 = defaultItem._库存数量;
                                     data._占用数量 = defaultItem._占用数量;
@@ -249,6 +253,8 @@ namespace Gadget
                                     {
                                         var data = new _导出表();
                                         data._SKU = item._SKU;
+                                        data._商品名称 = item._商品名称;
+                                        data._单位 = item._单位;
                                         data._可用数量 = item._可用数量;
                                         data._库存数量 = item._库存数量;
                                         data._占用数量 = item._占用数量;
@@ -350,41 +356,112 @@ namespace Gadget
             {
                 var workbox = package.Workbook;
 
-                var sheet1 = workbox.Worksheets.Add("Sheet1");
 
-                #region 标题行
-                sheet1.Cells[1, 1].Value = "SKU";
-                sheet1.Cells[1, 2].Value = "库存数量";
-                sheet1.Cells[1, 3].Value = "占用数量";
-                sheet1.Cells[1, 4].Value = "可用数量";
-                sheet1.Cells[1, 5].Value = "拣货单数量";
-                sheet1.Cells[1, 6].Value = "缺货数量";
-                sheet1.Cells[1, 7].Value = "库位";
-                sheet1.Cells[1, 8].Value = "入库数量";
-                sheet1.Cells[1, 9].Value = "出库数量";
-                sheet1.Cells[1, 10].Value = "入库数量-出库数量";
-                #endregion
-
-                #region 数据行
-                for (int idx = 0, rowIdx = 2, len = list.Count; idx < len; idx++, rowIdx++)
+                #region 总表
                 {
-                    var info = list[idx];
-                    sheet1.Cells[rowIdx, 1].Value = info._SKU;
-                    sheet1.Cells[rowIdx, 2].Value = info._库存数量;
-                    sheet1.Cells[rowIdx, 3].Value = info._占用数量;
-                    sheet1.Cells[rowIdx, 4].Value = info._可用数量;
-                    sheet1.Cells[rowIdx, 5].Value = info._拣货单数量;
-                    sheet1.Cells[rowIdx, 6].Value = info._缺货数量;
-                    sheet1.Cells[rowIdx, 7].Value = info._库位;
-                    sheet1.Cells[rowIdx, 8].Value = info._入库数量;
-                    sheet1.Cells[rowIdx, 9].Value = info._出库数量;
-                    sheet1.Cells[rowIdx, 10].Value = info._出入库差值;
+                    var sheet1 = workbox.Worksheets.Add("总表");
+
+                    #region 标题行
+                    sheet1.Cells[1, 1].Value = "库位";
+                    sheet1.Cells[1, 2].Value = "SKU";
+                    sheet1.Cells[1, 3].Value = "商品名称";
+                    sheet1.Cells[1, 4].Value = "单位";
+                    sheet1.Cells[1, 5].Value = "库存数量";
+                    sheet1.Cells[1, 6].Value = "占用数量";
+                    sheet1.Cells[1, 7].Value = "可用数量";
+                    sheet1.Cells[1, 8].Value = "盘点数量";
+                    #endregion
+
+                    #region 数据行
+                    for (int idx = 0, rowIdx = 2, len = list.Count; idx < len; idx++, rowIdx++)
+                    {
+                        var info = list[idx];
+                        sheet1.Cells[rowIdx, 1].Value = info._库位;
+                        sheet1.Cells[rowIdx, 2].Value = info._SKU;
+                        sheet1.Cells[rowIdx, 3].Value = info._商品名称;
+                        sheet1.Cells[rowIdx, 4].Value = info._单位;
+                        sheet1.Cells[rowIdx, 5].Value = info._库存数量;
+                        sheet1.Cells[rowIdx, 6].Value = info._占用数量;
+                        sheet1.Cells[rowIdx, 7].Value = info._可用数量;
+                    }
+                    #endregion
+
+                    #region 样式设置
+                    {
+                        sheet1.Cells[1, 1, 1, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;//水平居中
+
+                        sheet1.Column(1).Width = 13;
+                        sheet1.Column(2).Width = 18.43;
+                        sheet1.Column(3).Width = 40;
+                        sheet1.Column(4).Width = 4.86;
+
+                    }
+                    #endregion
                 }
                 #endregion
+
+
+                var areas = list.Select(x => !string.IsNullOrWhiteSpace(x._库位) ? x._库位.Substring(0, 1).ToUpper() : "").Distinct().OrderBy(x => x).ToList();
+
+                foreach (var areaName in areas)
+                {
+                    if (string.IsNullOrWhiteSpace(areaName))
+                        continue;
+                    var sheet1 = workbox.Worksheets.Add(string.Format("{0}区", areaName));
+                    var referDatas = list.Where(x => x._库位.Substring(0, 1).ToUpper() == areaName).ToList();
+
+                    #region 标题行
+                    sheet1.Cells[1, 1].Value = "库位";
+                    sheet1.Cells[1, 2].Value = "SKU";
+                    sheet1.Cells[1, 3].Value = "商品名称";
+                    sheet1.Cells[1, 4].Value = "单位";
+                    sheet1.Cells[1, 5].Value = "盘点数量";
+                    #endregion
+
+                    #region 数据行
+                    for (int idx = 0, rowIdx = 2, len = referDatas.Count; idx < len; idx++, rowIdx++)
+                    {
+                        var info = referDatas[idx];
+                        sheet1.Cells[rowIdx, 1].Value = info._库位;
+                        sheet1.Cells[rowIdx, 2].Value = info._SKU;
+                        sheet1.Cells[rowIdx, 3].Value = info._商品名称;
+                        sheet1.Cells[rowIdx, 4].Value = info._单位;
+
+                    }
+                    #endregion
+
+                    #region 样式设置
+                    {
+                        sheet1.Cells[1,1,1, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;//水平居中
+
+                        sheet1.Column(1).Width = 13;
+                        sheet1.Column(2).Width = 18.43;
+                        sheet1.Column(3).Width = 40;
+                        sheet1.Column(4).Width = 4.86;
+                        sheet1.Column(5).Width = 9.43;
+
+                        var endRow = sheet1.Dimension.End.Row;
+                        var endColumn = sheet1.Dimension.End.Column;
+                        using (var rng = sheet1.Cells[1, 1, endRow, endColumn])
+                        {
+                            rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        }
+                    }
+                    #endregion
+
+                }
+
+
+
 
                 buffer = package.GetAsByteArray();
             }
             #endregion
+
+
 
             InvokeMainForm((obj) =>
             {
@@ -405,6 +482,7 @@ namespace Gadget
                         fs.Write(buffer, 0, len);
                     }
                     ShowMsg("表格生成完毕");
+                    btnAnalyze.Enabled = true;
                 }
             }, null);
         }
@@ -502,6 +580,10 @@ namespace Gadget
             public decimal _可用数量 { get; set; }
             [ExcelColumn("库位")]
             public string _库位 { get; set; }
+            [ExcelColumn("商品名称")]
+            public string _商品名称 { get; set; }
+            [ExcelColumn("单位")]
+            public string _单位 { get; set; }
         }
 
         [ExcelTable("出入库差")]
@@ -540,6 +622,8 @@ namespace Gadget
             public decimal _入库数量 { get; set; }
             public decimal _出库数量 { get; set; }
             public decimal _出入库差值 { get; set; }
+            public string _商品名称 { get; set; }
+            public string _单位 { get; set; }
         }
     }
 }

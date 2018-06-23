@@ -21,9 +21,9 @@ namespace Gadget
 
         private void _分库盘点_Load(object sender, EventArgs e)
         {
-            txt库存明细.Text = @"C:\Users\Leon\Desktop\yyy.csv";
-            //txt盘点结果.Text = @"C:\Users\Leon\Desktop\盘点.csv";
-            txt负责人.Text = @"C:\Users\Leon\Desktop\仓库配货人员.csv";
+            //txt库存明细.Text = @"C:\Users\Leon\Desktop\yyy.csv";
+            ////txt盘点结果.Text = @"C:\Users\Leon\Desktop\盘点.csv";
+            //txt负责人.Text = @"C:\Users\Leon\Desktop\仓库配货人员.csv";
 
 
 
