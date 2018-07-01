@@ -216,6 +216,11 @@ namespace Gadget
                             {
                                 if (!string.IsNullOrEmpty(name))
                                 {
+
+                                    //if (name.Trim()== "魏婷")
+                                    //{
+
+                                    //}
                                     var md = new _配货绩效结果();
                                     md._d张数占比 = _d张数占比;
                                     md._d张数定值 = _d张数定值;
@@ -399,7 +404,7 @@ namespace Gadget
         #region 导出表格说明事件
         private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormHelper.GenerateTableDes(typeof(_拣货单), typeof(_拣货时间), typeof(_拣货人员配置));
+            FormHelper.GenerateTableDes(typeof(_拣货单), typeof(_乱单), typeof(_拣货时间), typeof(_拣货人员配置));
         }
         #endregion
 
