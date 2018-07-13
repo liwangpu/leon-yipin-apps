@@ -14,7 +14,7 @@ namespace Gadget
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new _库存盘点());//库存盘点
-            Application.Run(new _工资计算());//工资计算
+            //Application.Run(new _工资计算());//工资计算
             //Application.Run(new _商品信息统计());//商品信息统计
             //Application.Run(new _分库盘点());//分库盘点
             //Application.Run(new _移库());//移库
@@ -29,6 +29,7 @@ namespace Gadget
             //Application.Run(new _配货绩效());//配货绩效
             //Application.Run(new _乱单绩效());//乱单绩效
             //Application.Run(new _仓库加班考勤());//仓库加班考勤
+            Application.Run(new _紧急单统计());//_紧急单统计
             //Application.Run(new Form1());
             //Application.Run(new _测试());//
         }
