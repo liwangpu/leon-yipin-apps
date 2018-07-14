@@ -1,0 +1,544 @@
+﻿using CommonLibs;
+using Gadget.Libs;
+using LinqToExcel.Attributes;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+
+
+namespace Gadget
+{
+    public partial class _批量生成采购订单 : Form
+    {
+        public _批量生成采购订单()
+        {
+            InitializeComponent();
+        }
+
+        private void _批量生成采购订单_Load(object sender, EventArgs e)
+        {
+            txt库存预警原表.Text = @"C:\Users\Leon\Desktop\7月14号\库存预警.csv";
+            txt库存预警中位数.Text = @"C:\Users\Leon\Desktop\7月14号\库存预警中位数.csv";
+            txt每月流水.Text = @"C:\Users\Leon\Desktop\7月14号\月销量流水.csv";
+            btn处理数据.Enabled = true;
+        }
+
+        /**************** button event ****************/
+
+        #region 上传库存预警原表
+        private void btn上传库存预警原表_Click(object sender, EventArgs e)
+        {
+            FormHelper.GetCSVPath(txt库存预警原表, () =>
+            {
+                btn处理数据.Enabled = CanCalcu();
+            });
+        }
+        #endregion
+
+        #region 上传库存预警中位数
+        private void btn上传库存预警中位数_Click(object sender, EventArgs e)
+        {
+            FormHelper.GetCSVPath(txt库存预警中位数, () =>
+            {
+                btn处理数据.Enabled = CanCalcu();
+            });
+        }
+        #endregion
+
+        #region 上传每月流水
+        private void btn上传每月流水_Click(object sender, EventArgs e)
+        {
+            FormHelper.GetCSVPath(txt每月流水, () =>
+            {
+                btn处理数据.Enabled = CanCalcu();
+            });
+        }
+        #endregion
+
+        #region 处理数据
+        private void btn处理数据_Click(object sender, EventArgs e)
+        {
+            var list库存预警原表 = new List<_库存预警_原表>();
+            var list库存预警中位数 = new List<_库存预警_中位数>();
+            var list每月流水 = new List<_每月流水>();
+
+            #region 读取数据
+            var actReadData = new Action(() =>
+            {
+                var strError = string.Empty;
+                ShowMsg("开始读取预警原表数据");
+                FormHelper.ReadCSVFile(txt库存预警原表.Text, ref list库存预警原表, ref strError);
+                ShowMsg("开始读取预警中位数表数据");
+                FormHelper.ReadCSVFile(txt库存预警中位数.Text, ref list库存预警中位数, ref strError);
+                ShowMsg("开始读取每月流水数据");
+                FormHelper.ReadCSVFile(txt每月流水.Text, ref list每月流水, ref strError);
+
+            });
+            #endregion
+
+            #region 处理数据
+            actReadData.BeginInvoke((obj) =>
+            {
+
+            }, null);
+            #endregion
+        }
+        #endregion
+
+        #region 导出说明
+        private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FormHelper.GenerateTableDes(typeof(_库存预警), typeof(_每月流水));
+        }
+        #endregion
+
+        /**************** common method ****************/
+
+        #region CanCalcu 判断是否可以开始计算数据
+        private bool CanCalcu()
+        {
+            var b上传预警原表 = !string.IsNullOrWhiteSpace(txt库存预警原表.Text);
+            var b上传预警中位数 = !string.IsNullOrWhiteSpace(txt库存预警中位数.Text);
+            var b上传每月流水 = !string.IsNullOrWhiteSpace(txt每月流水.Text);
+            return b上传预警原表 && b上传预警中位数 && b上传每月流水;
+        }
+        #endregion
+
+        #region ExportExcel 导出表格
+        private void ExportExcel(List<string> list)
+        {
+            ShowMsg("开始生成表格");
+            var buffer = new byte[0];
+
+            #region 订单分配
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                var workbox = package.Workbook;
+                var sheet1 = workbox.Worksheets.Add("Sheet1");
+
+                //#region 标题行
+                //using (var rng = sheet1.Cells[1, 1, 1, 9])
+                //{
+                //    rng.Value = DateTime.Now.ToString("yyyy-MM-dd");
+                //    rng.Merge = true;
+                //    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;//水平居中
+                //    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;//垂直居中
+                //}
+
+
+                //sheet1.Cells[2, 1].Value = "采购员";
+                //sheet1.Cells[2, 2].Value = "紧急订单数";
+                //sheet1.Cells[2, 3].Value = "完成订单数";
+                //sheet1.Cells[2, 4].Value = "异常订单";
+                //sheet1.Cells[2, 5].Value = "订单完成占比";
+                //sheet1.Cells[2, 6].Value = "紧急单SKU个数";
+                //sheet1.Cells[2, 7].Value = "完成SKU个数";
+                //sheet1.Cells[2, 8].Value = "SKU完成占比";
+                //sheet1.Cells[2, 9].Value = "缺货订单";
+
+                //#endregion
+
+                //#region 数据行
+                //for (int idx = 0, rowIdx = 3, len = list.Count; idx < len; idx++)
+                //{
+                //    var curData = list[idx];
+                //    sheet1.Cells[rowIdx, 1].Value = curData._采购员;
+                //    sheet1.Cells[rowIdx, 2].Value = curData._紧急订单数;
+                //    sheet1.Cells[rowIdx, 3].Value = curData._完成订单数;
+                //    sheet1.Cells[rowIdx, 4].Value = curData._异常订单;
+                //    sheet1.Cells[rowIdx, 5].Value = curData._订单完成占比;
+                //    sheet1.Cells[rowIdx, 6].Value = curData._紧急单SKU个数;
+                //    sheet1.Cells[rowIdx, 7].Value = curData._完成SKU个数;
+                //    sheet1.Cells[rowIdx, 8].Value = curData._SKU完成占比;
+                //    rowIdx++;
+                //}
+                //#endregion
+
+                //#region 全部边框
+                //{
+                //    var endRow = sheet1.Dimension.End.Row;
+                //    var endColumn = sheet1.Dimension.End.Column;
+                //    using (var rng = sheet1.Cells[1, 1, endRow, endColumn])
+                //    {
+                //        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                //        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                //        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                //        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                //    }
+                //}
+                //#endregion
+
+                sheet1.Cells[sheet1.Dimension.Address].AutoFitColumns();
+
+                buffer = package.GetAsByteArray();
+            }
+            #endregion
+
+            InvokeMainForm((obj) =>
+            {
+
+                SaveFileDialog saveFile = new SaveFileDialog();
+                saveFile.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
+                saveFile.Title = "导出数据";//设置标题
+                saveFile.AddExtension = true;//是否自动增加所辍名
+                saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+                if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+                {
+                    var FileName = saveFile.FileName;//得到文件路径   
+                    var saveFilName = Path.GetFileNameWithoutExtension(FileName);
+                    var savePath = Path.GetDirectoryName(FileName);
+
+                    try
+                    {
+                        var len = buffer.Length;
+                        using (var fs = File.Create(FileName, len))
+                        {
+                            fs.Write(buffer, 0, len);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowMsg(ex.Message);
+                    }
+
+                    ShowMsg("表格生成完毕");
+                }
+
+            }, null);
+        }
+        #endregion
+
+        #region ShowMsg 消息提示
+        /// <summary>
+        /// 消息提示
+        /// </summary>
+        /// <param name="strMsg"></param>
+        private void ShowMsg(string strMsg)
+        {
+            if (this.InvokeRequired)
+            {
+                var act = new Action<string>(ShowMsg);
+                this.Invoke(act, strMsg);
+            }
+            else
+            {
+                this.lbMsg.Text = strMsg;
+            }
+        }
+        #endregion
+
+        #region InvokeMainForm 调用主线程
+        protected void InvokeMainForm(Action act)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(act);
+            }
+            else
+            {
+                act.Invoke();
+            }
+        }
+        protected void InvokeMainForm(Action<object> act, object obj)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(act, obj);
+            }
+            else
+            {
+                act.Invoke(obj);
+            }
+        }
+        #endregion
+
+        /**************** common class ****************/
+
+        [ExcelTable("库存预警")]
+        class _库存预警
+        {
+            private string _SKU;
+            private bool _销量上升;
+
+            [ExcelColumn("SKU码")]
+            public string SKU
+            {
+                get
+                {
+                    return _SKU;
+                }
+                set
+                {
+                    _SKU = value != null ? value.ToString().Trim() : "";
+                }
+            }
+
+            [ExcelColumn("供应商")]
+            public string _供应商 { get; set; }
+
+            [ExcelColumn("采购员")]
+            public string _采购员 { get; set; }
+
+            [ExcelColumn("业绩归属2")]
+            public string _开发 { get; set; }
+
+            [ExcelColumn("可用数量")]
+            public decimal _可用数量 { get; set; }
+
+            [ExcelColumn("采购未入库")]
+            public decimal _采购未入库 { get; set; }
+
+            [ExcelColumn("缺货及未派单数量")]
+            public decimal _缺货及未派单数量 { get; set; }
+
+            [ExcelColumn("商品成本单价")]
+            public decimal _商品成本单价 { get; set; }
+
+            [ExcelColumn("30天销量")]
+            public decimal _30天销量 { get; set; }
+
+            [ExcelColumn("15天销量")]
+            public decimal _15天销量 { get; set; }
+
+            [ExcelColumn("5天销量")]
+            public decimal _5天销量 { get; set; }
+
+            [ExcelColumn("预警销售天数")]
+            public decimal _预警销售天数 { get; set; }
+
+            [ExcelColumn("采购到货天数")]
+            public decimal _采购到货天数 { get; set; }
+
+            [ExcelColumn("预计可用库存")]
+            public decimal _预计可用库存 { get; set; }
+
+
+            public decimal _建议采购数量
+            {
+                get
+                {
+                    var _库存上限 = _预警销售天数 * _日平均销量;
+                    var _库存下限 = _采购到货天数 * _日平均销量;
+                    return Convert.ToDecimal(Helper.CalAmount(Convert.ToDouble(_库存上限 + _库存下限 - _可用数量 - _采购未入库 + _缺货及未派单数量)));
+                }
+            }
+            /**************** virtual ****************/
+
+            public virtual decimal _日平均销量 { get; }
+
+            public virtual decimal _库存下限
+            {
+                get
+                {
+                    return _日平均销量 * _采购到货天数;
+                }
+            }
+
+            public virtual decimal _库存上限 { get; set; }
+
+            public virtual bool _是否需要采购 { get; }
+
+        }
+
+        class _库存预警_原表 : _库存预警
+        {
+            public override decimal _日平均销量
+            {
+                get
+                {
+                    decimal vl = (_5天销量 * 0.1m / 5 + _15天销量 * 0.1m / 15 + _30天销量 * 0.1m / 30) / 3;
+                    return Math.Round(vl, 2);
+                }
+            }
+            public override bool _是否需要采购
+            {
+                get
+                {
+                    return _预计可用库存 < _库存下限 && _30天销量 > 0;
+                }
+            }
+        }
+
+        class _库存预警_中位数 : _库存预警
+        {
+            public decimal _5天中位数 { get; set; }
+
+            public decimal _15天中位数 { get; set; }
+
+            public decimal _30天中位数 { get; set; }
+
+            public override decimal _日平均销量
+            {
+                get
+                {
+                    decimal vl = (_5天中位数 + _15天中位数 + _30天中位数) / 3;
+                    return Math.Round(vl, 2);
+                }
+            }
+
+            public override bool _是否需要采购
+            {
+                get
+                {
+                    return _预计可用库存 < _库存下限;
+                }
+            }
+        }
+
+        [ExcelTable("每月流水")]
+        class _每月流水
+        {
+            private string _SKU;
+
+            [ExcelColumn("SKU")]
+            public string SKU
+            {
+                get
+                {
+                    return _SKU;
+                }
+                set
+                {
+                    _SKU = value != null ? value.ToString().Trim() : "";
+                }
+            }
+
+            [ExcelColumn("今天销量")]
+            public decimal _今天销量 { get; set; }
+            [ExcelColumn("今天往前1天")]
+            public decimal _今天往前1天 { get; set; }
+            [ExcelColumn("今天往前2天")]
+            public decimal _今天往前2天 { get; set; }
+            [ExcelColumn("今天往前3天")]
+            public decimal _今天往前3天 { get; set; }
+            [ExcelColumn("今天往前4天")]
+            public decimal _今天往前4天 { get; set; }
+            [ExcelColumn("今天往前5天")]
+            public decimal _今天往前5天 { get; set; }
+            [ExcelColumn("今天往前6天")]
+            public decimal _今天往前6天 { get; set; }
+            [ExcelColumn("今天往前7天")]
+            public decimal _今天往前7天 { get; set; }
+            [ExcelColumn("今天往前8天")]
+            public decimal _今天往前8天 { get; set; }
+            [ExcelColumn("今天往前9天")]
+            public decimal _今天往前9天 { get; set; }
+            [ExcelColumn("今天往前10天")]
+            public decimal _今天往前10天 { get; set; }
+
+            [ExcelColumn("今天往前11天")]
+            public decimal _今天往前11天 { get; set; }
+            [ExcelColumn("今天往前12天")]
+            public decimal _今天往前12天 { get; set; }
+            [ExcelColumn("今天往前13天")]
+            public decimal _今天往前13天 { get; set; }
+            [ExcelColumn("今天往前14天")]
+            public decimal _今天往前14天 { get; set; }
+            [ExcelColumn("今天往前15天")]
+            public decimal _今天往前15天 { get; set; }
+            [ExcelColumn("今天往前16天")]
+            public decimal _今天往前16天 { get; set; }
+            [ExcelColumn("今天往前17天")]
+            public decimal _今天往前17天 { get; set; }
+            [ExcelColumn("今天往前18天")]
+            public decimal _今天往前18天 { get; set; }
+            [ExcelColumn("今天往前19天")]
+            public decimal _今天往前19天 { get; set; }
+            [ExcelColumn("今天往前20天")]
+            public decimal _今天往前20天 { get; set; }
+
+            [ExcelColumn("今天往前21天")]
+            public decimal _今天往前21天 { get; set; }
+            [ExcelColumn("今天往前22天")]
+            public decimal _今天往前22天 { get; set; }
+            [ExcelColumn("今天往前23天")]
+            public decimal _今天往前23天 { get; set; }
+            [ExcelColumn("今天往前24天")]
+            public decimal _今天往前24天 { get; set; }
+            [ExcelColumn("今天往前25天")]
+            public decimal _今天往前25天 { get; set; }
+            [ExcelColumn("今天往前26天")]
+            public decimal _今天往前26天 { get; set; }
+            [ExcelColumn("今天往前27天")]
+            public decimal _今天往前27天 { get; set; }
+            [ExcelColumn("今天往前28天")]
+            public decimal _今天往前28天 { get; set; }
+            [ExcelColumn("今天往前29天")]
+            public decimal _今天往前29天 { get; set; }
+
+            public List<decimal> _月销量流水
+            {
+                get
+                {
+                    return new List<decimal>()
+                    {
+                        _今天销量,
+                        _今天往前1天,
+                        _今天往前2天,
+                        _今天往前3天,
+                        _今天往前4天,
+                        _今天往前5天,
+                        _今天往前6天,
+                        _今天往前7天,
+                        _今天往前8天,
+                        _今天往前9天,
+                        _今天往前10天,
+                        _今天往前11天,
+                        _今天往前12天,
+                        _今天往前13天,
+                        _今天往前14天,
+                        _今天往前15天,
+                        _今天往前16天,
+                        _今天往前17天,
+                        _今天往前18天,
+                        _今天往前19天,
+                        _今天往前20天,
+                        _今天往前21天,
+                        _今天往前22天,
+                        _今天往前23天,
+                        _今天往前24天,
+                        _今天往前25天,
+                        _今天往前26天,
+                        _今天往前27天,
+                        _今天往前28天,
+                        _今天往前29天
+                    };
+                }
+            }
+
+        }
+
+        class _订单分配
+        {
+            public string _供应商 { get; set; }
+            public string _SKU { get; set; }
+            public decimal _Qty { get; set; }
+            public string _仓库 { get; set; }
+            public string _备注 { get; set; }
+            public string _合同号 { get; set; }
+            public string _采购员 { get; set; }
+            public decimal _含税单价 { get; set; }
+            public double _物流费 { get; set; }
+            public string _付款方式 { get; set; }
+            public string _制单人 { get; set; }
+            public string _到货日期 { get; set; }
+            public string _1688单号 { get; set; }
+            public double _预付款 { get; set; }
+            public double _对应供应商采购金额 { get; set; }
+        }
+
+        class _分析详情
+        {
+            public string _SKU { get; set; }
+            public decimal _如果按之前的算法建议采购数量 { get; set; }
+            public decimal _建议采购数量 { get; set; }
+            public decimal _普源_建议采购数量 { get; set; }
+            public decimal _以5天乘以3对比15天销量上升的量 { get; set; }
+            public bool _销量是否上升 { get; set; }
+        }
+    }
+}

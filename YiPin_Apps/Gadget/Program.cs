@@ -29,7 +29,8 @@ namespace Gadget
             //Application.Run(new _配货绩效());//配货绩效
             //Application.Run(new _乱单绩效());//乱单绩效
             //Application.Run(new _仓库加班考勤());//仓库加班考勤
-            Application.Run(new _紧急单统计());//_紧急单统计
+            //Application.Run(new _紧急单统计());//_紧急单统计
+            Application.Run(new _批量生成采购订单());//_批量生成采购订单
             //Application.Run(new Form1());
             //Application.Run(new _测试());//
         }
