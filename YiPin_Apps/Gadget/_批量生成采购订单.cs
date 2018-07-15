@@ -77,13 +77,45 @@ namespace Gadget
                 ShowMsg("开始读取每月流水数据");
                 FormHelper.ReadCSVFile(txt每月流水.Text, ref list每月流水, ref strError);
 
+                ShowMsg("开始过滤每月流水中不需要的数据");
+                //过滤掉流水表里面不需要的sku数据,因为改表太大
+                var sku_yb = list库存预警原表.Select(x => x.SKU).ToList();
+                var sku_zw = list库存预警中位数.Select(x => x.SKU).ToList();
+                sku_yb.AddRange(sku_zw);
+                var sku_all = sku_yb.Select(x => x).Distinct().ToList();
+                list每月流水 = list每月流水.Where(x => sku_all.Contains(x.SKU)).ToList();
+
             });
             #endregion
 
             #region 处理数据
             actReadData.BeginInvoke((obj) =>
             {
+                #region 从库存流水里面统计库存预警中位数
+                for (int idx = list库存预警中位数.Count - 1; idx >= 0; idx--)
+                {
+                    var curData = list库存预警中位数[idx];
+                    var refer流水情况 = list每月流水.FirstOrDefault(x => x.SKU == curData.SKU);
+                    if (refer流水情况 != null)
+                    {
+                        #region 近5天中位数
+                        {
+                            curData._5天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(5).ToList(), 2);
+                            curData._15天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(15).ToList(), 7);
+                            var sorts = refer流水情况._月销量流水.OrderBy(x => x).ToList();
+                            curData._30天中位数 = Math.Round((sorts[14] + sorts[15]) * 1m / 2, 2);
+                        }
 
+                        #endregion
+                    }
+                }
+                #endregion
+
+
+                //var aaa = list库存预警中位数.Where(x => x._是否需要采购 == true).ToList();
+                //var bbb = aaa.Where(x => x._建议采购数量 > 0).ToList();
+
+                var b = 1;
             }, null);
             #endregion
         }
@@ -105,6 +137,24 @@ namespace Gadget
             var b上传预警中位数 = !string.IsNullOrWhiteSpace(txt库存预警中位数.Text);
             var b上传每月流水 = !string.IsNullOrWhiteSpace(txt每月流水.Text);
             return b上传预警原表 && b上传预警中位数 && b上传每月流水;
+        }
+        #endregion
+
+        #region Calcu中位数 获取中位数
+        /// <summary>
+        /// 获取中位数
+        /// </summary>
+        /// <param name="datas"></param>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        private decimal Calcu中位数(List<decimal> datas, int idx)
+        {
+            if (datas.Count > 0)
+            {
+                var sorts = datas.OrderBy(x => x);
+                return datas[idx];
+            }
+            return 0m;
         }
         #endregion
 
@@ -262,7 +312,6 @@ namespace Gadget
         class _库存预警
         {
             private string _SKU;
-            private bool _销量上升;
 
             [ExcelColumn("SKU码")]
             public string SKU
@@ -316,14 +365,21 @@ namespace Gadget
             [ExcelColumn("预计可用库存")]
             public decimal _预计可用库存 { get; set; }
 
-
             public decimal _建议采购数量
+            {
+                get
+                {
+                    return Convert.ToDecimal(Helper.CalAmount(Convert.ToDouble(_如果按之前的算法建议采购数量)));
+                }
+            }
+
+            public decimal _如果按之前的算法建议采购数量
             {
                 get
                 {
                     var _库存上限 = _预警销售天数 * _日平均销量;
                     var _库存下限 = _采购到货天数 * _日平均销量;
-                    return Convert.ToDecimal(Helper.CalAmount(Convert.ToDouble(_库存上限 + _库存下限 - _可用数量 - _采购未入库 + _缺货及未派单数量)));
+                    return _库存上限 + _库存下限 - _可用数量 - _采购未入库 + _缺货及未派单数量;
                 }
             }
             /**************** virtual ****************/
