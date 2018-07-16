@@ -33,15 +33,15 @@
             this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.btn处理数据 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btn上传库存预警原表 = new System.Windows.Forms.Button();
-            this.txt库存预警原表 = new System.Windows.Forms.TextBox();
-            this.btn上传库存预警中位数 = new System.Windows.Forms.Button();
             this.btn上传每月流水 = new System.Windows.Forms.Button();
-            this.txt库存预警中位数 = new System.Windows.Forms.TextBox();
+            this.btn上传库存预警中位数 = new System.Windows.Forms.Button();
+            this.btn上传库存预警原表 = new System.Windows.Forms.Button();
             this.txt每月流水 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.txt库存预警中位数 = new System.Windows.Forms.TextBox();
+            this.txt库存预警原表 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -107,6 +107,15 @@
             this.btn处理数据.UseVisualStyleBackColor = true;
             this.btn处理数据.Click += new System.EventHandler(this.btn处理数据_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 83);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(83, 12);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "每月销售流水:";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -125,23 +134,15 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "库存预警-原先:";
             // 
-            // btn上传库存预警原表
+            // btn上传每月流水
             // 
-            this.btn上传库存预警原表.Location = new System.Drawing.Point(382, 18);
-            this.btn上传库存预警原表.Name = "btn上传库存预警原表";
-            this.btn上传库存预警原表.Size = new System.Drawing.Size(75, 23);
-            this.btn上传库存预警原表.TabIndex = 1;
-            this.btn上传库存预警原表.Text = "浏览";
-            this.btn上传库存预警原表.UseVisualStyleBackColor = true;
-            this.btn上传库存预警原表.Click += new System.EventHandler(this.btn上传库存预警原表_Click);
-            // 
-            // txt库存预警原表
-            // 
-            this.txt库存预警原表.Enabled = false;
-            this.txt库存预警原表.Location = new System.Drawing.Point(112, 20);
-            this.txt库存预警原表.Name = "txt库存预警原表";
-            this.txt库存预警原表.Size = new System.Drawing.Size(264, 21);
-            this.txt库存预警原表.TabIndex = 0;
+            this.btn上传每月流水.Location = new System.Drawing.Point(382, 80);
+            this.btn上传每月流水.Name = "btn上传每月流水";
+            this.btn上传每月流水.Size = new System.Drawing.Size(75, 23);
+            this.btn上传每月流水.TabIndex = 1;
+            this.btn上传每月流水.Text = "浏览";
+            this.btn上传每月流水.UseVisualStyleBackColor = true;
+            this.btn上传每月流水.Click += new System.EventHandler(this.btn上传每月流水_Click);
             // 
             // btn上传库存预警中位数
             // 
@@ -153,23 +154,15 @@
             this.btn上传库存预警中位数.UseVisualStyleBackColor = true;
             this.btn上传库存预警中位数.Click += new System.EventHandler(this.btn上传库存预警中位数_Click);
             // 
-            // btn上传每月流水
+            // btn上传库存预警原表
             // 
-            this.btn上传每月流水.Location = new System.Drawing.Point(382, 80);
-            this.btn上传每月流水.Name = "btn上传每月流水";
-            this.btn上传每月流水.Size = new System.Drawing.Size(75, 23);
-            this.btn上传每月流水.TabIndex = 1;
-            this.btn上传每月流水.Text = "浏览";
-            this.btn上传每月流水.UseVisualStyleBackColor = true;
-            this.btn上传每月流水.Click += new System.EventHandler(this.btn上传每月流水_Click);
-            // 
-            // txt库存预警中位数
-            // 
-            this.txt库存预警中位数.Enabled = false;
-            this.txt库存预警中位数.Location = new System.Drawing.Point(114, 51);
-            this.txt库存预警中位数.Name = "txt库存预警中位数";
-            this.txt库存预警中位数.Size = new System.Drawing.Size(264, 21);
-            this.txt库存预警中位数.TabIndex = 0;
+            this.btn上传库存预警原表.Location = new System.Drawing.Point(382, 18);
+            this.btn上传库存预警原表.Name = "btn上传库存预警原表";
+            this.btn上传库存预警原表.Size = new System.Drawing.Size(75, 23);
+            this.btn上传库存预警原表.TabIndex = 1;
+            this.btn上传库存预警原表.Text = "浏览";
+            this.btn上传库存预警原表.UseVisualStyleBackColor = true;
+            this.btn上传库存预警原表.Click += new System.EventHandler(this.btn上传库存预警原表_Click);
             // 
             // txt每月流水
             // 
@@ -179,14 +172,21 @@
             this.txt每月流水.Size = new System.Drawing.Size(264, 21);
             this.txt每月流水.TabIndex = 0;
             // 
-            // label1
+            // txt库存预警中位数
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 83);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 12);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "每月销售流水:";
+            this.txt库存预警中位数.Enabled = false;
+            this.txt库存预警中位数.Location = new System.Drawing.Point(114, 51);
+            this.txt库存预警中位数.Name = "txt库存预警中位数";
+            this.txt库存预警中位数.Size = new System.Drawing.Size(264, 21);
+            this.txt库存预警中位数.TabIndex = 0;
+            // 
+            // txt库存预警原表
+            // 
+            this.txt库存预警原表.Enabled = false;
+            this.txt库存预警原表.Location = new System.Drawing.Point(112, 20);
+            this.txt库存预警原表.Name = "txt库存预警原表";
+            this.txt库存预警原表.Size = new System.Drawing.Size(264, 21);
+            this.txt库存预警原表.TabIndex = 0;
             // 
             // _批量生成采购订单
             // 
@@ -194,6 +194,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(491, 176);
             this.Controls.Add(this.groupBox1);
+            this.MaximumSize = new System.Drawing.Size(507, 215);
+            this.MinimumSize = new System.Drawing.Size(507, 215);
             this.Name = "_批量生成采购订单";
             this.Text = "_批量生成采购订单";
             this.Load += new System.EventHandler(this._批量生成采购订单_Load);
