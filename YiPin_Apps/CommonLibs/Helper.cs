@@ -136,7 +136,7 @@ namespace CommonLibs
                 return list;
             }
             return new List<string>();
-        } 
+        }
         #endregion
 
         #region IsSpecBuyerType 判断是否为对应采购类型
@@ -236,6 +236,12 @@ namespace CommonLibs
 
             }
             return calAmount;
+        }
+
+        public static decimal CalAmount(decimal orgAmount)
+        {
+            double b = Convert.ToDouble(orgAmount);
+            return Convert.ToDecimal(CalAmount(b));
         }
         #endregion
 

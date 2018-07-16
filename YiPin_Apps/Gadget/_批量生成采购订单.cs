@@ -2,7 +2,6 @@
 using Gadget.Libs;
 using LinqToExcel.Attributes;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,10 +20,10 @@ namespace Gadget
 
         private void _批量生成采购订单_Load(object sender, EventArgs e)
         {
-            txt库存预警原表.Text = @"C:\Users\Leon\Desktop\7月14号\库存预警.csv";
-            txt库存预警中位数.Text = @"C:\Users\Leon\Desktop\7月14号\库存预警中位数.csv";
-            txt每月流水.Text = @"C:\Users\Leon\Desktop\7月14号\月销量流水.csv";
-            btn处理数据.Enabled = true;
+            //txt库存预警原表.Text = @"C:\Users\Leon\Desktop\7月14号\库存预警.csv";
+            //txt库存预警中位数.Text = @"C:\Users\Leon\Desktop\7月14号\库存预警中位数.csv";
+            //txt每月流水.Text = @"C:\Users\Leon\Desktop\7月14号\月销量流水.csv";
+            //btn处理数据.Enabled = true;
         }
 
         /**************** button event ****************/
@@ -65,7 +64,8 @@ namespace Gadget
             var list库存预警原表 = new List<_库存预警_原表>();
             var list库存预警中位数 = new List<_库存预警_中位数>();
             var list每月流水 = new List<_每月流水>();
-
+            var list两表都有的SKUs = new List<string>();
+            var list处理结果 = new List<_订单分配>();
             #region 读取数据
             var actReadData = new Action(() =>
             {
@@ -81,6 +81,12 @@ namespace Gadget
                 //过滤掉流水表里面不需要的sku数据,因为改表太大
                 var sku_yb = list库存预警原表.Select(x => x.SKU).ToList();
                 var sku_zw = list库存预警中位数.Select(x => x.SKU).ToList();
+
+                var q = from t1 in sku_yb
+                        join t2 in sku_zw on t1 equals t2
+                        select t1;
+                list两表都有的SKUs = q.ToList();
+
                 sku_yb.AddRange(sku_zw);
                 var sku_all = sku_yb.Select(x => x).Distinct().ToList();
                 list每月流水 = list每月流水.Where(x => sku_all.Contains(x.SKU)).ToList();
@@ -98,6 +104,11 @@ namespace Gadget
                     var refer流水情况 = list每月流水.FirstOrDefault(x => x.SKU == curData.SKU);
                     if (refer流水情况 != null)
                     {
+                        //if (refer流水情况.SKU == "LGDC1C03-1B")
+                        //{
+
+                        //}
+
                         #region 近5天中位数
                         {
                             curData._5天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(5).ToList(), 2);
@@ -111,11 +122,144 @@ namespace Gadget
                 }
                 #endregion
 
+                /*
+                 * 建议采购量以库存预警-中位数为主，但是需要修改以下条件：                 *（1）如果建议采购量 和 预计可用数量 一致或者差不多（建议采购量刚好够补缺货订单），那么建议采购最终数量=                                  * （库存预警建议采购量+库存预警中位数建议采购量）/2                 *（2）当库存预警建议采购量<库存预警中位数建议采购量，以库存预警建议采购量为主                 *（3）当库存预警中位数 标记建议采购，但是建议采购量为0时，对应的SKU 以库存预警的建议采购量为主                 * （这个是普源数据的问题，已经联系崔总做修改，待回复）                 *（4）当库存预警中位数建议采购量<库存预警建议采购量，商品成本单价小于1元的，最终建议采购量=（库存预警建议采购量+库存预警中位数建议采购量）/2                 *（5）商品单价低于10元的，建议采购量小于5个的，最终建议采购量为 5个。(已经在建议采购做判断了)
+                 */
 
-                //var aaa = list库存预警中位数.Where(x => x._是否需要采购 == true).ToList();
-                //var bbb = aaa.Where(x => x._建议采购数量 > 0).ToList();
+                #region 先处理两表共有的,同时删除原始数据
+                {
+                    foreach (var cmSKU in list两表都有的SKUs)
+                    {
 
-                var b = 1;
+                        //if (cmSKU == "LGDC1C03-1B")
+                        //{
+
+                        //}
+
+                        var model = new _订单分配();
+                        model._SKU = cmSKU;
+                        model._数据来源 = _Enum数据来源._两表共有;
+                        var refer原预警表 = list库存预警原表.First(x => x.SKU == cmSKU);
+                        var refer预警中位数表 = list库存预警中位数.First(x => x.SKU == cmSKU);
+                        model._计算后的建议采购数量_原预警表 = refer原预警表._原始建议采购数量;
+                        model._计算后的建议采购数量_中位数表 = refer预警中位数表._原始建议采购数量;
+                        model._原来表格导出的建议采购数量_原预警表 = refer原预警表._表格导出的原始建议采购;
+                        model._原来表格导出的建议采购数量_中位数表 = refer预警中位数表._表格导出的原始建议采购;
+                        /*
+                        *（1）如果建议采购量 和 预计可用数量 一致或者差不多（建议采购量刚好够补缺货订单），那么建议采购最终数量 =
+                        * （库存预警建议采购量 + 库存预警中位数建议采购量）/ 2
+                        */
+                        if (refer原预警表._可用数量 < 0)
+                        {
+                            decimal culc = (refer原预警表._原始建议采购数量 + refer预警中位数表._原始建议采购数量) / 2;
+                            //if (refer原预警表._商品成本单价 >= 10)
+                            //    model._Qty = Math.Round(culc, 0);
+                            //else
+                            //    model._Qty = Helper.CalAmount(culc);
+
+                            model._Qty = Math.Round(culc, 0);
+                        }
+                        else
+                        {
+                            /*
+                             * （2）当库存预警建议采购量<库存预警中位数建议采购量，以库存预警建议采购量为主
+                             */
+                            if (refer原预警表._原始建议采购数量 < refer预警中位数表._原始建议采购数量)
+                            {
+                                model._Qty = refer原预警表._建议采购数量;
+                            }
+                            else
+                            {
+                                if (refer原预警表._商品成本单价 < 1)
+                                {
+                                    decimal culc = (refer原预警表._原始建议采购数量 + refer预警中位数表._原始建议采购数量) / 2;
+                                    //if (refer原预警表._商品成本单价 >= 10)
+                                    //    model._Qty = Math.Round(culc, 0);
+                                    //else
+                                    //    model._Qty = Helper.CalAmount(culc);
+
+                                    model._Qty = Math.Round(culc, 0);
+                                }
+                                else
+                                {
+                                    model._Qty = refer预警中位数表._建议采购数量;
+                                }
+                            }
+
+
+
+                        }
+
+                        model._预计可用库存 = refer原预警表._预计可用库存;
+                        model._供应商 = refer原预警表._供应商;
+                        model._采购员 = refer原预警表._采购员;
+                        model._含税单价 = refer原预警表._商品成本单价;
+                        model._制单人 = refer原预警表._采购员;
+                        list处理结果.Add(model);
+
+
+                        //已经用不上两种共有的sku数据,删除原数据
+                        for (int idx = list库存预警原表.Count - 1; idx >= 0; idx--)
+                        {
+                            if (list库存预警原表[idx].SKU == cmSKU)
+                            {
+                                list库存预警原表.RemoveAt(idx);
+                                break;
+                            }
+                        }
+                        for (int idx = list库存预警中位数.Count - 1; idx >= 0; idx--)
+                        {
+                            if (list库存预警中位数[idx].SKU == cmSKU)
+                            {
+                                list库存预警中位数.RemoveAt(idx);
+                                break;
+                            }
+                        }
+                    }
+                }
+                #endregion
+
+
+                #region 处理原预警表
+                foreach (var item in list库存预警原表)
+                {
+                    var model = new _订单分配();
+                    model._SKU = item.SKU;
+                    model._预计可用库存 = item._预计可用库存;
+                    model._Qty = item._建议采购数量;
+                    model._供应商 = item._供应商;
+                    model._采购员 = item._采购员;
+                    model._含税单价 = item._商品成本单价;
+                    model._制单人 = item._采购员;
+                    model._原来表格导出的建议采购数量_原预警表 = item._表格导出的原始建议采购;
+                    model._计算后的建议采购数量_原预警表 = item._原始建议采购数量;
+
+                    model._数据来源 = _Enum数据来源._原建议采购表;
+                    list处理结果.Add(model);
+                }
+                #endregion
+
+                #region 处理中位数预警表
+                foreach (var item in list库存预警中位数)
+                {
+                    var model = new _订单分配();
+                    model._SKU = item.SKU;
+                    model._预计可用库存 = item._预计可用库存;
+                    model._Qty = item._建议采购数量;
+                    model._供应商 = item._供应商;
+                    model._采购员 = item._采购员;
+                    model._含税单价 = item._商品成本单价;
+                    model._制单人 = item._采购员;
+                    model._原来表格导出的建议采购数量_中位数表 = item._表格导出的原始建议采购;
+                    model._计算后的建议采购数量_中位数表 = item._原始建议采购数量;
+
+                    model._数据来源 = _Enum数据来源._中位数建议采购;
+                    list处理结果.Add(model);
+                }
+                #endregion
+
+                ExportExcel(list处理结果.OrderByDescending(x => x._供应商).ToList());
+
             }, null);
             #endregion
         }
@@ -151,18 +295,26 @@ namespace Gadget
         {
             if (datas.Count > 0)
             {
-                var sorts = datas.OrderBy(x => x);
-                return datas[idx];
+                var sorts = datas.OrderBy(x => x).ToList();
+                return sorts[idx];
             }
             return 0m;
         }
         #endregion
 
-        #region ExportExcel 导出表格
-        private void ExportExcel(List<string> list)
+        #region ExportExcel 导出Excel表格
+        /// <summary>
+        /// 导出Excel表格
+        /// </summary>
+        /// <param name="orders"></param>
+        private void ExportExcel(List<_订单分配> orders)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
+            var buffer2 = new byte[0];
+            var buffer3 = new byte[0];
+            var devOrder = new List<_订单分配>();
+
 
             #region 订单分配
             using (ExcelPackage package = new ExcelPackage())
@@ -170,61 +322,149 @@ namespace Gadget
                 var workbox = package.Workbook;
                 var sheet1 = workbox.Worksheets.Add("Sheet1");
 
-                //#region 标题行
-                //using (var rng = sheet1.Cells[1, 1, 1, 9])
-                //{
-                //    rng.Value = DateTime.Now.ToString("yyyy-MM-dd");
-                //    rng.Merge = true;
-                //    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;//水平居中
-                //    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;//垂直居中
-                //}
+                #region 标题行
+                sheet1.Cells[1, 1].Value = "供应商";
+                sheet1.Cells[1, 2].Value = "SKU";
+                sheet1.Cells[1, 3].Value = "Qty";
+                sheet1.Cells[1, 4].Value = "仓库";
+                sheet1.Cells[1, 5].Value = "备注";
+                sheet1.Cells[1, 6].Value = "合同号";
+                sheet1.Cells[1, 7].Value = "采购员";
+                sheet1.Cells[1, 8].Value = "含税单价";
+                sheet1.Cells[1, 9].Value = "物流费";
+                sheet1.Cells[1, 10].Value = "付款方式";
+                sheet1.Cells[1, 11].Value = "制单人";
+                sheet1.Cells[1, 12].Value = "到货日期";
+                sheet1.Cells[1, 13].Value = "1688单号";
+                sheet1.Cells[1, 14].Value = "预付款";
+                //sheet1.Cells[1, 15].Value = "对应供应商采购总金额";
 
+                sheet1.Cells[1, 15].Value = "预计可用库存";
+                sheet1.Cells[1, 16].Value = "表格导出建议采购(原预警)";
+                sheet1.Cells[1, 17].Value = "表格导出建议采购(中位数预警)";
+                sheet1.Cells[1, 18].Value = "取整前建议采购(原预警)";
+                sheet1.Cells[1, 19].Value = "取整前建议采购(中位数预警)";
+                //原预警建议采购 中位数建议采购
 
-                //sheet1.Cells[2, 1].Value = "采购员";
-                //sheet1.Cells[2, 2].Value = "紧急订单数";
-                //sheet1.Cells[2, 3].Value = "完成订单数";
-                //sheet1.Cells[2, 4].Value = "异常订单";
-                //sheet1.Cells[2, 5].Value = "订单完成占比";
-                //sheet1.Cells[2, 6].Value = "紧急单SKU个数";
-                //sheet1.Cells[2, 7].Value = "完成SKU个数";
-                //sheet1.Cells[2, 8].Value = "SKU完成占比";
-                //sheet1.Cells[2, 9].Value = "缺货订单";
+                #endregion
 
-                //#endregion
+                #region 数据行
+                for (int idx = 0, rowIdx = 2, len = orders.Count; idx < len; idx++)
+                {
+                    var curOrder = orders[idx];
+                    if (Helper.IsBuyer(curOrder._制单人))
+                    {
 
-                //#region 数据行
-                //for (int idx = 0, rowIdx = 3, len = list.Count; idx < len; idx++)
-                //{
-                //    var curData = list[idx];
-                //    sheet1.Cells[rowIdx, 1].Value = curData._采购员;
-                //    sheet1.Cells[rowIdx, 2].Value = curData._紧急订单数;
-                //    sheet1.Cells[rowIdx, 3].Value = curData._完成订单数;
-                //    sheet1.Cells[rowIdx, 4].Value = curData._异常订单;
-                //    sheet1.Cells[rowIdx, 5].Value = curData._订单完成占比;
-                //    sheet1.Cells[rowIdx, 6].Value = curData._紧急单SKU个数;
-                //    sheet1.Cells[rowIdx, 7].Value = curData._完成SKU个数;
-                //    sheet1.Cells[rowIdx, 8].Value = curData._SKU完成占比;
-                //    rowIdx++;
-                //}
-                //#endregion
+                        sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
+                        sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
+                        sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
+                        sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
+                        sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
+                        sheet1.Cells[rowIdx, 10].Value = "支付宝";
+                        sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
+                        //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
 
-                //#region 全部边框
-                //{
-                //    var endRow = sheet1.Dimension.End.Row;
-                //    var endColumn = sheet1.Dimension.End.Column;
-                //    using (var rng = sheet1.Cells[1, 1, endRow, endColumn])
-                //    {
-                //        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                //        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                //        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                //        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                //    }
-                //}
-                //#endregion
+                        sheet1.Cells[rowIdx, 15].Value = curOrder._预计可用库存;
+                        sheet1.Cells[rowIdx, 16].Value = curOrder._原来表格导出的建议采购数量_原预警表;
+                        sheet1.Cells[rowIdx, 17].Value = curOrder._原来表格导出的建议采购数量_中位数表;
+                        sheet1.Cells[rowIdx, 18].Value = curOrder._计算后的建议采购数量_原预警表;
+                        sheet1.Cells[rowIdx, 19].Value = curOrder._计算后的建议采购数量_中位数表;
+                        rowIdx++;
+                    }
+                    else
+                    {
+                        devOrder.Add(curOrder);
+                    }
+                }
+                #endregion
 
-                sheet1.Cells[sheet1.Dimension.Address].AutoFitColumns();
 
                 buffer = package.GetAsByteArray();
+            }
+            #endregion
+
+            #region 工作量单独表
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                var workbox = package.Workbook;
+                var sheet1 = workbox.Worksheets.Add("Sheet1");
+
+                #region 标题行
+                sheet1.Cells[1, 1].Value = "采购员";
+                sheet1.Cells[1, 2].Value = "订单量";
+                #endregion
+
+                #region 数据行
+                var buyers = new List<string>();
+                buyers = orders.Where(x => !string.IsNullOrEmpty(x._采购员)).Select(x => x._采购员).Distinct().ToList();
+                for (int idx = 0, len = buyers.Count, rowIdx = 2; idx < len; idx++, rowIdx++)
+                {
+                    var curBuyerName = buyers[idx];
+                    var refOrders = orders.Where(m => m._采购员 == curBuyerName).ToList();
+                    var amount = refOrders.Select(m => m._供应商).Distinct().Count();
+
+                    sheet1.Cells[rowIdx, 1].Value = curBuyerName;
+                    sheet1.Cells[rowIdx, 2].Value = amount;
+                }
+                #endregion
+
+                buffer2 = package.GetAsByteArray();
+            }
+            #endregion
+
+            #region 订单分配(开发单独一张表,其实是从订单分配分出来的)
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                var workbox = package.Workbook;
+                var sheet1 = workbox.Worksheets.Add("Sheet1");
+
+                #region 标题行
+                sheet1.Cells[1, 1].Value = "供应商";
+                sheet1.Cells[1, 2].Value = "SKU";
+                sheet1.Cells[1, 3].Value = "Qty";
+                sheet1.Cells[1, 4].Value = "仓库";
+                sheet1.Cells[1, 5].Value = "备注";
+                sheet1.Cells[1, 6].Value = "合同号";
+                sheet1.Cells[1, 7].Value = "采购员";
+                sheet1.Cells[1, 8].Value = "含税单价";
+                sheet1.Cells[1, 9].Value = "物流费";
+                sheet1.Cells[1, 10].Value = "付款方式";
+                sheet1.Cells[1, 11].Value = "制单人";
+                sheet1.Cells[1, 12].Value = "到货日期";
+                sheet1.Cells[1, 13].Value = "1688单号";
+                sheet1.Cells[1, 14].Value = "预付款";
+                //sheet1.Cells[1, 15].Value = "对应供应商采购总金额";
+
+
+                sheet1.Cells[1, 15].Value = "预计可用库存";
+                sheet1.Cells[1, 16].Value = "表格导出建议采购(原预警)";
+                sheet1.Cells[1, 17].Value = "表格导出建议采购(中位数预警)";
+                sheet1.Cells[1, 18].Value = "取整前建议采购(原预警)";
+                sheet1.Cells[1, 19].Value = "取整前建议采购(中位数预警)";
+                #endregion
+
+                #region 数据行
+                for (int idx = 0, rowIdx = 2, len = devOrder.Count; idx < len; idx++, rowIdx++)
+                {
+                    var curOrder = devOrder[idx];
+                    sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
+                    sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
+                    sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
+                    sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
+                    sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
+                    sheet1.Cells[rowIdx, 10].Value = "支付宝";
+                    sheet1.Cells[rowIdx, 11].Value = curOrder._制单人;
+                    //sheet1.Cells[rowIdx, 15].Value = curOrder._对应供应商采购金额;
+                    sheet1.Cells[rowIdx, 15].Value = curOrder._预计可用库存;
+                    sheet1.Cells[rowIdx, 16].Value = curOrder._原来表格导出的建议采购数量_原预警表;
+                    sheet1.Cells[rowIdx, 17].Value = curOrder._原来表格导出的建议采购数量_中位数表;
+                    sheet1.Cells[rowIdx, 18].Value = curOrder._计算后的建议采购数量_原预警表;
+                    sheet1.Cells[rowIdx, 19].Value = curOrder._计算后的建议采购数量_中位数表;
+                }
+                #endregion
+
+
+                buffer3 = package.GetAsByteArray();
             }
             #endregion
 
@@ -241,6 +481,10 @@ namespace Gadget
                     var FileName = saveFile.FileName;//得到文件路径   
                     var saveFilName = Path.GetFileNameWithoutExtension(FileName);
                     var savePath = Path.GetDirectoryName(FileName);
+                    var FileName2 = Path.Combine(savePath, saveFilName + "工作量.xlsx");
+                    var FileName3 = Path.Combine(savePath, saveFilName + "(开发订单).xlsx");
+                    var FileName4 = Path.Combine(savePath, saveFilName + "(详情表).xlsx");
+                    //var FileName5 = Path.Combine(savePath, saveFilName + "(判断两个库存).xlsx");
 
                     try
                     {
@@ -249,6 +493,19 @@ namespace Gadget
                         {
                             fs.Write(buffer, 0, len);
                         }
+
+                        var len2 = buffer2.Length;
+                        using (var fs = File.Create(FileName2, len2))
+                        {
+                            fs.Write(buffer2, 0, len2);
+                        }
+
+                        var len3 = buffer3.Length;
+                        using (var fs = File.Create(FileName3, len3))
+                        {
+                            fs.Write(buffer3, 0, len3);
+                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -257,7 +514,6 @@ namespace Gadget
 
                     ShowMsg("表格生成完毕");
                 }
-
             }, null);
         }
         #endregion
@@ -365,15 +621,21 @@ namespace Gadget
             [ExcelColumn("预计可用库存")]
             public decimal _预计可用库存 { get; set; }
 
+            [ExcelColumn("建议采购数量")]
+            public decimal _表格导出的原始建议采购 { get; set; }
+
             public decimal _建议采购数量
             {
                 get
                 {
-                    return Convert.ToDecimal(Helper.CalAmount(Convert.ToDouble(_如果按之前的算法建议采购数量)));
+                    //if (_原始建议采购数量 < 5 && _商品成本单价 >= 10)
+                    //    return Math.Round(_原始建议采购数量, 0);
+
+                    return Math.Round(_原始建议采购数量, 0);
                 }
             }
 
-            public decimal _如果按之前的算法建议采购数量
+            public decimal _原始建议采购数量
             {
                 get
                 {
@@ -398,6 +660,8 @@ namespace Gadget
 
             public virtual bool _是否需要采购 { get; }
 
+            public virtual _Enum数据来源 _数据来源 { get { return _Enum数据来源._无; } }
+
         }
 
         class _库存预警_原表 : _库存预警
@@ -406,7 +670,7 @@ namespace Gadget
             {
                 get
                 {
-                    decimal vl = (_5天销量 * 0.1m / 5 + _15天销量 * 0.1m / 15 + _30天销量 * 0.1m / 30) / 3;
+                    decimal vl = (_5天销量 * 1m / 5 + _15天销量 * 1m / 15 + _30天销量 * 1m / 30) / 3;
                     return Math.Round(vl, 2);
                 }
             }
@@ -417,7 +681,9 @@ namespace Gadget
                     return _预计可用库存 < _库存下限 && _30天销量 > 0;
                 }
             }
+            public override _Enum数据来源 _数据来源 { get { return _Enum数据来源._原建议采购表; } }
         }
+
 
         class _库存预警_中位数 : _库存预警
         {
@@ -442,6 +708,10 @@ namespace Gadget
                 {
                     return _预计可用库存 < _库存下限;
                 }
+            }
+            public override _Enum数据来源 _数据来源
+            {
+                get { return _Enum数据来源._中位数建议采购; }
             }
         }
 
@@ -578,23 +848,31 @@ namespace Gadget
             public string _合同号 { get; set; }
             public string _采购员 { get; set; }
             public decimal _含税单价 { get; set; }
-            public double _物流费 { get; set; }
+            public decimal _物流费 { get; set; }
             public string _付款方式 { get; set; }
             public string _制单人 { get; set; }
             public string _到货日期 { get; set; }
             public string _1688单号 { get; set; }
-            public double _预付款 { get; set; }
-            public double _对应供应商采购金额 { get; set; }
+            public decimal _预付款 { get; set; }
+            public decimal _对应供应商采购金额 { get; set; }
+            public decimal _预计可用库存 { get; set; }
+
+            public decimal _原来表格导出的建议采购数量_原预警表 { get; set; }
+            public decimal _原来表格导出的建议采购数量_中位数表 { get; set; }
+            public decimal _计算后的建议采购数量_原预警表 { get; set; }
+            public decimal _计算后的建议采购数量_中位数表 { get; set; }
+            //public double _计算出来的未经取整的建议采购数量 { get; set; }
+            public _Enum数据来源 _数据来源 { get; set; }
+
+
         }
 
-        class _分析详情
+        enum _Enum数据来源
         {
-            public string _SKU { get; set; }
-            public decimal _如果按之前的算法建议采购数量 { get; set; }
-            public decimal _建议采购数量 { get; set; }
-            public decimal _普源_建议采购数量 { get; set; }
-            public decimal _以5天乘以3对比15天销量上升的量 { get; set; }
-            public bool _销量是否上升 { get; set; }
+            _无 = 0,
+            _原建议采购表 = 1,
+            _中位数建议采购 = 2,
+            _两表共有 = 3
         }
     }
 }
