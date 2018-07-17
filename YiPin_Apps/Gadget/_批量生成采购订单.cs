@@ -123,7 +123,14 @@ namespace Gadget
                 #endregion
 
                 /*
-                 * 建议采购量以库存预警-中位数为主，但是需要修改以下条件：                 *（1）如果建议采购量 和 预计可用数量 一致或者差不多（建议采购量刚好够补缺货订单），那么建议采购最终数量=                                  * （库存预警建议采购量+库存预警中位数建议采购量）/2                 *（2）当库存预警建议采购量<库存预警中位数建议采购量，以库存预警建议采购量为主                 *（3）当库存预警中位数 标记建议采购，但是建议采购量为0时，对应的SKU 以库存预警的建议采购量为主                 * （这个是普源数据的问题，已经联系崔总做修改，待回复）                 *（4）当库存预警中位数建议采购量<库存预警建议采购量，商品成本单价小于1元的，最终建议采购量=（库存预警建议采购量+库存预警中位数建议采购量）/2                 *（5）商品单价低于10元的，建议采购量小于5个的，最终建议采购量为 5个。(已经在建议采购做判断了)
+                 * 建议采购量以库存预警-中位数为主，但是需要修改以下条件：
+                 *（1）如果建议采购量 和 预计可用数量 一致或者差不多（建议采购量刚好够补缺货订单），那么建议采购最终数量=                 
+                 * （库存预警建议采购量+库存预警中位数建议采购量）/2
+                 *（2）当库存预警建议采购量<库存预警中位数建议采购量，以库存预警建议采购量为主
+                 *（3）当库存预警中位数 标记建议采购，但是建议采购量为0时，对应的SKU 以库存预警的建议采购量为主
+                 * （这个是普源数据的问题，已经联系崔总做修改，待回复）
+                 *（4）当库存预警中位数建议采购量<库存预警建议采购量，商品成本单价小于1元的，最终建议采购量=（库存预警建议采购量+库存预警中位数建议采购量）/2
+                 *（5）商品单价低于10元的，建议采购量小于5个的，最终建议采购量为 5个。(已经在建议采购做判断了)
                  */
 
                 #region 先处理两表共有的,同时删除原始数据
@@ -139,6 +146,7 @@ namespace Gadget
                         var model = new _订单分配();
                         model._SKU = cmSKU;
                         model._数据来源 = _Enum数据来源._两表共有;
+
                         var refer原预警表 = list库存预警原表.First(x => x.SKU == cmSKU);
                         var refer预警中位数表 = list库存预警中位数.First(x => x.SKU == cmSKU);
                         model._计算后的建议采购数量_原预警表 = refer原预警表._原始建议采购数量;
@@ -190,6 +198,7 @@ namespace Gadget
 
                         }
 
+                        model._是否紧急单 = refer原预警表._是否紧急单;
                         model._预计可用库存 = refer原预警表._预计可用库存;
                         model._供应商 = refer原预警表._供应商;
                         model._采购员 = refer原预警表._采购员;
@@ -234,6 +243,7 @@ namespace Gadget
                     model._原来表格导出的建议采购数量_原预警表 = item._表格导出的原始建议采购;
                     model._计算后的建议采购数量_原预警表 = item._原始建议采购数量;
 
+                    model._是否紧急单 = item._是否紧急单;
                     model._数据来源 = _Enum数据来源._原建议采购表;
                     list处理结果.Add(model);
                 }
@@ -253,6 +263,7 @@ namespace Gadget
                     model._原来表格导出的建议采购数量_中位数表 = item._表格导出的原始建议采购;
                     model._计算后的建议采购数量_中位数表 = item._原始建议采购数量;
 
+                    model._是否紧急单 = item._是否紧急单;
                     model._数据来源 = _Enum数据来源._中位数建议采购;
                     list处理结果.Add(model);
                 }
@@ -358,6 +369,8 @@ namespace Gadget
                         sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
                         sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
                         sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
+                        if (curOrder._是否紧急单)
+                            sheet1.Cells[rowIdx, 5].Value = "紧急";
                         sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
                         sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
                         sheet1.Cells[rowIdx, 10].Value = "支付宝";
@@ -450,6 +463,8 @@ namespace Gadget
                     sheet1.Cells[rowIdx, 1].Value = curOrder._供应商;
                     sheet1.Cells[rowIdx, 2].Value = curOrder._SKU;
                     sheet1.Cells[rowIdx, 3].Value = curOrder._Qty;
+                    if (curOrder._是否紧急单)
+                        sheet1.Cells[rowIdx, 5].Value = "紧急";
                     sheet1.Cells[rowIdx, 7].Value = curOrder._采购员;
                     sheet1.Cells[rowIdx, 8].Value = curOrder._含税单价;
                     sheet1.Cells[rowIdx, 10].Value = "支付宝";
@@ -600,6 +615,9 @@ namespace Gadget
             [ExcelColumn("缺货及未派单数量")]
             public decimal _缺货及未派单数量 { get; set; }
 
+            [ExcelColumn("缺货占用数量")]
+            public decimal _缺货占用数量 { get; set; }
+
             [ExcelColumn("商品成本单价")]
             public decimal _商品成本单价 { get; set; }
 
@@ -645,6 +663,14 @@ namespace Gadget
                 }
             }
             /**************** virtual ****************/
+
+            public virtual bool _是否紧急单
+            {
+                get
+                {
+                    return _可用数量 - _缺货及未派单数量 + _缺货占用数量 <= 0;
+                }
+            }
 
             public virtual decimal _日平均销量 { get; }
 
@@ -856,6 +882,7 @@ namespace Gadget
             public decimal _预付款 { get; set; }
             public decimal _对应供应商采购金额 { get; set; }
             public decimal _预计可用库存 { get; set; }
+            public bool _是否紧急单 { get; set; }
 
             public decimal _原来表格导出的建议采购数量_原预警表 { get; set; }
             public decimal _原来表格导出的建议采购数量_中位数表 { get; set; }
