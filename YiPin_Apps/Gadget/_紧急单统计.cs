@@ -40,6 +40,7 @@ namespace Gadget
         private void btn计算工作情况_Click(object sender, EventArgs e)
         {
             var _List原始数据 = new List<_库位明细信息>();
+            var _List统计时间内的数据 = new List<_库位明细信息>();
             var settime = dtp截至时间.Value;
             #region 读取数据
             var actReadData = new Action(() =>
@@ -61,14 +62,10 @@ namespace Gadget
                             {
                                 var strTime = strArr[2].Substring(0, 8);
                                 var cTime = Convert.ToDateTime(string.Format("{0} {1}", DateTime.Now.ToString("yyyy-MM-dd"), strTime));
-                                if (cTime > settime)
-                                    _List原始数据.RemoveAt(idx);
+                                if (cTime <= settime)
+                                    _List统计时间内的数据.Add(curData);
                             }
                         }
-                        //else
-                        //{
-                        //    _List原始数据.RemoveAt(idx);
-                        //}
                     }
                 }
                 #endregion
@@ -89,17 +86,18 @@ namespace Gadget
                         //{
 
                         //}
-                        var referDatas = _List原始数据.Where(x => x._采购员 == name).ToList();
-                        var list紧急订单 = referDatas.Where(x => x._备注.Contains("紧急")).ToList();
-                        var list完成订单 = referDatas.Where(x => x._内部标签.Contains("付")).ToList();
+                        var referAllDatas= _List原始数据.Where(x => x._采购员 == name).ToList();
+                        var referInTimeDatas = _List统计时间内的数据.Where(x => x._采购员 == name).ToList();
+                        var list统计时间内的紧急订单 = referInTimeDatas.Where(x => x._备注.Contains("紧急")).ToList();
+                        var list统计时间内的完成订单 = referInTimeDatas.Where(x => x._内部标签.Contains("付")).ToList();
 
                         var mode = new _统计结果();
                         mode._采购员 = name;
-                        mode._紧急订单数 = list紧急订单.Select(x => x._采购订单号).Distinct().Count();
-                        mode._完成订单数 = list完成订单.Select(x => x._采购订单号).Distinct().Count();
-                        mode._异常订单 = referDatas.Where(x => x._备注.Contains("标") || x._备注.Contains("缺")).Select(x => x._采购订单号).Distinct().Count();
-                        mode._紧急单SKU个数 = list紧急订单.Select(x => x.SKU).Distinct().Count();
-                        mode._完成SKU个数 = list完成订单.Select(x => x.SKU).Distinct().Count();
+                        mode._紧急订单数 = referAllDatas.Select(x => x._采购订单号).Distinct().Count();
+                        mode._完成订单数 = list统计时间内的完成订单.Select(x => x._采购订单号).Distinct().Count();
+                        mode._异常订单 = referInTimeDatas.Where(x => x._备注.Contains("标") || x._备注.Contains("缺")).Select(x => x._采购订单号).Distinct().Count();
+                        mode._紧急单SKU个数 = referAllDatas.Select(x => x.SKU).Distinct().Count();
+                        mode._完成SKU个数 = list统计时间内的完成订单.Select(x => x.SKU).Distinct().Count();
 
                         var d订单完成占比 = mode._紧急订单数 - mode._异常订单 > 0 ? Math.Round(mode._完成订单数 * 1.0m / (mode._紧急订单数 - mode._异常订单), 4) : 0;
                         mode._订单完成占比 = d订单完成占比;
