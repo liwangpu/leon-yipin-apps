@@ -8,11 +8,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-
+using Newtonsoft.Json;
 namespace Gadget
 {
     public partial class _缺货订单跟踪 : Form
     {
+        private string _CacheFolder { get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "缓存信息"); } }
+        private string _缺货记录信息Path { get { return Path.Combine(_CacheFolder, "缺货记录信息.json"); } }
+        private List<_缺货记录信息> _List缺货记录 = new List<_缺货记录信息>();
+
         public _缺货订单跟踪()
         {
             InitializeComponent();
@@ -20,6 +24,17 @@ namespace Gadget
 
         private void _缺货订单跟踪_Load(object sender, EventArgs e)
         {
+            if (!Directory.Exists(_CacheFolder))
+                Directory.CreateDirectory(_CacheFolder);
+            if (File.Exists(_缺货记录信息Path))
+                using (var fs = new FileStream(_缺货记录信息Path, FileMode.Open))
+                using (var reader = new StreamReader(fs))
+                {
+                    var str = reader.ReadToEnd();
+                    _List缺货记录 = JsonConvert.DeserializeObject<List<_缺货记录信息>>(str);
+                }
+
+
             txt缺货订单.Text = @"C:\Users\Leon\Desktop\缺货订单7月17号\缺货订单7月17号.csv";
             txt在售产品.Text = @"C:\Users\Leon\Desktop\缺货订单7月17号\所有在售产品信息7月17号.csv";
             btn计算.Enabled = true;
@@ -54,7 +69,7 @@ namespace Gadget
             var list缺货详细信息 = new List<_缺货信息>();
             var list产品信息 = new List<_产品信息>();
             var list当前缺货产品信息 = new List<_产品信息>();
-
+            var list当天已经解决的缺货信息 = new List<_缺货记录信息>();
             var list报表1 = new List<_报表1>();
             var list报表2 = new List<_报表2>();
 
@@ -76,9 +91,12 @@ namespace Gadget
                     {
                         foreach (var dt in item._缺货详情)
                         {
+                            //if (dt.SKU== "MRZC2C66-FC")
+                            //{
 
+                            //}
                             var refer产品信息 = list产品信息.FirstOrDefault(x => x.SKU == dt.SKU);
-                            if (refer产品信息 != null)
+                            if (refer产品信息 == null)
                             {
                                 dt._已停售 = true;
                                 list缺货详细信息.Add(dt);
@@ -94,6 +112,21 @@ namespace Gadget
                             }
                         }
                     }
+
+                    ////遍历List缺货记录,把今天不缺货的统计出来,同时刷新缺货记录上的最早缺货时间
+                    //for (int idx = _List缺货记录.Count - 1; idx >= 0; idx--)
+                    //{
+                    //    var curData = _List缺货记录[idx];
+                    //    var b缺货 = list当前缺货产品信息.Any(x => x.SKU == curData.SKU);
+                    //    if (!b缺货)
+                    //    {
+                    //        //不缺货了,加入当天已经解决的缺货信息
+                    //        list当天已经解决的缺货信息.Add(curData);
+                    //        //同时清除List缺货记录
+                    //        _List缺货记录.RemoveAt(idx);
+                    //    }
+                    //}
+
                 }
 
             });
@@ -125,23 +158,35 @@ namespace Gadget
                 #region 统计报表2
                 {
                     var buyerNames = list报表1.Select(x => x._采购员).Distinct().ToList();
+                    var m开发汇总 = new _报表2();
+                    m开发汇总._采购员 = "开发";
                     foreach (var name in buyerNames)
                     {
-                        var refers = list报表1.Where(x=>x._采购员== name).ToList();
-                        var model = new _报表2();
-                        model._采购员 = !string.IsNullOrWhiteSpace(name) ? name : "停售";
-                        model._缺货SKU个数 = refers.Count;
-                        model._缺货数量 = refers.Select(x => x._缺货数量).Sum();
-                        model._缺货订单数量 = refers.Select(x => x._缺货订单数量).Sum();
-                        list报表2.Add(model);
+                        var refers = list报表1.Where(x => x._采购员 == name).ToList();
+                        if (Helper.IsBuyer(name) || string.IsNullOrWhiteSpace(name))
+                        {
+                            var model = new _报表2();
+                            model._采购员 = !string.IsNullOrWhiteSpace(name) ? name : "停售";
+                            model._缺货SKU个数 = refers.Count;
+                            model._缺货数量 = refers.Select(x => x._缺货数量).Sum();
+                            model._缺货订单数量 = refers.Select(x => x._缺货订单数量).Sum();
+                            list报表2.Add(model);
+                        }
+                        else
+                        {
+                            m开发汇总._缺货SKU个数 += refers.Count;
+                            m开发汇总._缺货数量 += refers.Select(x => x._缺货数量).Sum();
+                            m开发汇总._缺货订单数量 += refers.Select(x => x._缺货订单数量).Sum();
+                        }
                     }
+                    list报表2.Add(m开发汇总);
+
                 }
                 #endregion
 
-                ExportExcel(list报表1, list报表2);
+                ExportExcel(list报表1.OrderByDescending(x => x._采购员).ToList(), list报表2.OrderByDescending(x => x._缺货订单数量).ToList());
             }, null);
             #endregion
-
 
         }
         #endregion
@@ -166,54 +211,102 @@ namespace Gadget
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
 
-
-            #region 订单分配
+            #region 报表
             using (ExcelPackage package = new ExcelPackage())
             {
                 var workbox = package.Workbook;
-                var sheet1 = workbox.Worksheets.Add("Sheet1");
 
-                #region 标题行
-                sheet1.Cells[1, 1].Value = "SKU";
-                sheet1.Cells[1, 2].Value = "缺货数量";
-                sheet1.Cells[1, 3].Value = "订单数量";
-                sheet1.Cells[1, 4].Value = "采购员";
-                sheet1.Cells[1, 5].Value = "停售与否";
-                #endregion
-
-                #region 数据行
-                for (int idx = 0, rowIdx = 2, len = list1.Count; idx < len; idx++)
+                #region 报表1
                 {
-                    var curData = list1[idx];
-                    sheet1.Cells[rowIdx, 1].Value = curData.SKU;
-                    sheet1.Cells[rowIdx, 2].Value = curData._缺货数量;
-                    sheet1.Cells[rowIdx, 3].Value = curData._缺货订单数量;
-                    sheet1.Cells[rowIdx, 4].Value = curData._采购员;
-                    sheet1.Cells[rowIdx, 5].Value = curData._已停售?"停售":"";
-                    rowIdx++;
-                }
-                #endregion
+                    var sheet1 = workbox.Worksheets.Add("缺货详情");
 
-                #region 全部边框
-                {
-                    var endRow = sheet1.Dimension.End.Row;
-                    var endColumn = sheet1.Dimension.End.Column;
-                    using (var rng = sheet1.Cells[1, 1, endRow, endColumn])
+                    #region 标题行
+                    sheet1.Cells[1, 1].Value = "SKU";
+                    sheet1.Cells[1, 2].Value = "缺货数量";
+                    sheet1.Cells[1, 3].Value = "订单数量";
+                    sheet1.Cells[1, 4].Value = "采购员";
+                    sheet1.Cells[1, 5].Value = "停售与否";
+                    #endregion
+
+                    #region 数据行
+                    for (int idx = 0, rowIdx = 2, len = list1.Count; idx < len; idx++)
                     {
-                        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        var curData = list1[idx];
+                        sheet1.Cells[rowIdx, 1].Value = curData.SKU;
+                        sheet1.Cells[rowIdx, 2].Value = curData._缺货数量;
+                        sheet1.Cells[rowIdx, 3].Value = curData._缺货订单数量;
+                        sheet1.Cells[rowIdx, 4].Value = curData._采购员;
+                        sheet1.Cells[rowIdx, 5].Value = curData._已停售 ? "停售" : "";
+                        rowIdx++;
                     }
+                    #endregion
+
+                    #region 全部边框
+                    {
+                        var endRow = sheet1.Dimension.End.Row;
+                        var endColumn = sheet1.Dimension.End.Column;
+                        using (var rng = sheet1.Cells[1, 1, endRow, endColumn])
+                        {
+                            rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        }
+                    }
+                    #endregion
+
+                    sheet1.Cells[sheet1.Dimension.Address].AutoFitColumns();
                 }
                 #endregion
 
-                sheet1.Cells[sheet1.Dimension.Address].AutoFitColumns();
+                #region 报表2
+                {
+                    var sheet1 = workbox.Worksheets.Add("缺货统计");
+
+                    #region 标题行
+                    sheet1.Cells[1, 1].Value = "采购员";
+                    sheet1.Cells[1, 2].Value = "缺货SKU数量";
+                    sheet1.Cells[1, 3].Value = "缺货数量";
+                    sheet1.Cells[1, 4].Value = "缺货订单";
+                    sheet1.Cells[1, 5].Value = "整合人员";
+                    #endregion
+
+
+
+                    #region 数据行
+                    for (int idx = 0, rowIdx = 2, len = list2.Count; idx < len; idx++)
+                    {
+                        var curData = list2[idx];
+                        sheet1.Cells[rowIdx, 1].Value = curData._采购员;
+                        sheet1.Cells[rowIdx, 2].Value = curData._缺货SKU个数;
+                        sheet1.Cells[rowIdx, 3].Value = curData._缺货数量;
+                        sheet1.Cells[rowIdx, 4].Value = curData._缺货订单数量;
+
+                        rowIdx++;
+                    }
+                    #endregion
+
+                    #region 全部边框
+                    {
+                        var endRow = sheet1.Dimension.End.Row;
+                        var endColumn = sheet1.Dimension.End.Column;
+                        using (var rng = sheet1.Cells[1, 1, endRow, endColumn])
+                        {
+                            rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                            rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        }
+                    }
+                    #endregion
+
+                    sheet1.Cells[sheet1.Dimension.Address].AutoFitColumns();
+                }
+                #endregion
 
                 buffer = package.GetAsByteArray();
             }
             #endregion
-
 
             InvokeMainForm((obj) =>
             {
@@ -316,8 +409,17 @@ namespace Gadget
             public string SKU { get; set; }
             public decimal _缺货数量 { get; set; }
             public DateTime _缺货时间 { get; set; }
+            public DateTime _最早缺货时间 { get; set; }
             public bool _已停售 { get; set; }
             public string _采购员 { get; set; }
+            public double _延时_天
+            {
+                get
+                {
+                    var currentTime = DateTime.Now;
+                    return (currentTime - _最早缺货时间).TotalDays;
+                }
+            }
         }
 
         [ExcelTable("缺货订单")]
@@ -414,6 +516,20 @@ namespace Gadget
             public decimal _缺货SKU个数 { get; set; }
             public decimal _缺货数量 { get; set; }
             public int _缺货订单数量 { get; set; }
+        }
+
+        class _缺货记录信息
+        {
+            public string SKU { get; set; }
+            public DateTime _最早缺货时间 { get; set; }
+            public double _延时_天
+            {
+                get
+                {
+                    var currentTime = DateTime.Now;
+                    return (currentTime - _最早缺货时间).TotalDays;
+                }
+            }
         }
 
     }
