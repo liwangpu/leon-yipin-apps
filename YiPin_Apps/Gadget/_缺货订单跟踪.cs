@@ -35,9 +35,9 @@ namespace Gadget
                 }
 
 
-            txt缺货订单.Text = @"C:\Users\Leon\Desktop\缺货订单7月17号\缺货订单7月17号.csv";
-            txt在售产品.Text = @"C:\Users\Leon\Desktop\缺货订单7月17号\所有在售产品信息7月17号.csv";
-            btn计算.Enabled = true;
+            //txt缺货订单.Text = @"C:\Users\Leon\Desktop\缺货订单7月17号\缺货订单7月17号.csv";
+            //txt在售产品.Text = @"C:\Users\Leon\Desktop\缺货订单7月17号\所有在售产品信息7月17号.csv";
+            //btn计算.Enabled = true;
         }
 
         /**************** button event ****************/
