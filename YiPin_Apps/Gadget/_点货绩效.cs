@@ -26,11 +26,12 @@ namespace Gadget
 
         private void _点货绩效_Load(object sender, EventArgs e)
         {
-            //txt入库明细.Text = @"C:\Users\Leon\Desktop\点货\入库明细.csv";
-            //txt人员代号.Text = @"C:\Users\Leon\Desktop\点货\人员代号.csv";
-            //txt积分参数.Text = @"C:\Users\Leon\Desktop\点货\积分参数.csv";
-            //txt热销订单.Text = @"C:\Users\Leon\Desktop\点货\热销订单.csv";
-            //txt工号记录.Text = @"C:\Users\Leon\Desktop\点货\工号记录.csv";
+            //txt入库明细.Text = @"C:\Users\Leon\Desktop\绩效\采购入库单号-对应工号7月份.csv";
+            //txt产品订单.Text = @"C:\Users\Leon\Desktop\绩效\采购入库明细表7月份.csv";
+            //txt人员代号.Text = @"C:\Users\Leon\Desktop\绩效\人员代号.csv";
+            //txt积分参数.Text = @"C:\Users\Leon\Desktop\绩效\积分参数.csv";
+            //txt工号记录.Text = @"C:\Users\Leon\Desktop\绩效\工号记录.csv";
+            //txt产品等级.Text = @"C:\Users\Leon\Desktop\绩效\产品等级.csv";
 
             if (File.Exists(_当月历史点货记录信息Path))
                 using (var fs = new FileStream(_当月历史点货记录信息Path, FileMode.Open))
@@ -47,7 +48,7 @@ namespace Gadget
         #region 导出表格说明
         private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormHelper.GenerateTableDes(typeof(_入库明细Mapping), typeof(_人员代号Mapping), typeof(_积分参数Mapping), typeof(_热销订单Mapping), typeof(_工号记录表));
+            FormHelper.GenerateTableDes(typeof(_入库明细Mapping), typeof(_人员代号Mapping), typeof(_积分参数Mapping), typeof(_工号记录表), typeof(_产品等级), typeof(_订单产品));
         }
         #endregion
 
@@ -73,9 +74,9 @@ namespace Gadget
         #endregion
 
         #region 上传热销订单
-        private void btn上传热销订单_Click(object sender, EventArgs e)
+        private void btn上传订单产品_Click(object sender, EventArgs e)
         {
-            FormHelper.GetCSVPath(txt热销订单);
+            FormHelper.GetCSVPath(txt产品订单);
         }
         #endregion
 
@@ -86,15 +87,25 @@ namespace Gadget
         }
         #endregion
 
+        #region 上传产品等级
+        private void btn产品等级_Click(object sender, EventArgs e)
+        {
+            FormHelper.GetCSVPath(txt产品等级);
+        }
+        #endregion
+
         #region 处理数据
         private void btn处理_Click(object sender, EventArgs e)
         {
+            btn处理.Enabled = false;
             var list入库明细 = new List<_入库明细Mapping>();
+            var list订单产品 = new List<_订单产品>();
+            var list产品等级 = new List<_产品等级>();
             var list人员代号 = new List<_人员代号Mapping>();
             var list积分参数 = new List<_积分参数Mapping>();
-            var list热销订单 = new List<_热销订单Mapping>();
             var list点货绩效 = new List<_点货绩效Model>();
             var list工号记录详细信息 = new List<_工号记录详细信息>();
+
 
             #region 读取数据
             var actReadData = new Action(() =>
@@ -117,17 +128,24 @@ namespace Gadget
                 }
                 #endregion
 
-                #region 读取库存明细
+                #region 读取积分参数
                 {
-                    ShowMsg("开始读取库存明细数据");
+                    ShowMsg("开始读取库积分参数数据");
                     FormHelper.ReadCSVFile(txt积分参数.Text, ref list积分参数, ref strError);
                 }
                 #endregion
 
-                #region 读取热销订单
+                #region 读取订单产品
                 {
-                    ShowMsg("开始读取热销订单数据");
-                    FormHelper.ReadCSVFile(txt热销订单.Text, ref list热销订单, ref strError);
+                    ShowMsg("开始读取订单产品数据");
+                    FormHelper.ReadCSVFile(txt产品订单.Text, ref list订单产品, ref strError);
+                }
+                #endregion
+
+                #region 读取产品等级
+                {
+                    ShowMsg("开始读取产品等级数据");
+                    FormHelper.ReadCSVFile(txt产品等级.Text, ref list产品等级, ref strError);
                 }
                 #endregion
 
@@ -219,13 +237,43 @@ namespace Gadget
                     for (int idx = 0, len = list入库明细.Count; idx < len; idx++)
                     {
                         var item = list入库明细[idx];
-                        var ref积分 = list积分参数.Where(x => x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
-                        if (ref积分 != null)
+                        //找到明细的所有产品,再查产品对应等级的积分
+                        var refer产品 = list订单产品.Where(x => x._入库单号 == item._入库单退回单号).ToList();
+
+                        foreach (var referProduct in refer产品)
                         {
-                            item._盘点积分 = ref积分._积分;
+                            //查找对应等级
+                            var refer等级 = list产品等级.FirstOrDefault(x => x.SKU == referProduct.SKU);
+                            if (refer等级 != null)
+                            {
+                                var ref积分 = list积分参数.Where(x => x._等级.ToLower() == refer等级._等级.ToLower() && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                                if (ref积分 != null)
+                                {
+                                    item._盘点积分 += ref积分._积分;
+                                    item._积分详情 += string.Format("{0}-数量:{1},积分:{2};", referProduct.SKU, referProduct._采购数量, ref积分._积分);
+                                }
+                            }
+                            else
+                            {
+                                var ref积分 = list积分参数.Where(x => x._等级.ToLower() == "d" && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                                if (ref积分 != null)
+                                {
+                                    item._盘点积分 += ref积分._积分;
+                                    item._积分详情 += string.Format("{0}-数量:{1},积分:{2};", referProduct.SKU, referProduct._采购数量, ref积分._积分);
+                                }
+                            }
                         }
 
-                        item._是否热销订单 = list热销订单.Where(x => x._热销单号 == item._入库单退回单号).Count() > 0;
+
+
+
+                        //var ref积分 = list积分参数.Where(x => x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                        //if (ref积分 != null)
+                        //{
+                        //    item._盘点积分 = ref积分._积分;
+                        //}
+
+                        //item._是否热销订单 = list热销订单.Where(x => x._热销单号 == item._入库单退回单号).Count() > 0;
                     }
                 }
                 #endregion
@@ -257,7 +305,7 @@ namespace Gadget
                     using (var writer = new StreamWriter(_当月历史点货记录信息Path, false))
                     {
                         _List当月历史点货记录 = list工号记录详细信息.Where(x => !string.IsNullOrWhiteSpace(x._入库单号)).ToList();
-                          var str = JsonConvert.SerializeObject(_List当月历史点货记录);
+                        var str = JsonConvert.SerializeObject(_List当月历史点货记录);
                         writer.Write(str);
                     }
 
@@ -414,10 +462,8 @@ namespace Gadget
                     sheet1.Cells[1, 1].Value = "入库单号";
                     sheet1.Cells[1, 2].Value = "点货人";
                     sheet1.Cells[1, 3].Value = "数量";
-                    sheet1.Cells[1, 4].Value = "是否热销单";
-                    sheet1.Cells[1, 5].Value = "积分";
-                    sheet1.Cells[1, 6].Value = "积分减半";
-                    sheet1.Cells[1, 7].Value = "修改后积分";
+                    sheet1.Cells[1, 4].Value = "积分";
+                    sheet1.Cells[1, 4].Value = "积分详情";
 
                     #endregion
 
@@ -428,15 +474,8 @@ namespace Gadget
                         sheet1.Cells[rowIdx, 1].Value = info._入库单退回单号;
                         sheet1.Cells[rowIdx, 2].Value = info._人员姓名;
                         sheet1.Cells[rowIdx, 3].Value = info._总数量;
-
-                        if (info._是否热销订单)
-                        {
-                            sheet1.Cells[rowIdx, 4].Value = "是";
-                            sheet1.Cells[rowIdx, 6].Value = info._最后积分;
-                        }
-                        sheet1.Cells[rowIdx, 5].Value = info._盘点积分;
-                        sheet1.Cells[rowIdx, 7].Value = info._最后积分;
-
+                        sheet1.Cells[rowIdx, 4].Value = info._最后积分;
+                        sheet1.Cells[rowIdx, 5].Value = info._积分详情;
                     }
                     #endregion
 
@@ -479,6 +518,7 @@ namespace Gadget
                     }
 
                     ShowMsg("表格生成完毕");
+                    btn处理.Enabled = true;
                 }
             }, null);
             #endregion
@@ -588,18 +628,39 @@ namespace Gadget
             }
             public string _人员姓名 { get; set; }
             public decimal _盘点积分 { get; set; }
-
             public decimal _最后积分
             {
                 get
                 {
-                    if (_是否热销订单)
-                        return Math.Round(_盘点积分 / 2, 4);
-                    else
-                        return _盘点积分;
+                    //if (_是否热销订单)
+                    //    return Math.Round(_盘点积分 / 2, 4);
+                    //else
+                    return _盘点积分;
                 }
             }
-            public bool _是否热销订单 { get; set; }
+            public string _积分详情 { get; set; }
+        }
+
+        [ExcelTable("订单对应产品")]
+        class _订单产品
+        {
+            private string orgSKU;
+            [ExcelColumn("入库单号")]
+            public string _入库单号 { get; set; }
+            [ExcelColumn("商品SKU")]
+            public string SKU
+            {
+                get
+                {
+                    return orgSKU;
+                }
+                set
+                {
+                    orgSKU = value != null ? value.ToString().Trim() : "";
+                }
+            }
+            [ExcelColumn("采购数量")]
+            public decimal _采购数量 { get; set; }
         }
 
         [ExcelTable("人员代号")]
@@ -638,6 +699,9 @@ namespace Gadget
         [ExcelTable("积分参数")]
         class _积分参数Mapping
         {
+            [ExcelColumn("等级")]
+            public string _等级 { get; set; }
+
             [ExcelColumn("左区间")]
             public decimal _左区间 { get; set; }
 
@@ -646,25 +710,6 @@ namespace Gadget
 
             [ExcelColumn("积分")]
             public decimal _积分 { get; set; }
-        }
-
-        [ExcelTable("热销订单")]
-        class _热销订单Mapping
-        {
-            private string org热销单号;
-
-            [ExcelColumn("热销单号")]
-            public string _热销单号
-            {
-                get
-                {
-                    return org热销单号;
-                }
-                set
-                {
-                    org热销单号 = value != null ? value.ToString().Trim() : "";
-                }
-            }
         }
 
         [ExcelTable("工号记录")]
@@ -682,6 +727,26 @@ namespace Gadget
                 set
                 {
                     org工号记录 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+        }
+
+        [ExcelTable("产品等级")]
+        class _产品等级
+        {
+            private string orgSKU;
+            [ExcelColumn("等级")]
+            public string _等级 { get; set; }
+            [ExcelColumn("SKU")]
+            public string SKU
+            {
+                get
+                {
+                    return orgSKU;
+                }
+                set
+                {
+                    orgSKU = value != null ? value.ToString().Trim() : "";
                 }
             }
         }

@@ -3,6 +3,7 @@ using Gadget.Libs;
 using LinqToExcel.Attributes;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,6 +70,11 @@ namespace Gadget
         private void _配货绩效_Load(object sender, EventArgs e)
         {
 
+            //txt拣货单.Text = @"C:\Users\Leon\Desktop\配货数量\拣货单数据.csv";
+            //txt乱单.Text = @"C:\Users\Leon\Desktop\配货数量\乱单原数据.csv";
+            //txt拣货时间.Text = @"C:\Users\Leon\Desktop\配货数量\拣货时间表.csv";
+            //btn当天绩效.Enabled = true;
+
             _人员负责库位信息 = new List<_拣货人员配置信息>();
             if (!Directory.Exists(Folder人员配置))
                 Directory.CreateDirectory(Folder人员配置);
@@ -93,6 +99,13 @@ namespace Gadget
         private void btn上传拣货单_Click(object sender, EventArgs e)
         {
             FormHelper.GetCSVPath(txt拣货单);
+        }
+        #endregion
+
+        #region 上传乱单
+        private void btn上传乱单_Click(object sender, EventArgs e)
+        {
+            FormHelper.GetCSVPath(txt乱单);
         }
         #endregion
 
@@ -161,19 +174,33 @@ namespace Gadget
             {
                 try
                 {
+                    double _d张数定值 = Convert.ToDouble(nup张数定值.Value);
+                    double _d张数占比 = Convert.ToDouble(nup张数占比.Value);
+                    double _d数量定值 = Convert.ToDouble(nup数量定值.Value);
+                    double _d数量占比 = Convert.ToDouble(nup数量占比.Value);
+
                     CulcTime = dtp绩效时间.Value;
                     btn当天绩效.Enabled = false;
                     btn全月绩效.Enabled = false;
                     var strError = string.Empty;
                     var list拣货单 = new List<_拣货单>();
+                    var list乱单 = new List<_乱单>();
                     var list拣货时间 = new List<_拣货时间>();
                     var list最终绩效 = new List<_配货绩效结果>();
                     #region 读取数据
                     var actReadData = new Action(() =>
                     {
-                        ShowMsg("开始读取当天绩效信息");
+                        ShowMsg("开始读取当天绩效相关信息");
                         FormHelper.ReadCSVFile(txt拣货单.Text, ref list拣货单, ref strError);
+                        FormHelper.ReadCSVFile(txt乱单.Text, ref list乱单, ref strError);
                         FormHelper.ReadCSVFile(txt拣货时间.Text, ref list拣货时间, ref strError);
+
+                        //将乱单转换正常拣货单
+                        foreach (var item乱单 in list乱单)
+                        {
+                            //var aaa = item乱单.ToData();
+                            list拣货单.AddRange(item乱单.ToData());
+                        }
                     });
                     #endregion
 
@@ -190,36 +217,79 @@ namespace Gadget
                                 if (!string.IsNullOrEmpty(name))
                                 {
                                     var md = new _配货绩效结果();
+                                    md._d张数占比 = _d张数占比;
+                                    md._d张数定值 = _d张数定值;
+                                    md._d数量定值 = _d数量定值;
+                                    md._d数量占比 = _d数量占比;
+
+
                                     md._业绩归属人 = name;
                                     var _订单详情数据 = new List<_订单详情数据>();
 
                                     #region 抽取详细信息
                                     {
+                                        //var aarrr = (from it in list拣货单
+                                        //             join s in _人员负责库位信息 on it._库位号 equals s.管理库位
+                                        //             where s._姓名 == name && it._乱单 == true
+                                        //             select it).ToList();
+                                        //if (aarrr.Count > 0)
+                                        //{
+
+                                        //}
+
                                         var refLh = (from it in list拣货单
                                                      join s in _人员负责库位信息 on it._库位号 equals s.管理库位
                                                      where s._姓名 == name
-                                                     select it._拣货明细).ToList();
-                                        foreach (List<string> item in refLh)
+                                                     select it).ToList();
+                                        foreach (var deitem in refLh)
                                         {
+                                            var item = deitem._拣货明细;
                                             foreach (var it in item)
                                             {
                                                 var arr = it.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-                                                if (arr.Length >=2)
+                                                if (arr.Length >= 2)
                                                 {
                                                     var detail = new _订单详情数据();
                                                     detail.SKU = arr[0].Trim();
                                                     detail.Amount = Convert.ToDouble(arr[1]);
+                                                    detail._乱单 = deitem._乱单;
                                                     _订单详情数据.Add(detail);
                                                 }
 
                                             }
                                         }
+
+                                        //foreach (List<string> item in refLh)
+                                        //{
+                                        //    foreach (var it in item)
+                                        //    {
+                                        //        var arr = it.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+                                        //        if (arr.Length >= 2)
+                                        //        {
+                                        //            var detail = new _订单详情数据();
+                                        //            detail.SKU = arr[0].Trim();
+                                        //            detail.Amount = Convert.ToDouble(arr[1]);
+                                        //            //detail._乱单=
+                                        //            _订单详情数据.Add(detail);
+                                        //        }
+
+                                        //    }
+                                        //}
                                     }
                                     #endregion
 
+                                    var list订单详情数据_拣货单 = _订单详情数据.Where(x => x._乱单 == false).ToList();
+                                    var list订单详情数据_乱单 = _订单详情数据.Where(x => x._乱单 == true).ToList();
+
                                     var refTime = list拣货时间.Where(x => x._姓名 == name).FirstOrDefault();
-                                    md._拣货单张数 = _订单详情数据.Select(x => x.SKU).Distinct().Count();
-                                    md._购买总数量 = _订单详情数据.Select(x => x.Amount).Sum();
+                                    md._拣货单张数_正常 = list订单详情数据_拣货单.Select(x => x.SKU).Distinct().Count();
+                                    md._购买总数量_正常 = list订单详情数据_拣货单.Select(x => x.Amount).Sum();
+                                    md._拣货单张数_乱单 = list订单详情数据_乱单.Select(x => x.SKU).Distinct().Count();
+                                    md._购买总数量_乱单 = list订单详情数据_乱单.Select(x => x.Amount).Sum();
+
+
+                                    //md._拣货单张数 = _订单详情数据.Select(x => x.SKU).Distinct().Count();
+                                    //md._购买总数量 = _订单详情数据.Select(x => x.Amount).Sum();
                                     if (refTime != null)
                                     {
                                         refTime.CulcTime = CulcTime;
@@ -283,9 +353,19 @@ namespace Gadget
                     {
                         var md = new _配货绩效结果();
                         md._业绩归属人 = n;
-                        md._购买总数量 = list.Where(x => x._业绩归属人 == n).Select(x => x._购买总数量).Sum();
-                        md._拣货单张数 = list.Where(x => x._业绩归属人 == n).Select(x => x._拣货单张数).Sum();
-                        //md._总时长 = list.Where(x => x._业绩归属人 == n).Select(x => x._总时长).Sum();
+
+                        var defaultItem = list[0];
+                        md._d张数占比 = defaultItem._d张数占比;
+                        md._d张数定值 = defaultItem._d张数定值;
+                        md._d数量占比 = defaultItem._d数量占比;
+                        md._d数量定值 = defaultItem._d数量定值;
+
+
+                        md._购买总数量_正常 = list.Where(x => x._业绩归属人 == n).Select(x => x._购买总数量_正常).Sum();
+                        md._拣货单张数_正常 = list.Where(x => x._业绩归属人 == n).Select(x => x._拣货单张数_正常).Sum();
+                        md._购买总数量_乱单 = list.Where(x => x._业绩归属人 == n).Select(x => x._购买总数量_乱单).Sum();
+                        md._拣货单张数_乱单 = list.Where(x => x._业绩归属人 == n).Select(x => x._拣货单张数_乱单).Sum();
+
                         md._分钟 = list.Where(x => x._业绩归属人 == n).Select(x => x._分钟).Sum();
                         var mm = md._分钟 % 60;
                         var hh = (md._分钟 - mm) / 60;
@@ -346,18 +426,22 @@ namespace Gadget
 
 
                 #region 标题行
-                sheet1.Cells[1, 1].Value = "业绩归属人";
-                sheet1.Cells[1, 2].Value = "购买总数量";
-                sheet1.Cells[1, 3].Value = "拣货单张数";
-                sheet1.Cells[1, 4].Value = "总时长";
-                sheet1.Cells[1, 5].Value = "分钟";
-                sheet1.Cells[1, 6].Value = "拣货单效率";
-                sheet1.Cells[1, 7].Value = "购买数量效率";
-                sheet1.Cells[1, 8].Value = "小时";
-                sheet1.Cells[1, 9].Value = "拣货单每小时";
-                sheet1.Cells[1, 10].Value = "个数每小时";
-                sheet1.Cells[1, 11].Value = "定值倍数";
-                sheet1.Cells[1, 12].Value = "工资";
+                sheet1.Cells[1, 1].Value = "姓名";
+                sheet1.Cells[1, 2].Value = "拣货单数量";
+                sheet1.Cells[1, 3].Value = "乱单数量";
+                sheet1.Cells[1, 4].Value = "总数量";
+                sheet1.Cells[1, 5].Value = "拣货单张数";
+                sheet1.Cells[1, 6].Value = "乱单张数";
+                sheet1.Cells[1, 7].Value = "总张数";
+                sheet1.Cells[1, 8].Value = "总时长";
+                sheet1.Cells[1, 9].Value = "分钟";
+                sheet1.Cells[1, 10].Value = "拣货单效率";
+                sheet1.Cells[1, 11].Value = "购买数量效率";
+                sheet1.Cells[1, 12].Value = "小时";
+                sheet1.Cells[1, 13].Value = "拣货单每小时";
+                sheet1.Cells[1, 14].Value = "个数每小时";
+                sheet1.Cells[1, 15].Value = "定值倍数";
+                sheet1.Cells[1, 16].Value = "工资";
 
                 #endregion
 
@@ -366,21 +450,40 @@ namespace Gadget
                 {
                     var curOrder = list拣货绩效[idx];
                     sheet1.Cells[rowIdx, 1].Value = curOrder._业绩归属人;
-                    sheet1.Cells[rowIdx, 2].Value = curOrder._购买总数量;
-                    sheet1.Cells[rowIdx, 3].Value = curOrder._拣货单张数;
-                    sheet1.Cells[rowIdx, 4].Value = curOrder._总时长;
-                    sheet1.Cells[rowIdx, 5].Value = curOrder._分钟;
-                    sheet1.Cells[rowIdx, 6].Value = curOrder._拣货单效率;
-                    sheet1.Cells[rowIdx, 7].Value = curOrder._购买数量效率;
-                    sheet1.Cells[rowIdx, 8].Value = curOrder._小时;
-                    sheet1.Cells[rowIdx, 9].Value = curOrder._拣货单每小时;
-                    sheet1.Cells[rowIdx, 10].Value = curOrder._个数每小时;
-                    sheet1.Cells[rowIdx, 11].Value = curOrder._定值倍数;
-                    sheet1.Cells[rowIdx, 12].Value = curOrder._工资;
+                    sheet1.Cells[rowIdx, 2].Value = curOrder._购买总数量_正常;
+                    sheet1.Cells[rowIdx, 3].Value = curOrder._购买总数量_乱单;
+                    sheet1.Cells[rowIdx, 4].Value = curOrder._购买总数量;
+                    sheet1.Cells[rowIdx, 5].Value = curOrder._拣货单张数_正常;
+                    sheet1.Cells[rowIdx, 6].Value = curOrder._拣货单张数_乱单;
+                    sheet1.Cells[rowIdx, 7].Value = curOrder._拣货单张数;
+                    sheet1.Cells[rowIdx, 8].Value = curOrder._总时长;
+                    sheet1.Cells[rowIdx, 9].Value = curOrder._分钟;
+                    sheet1.Cells[rowIdx, 10].Value = curOrder._拣货单效率;
+                    sheet1.Cells[rowIdx, 11].Value = curOrder._购买数量效率;
+                    sheet1.Cells[rowIdx, 12].Value = curOrder._小时;
+                    sheet1.Cells[rowIdx, 13].Value = curOrder._拣货单每小时;
+                    sheet1.Cells[rowIdx, 14].Value = curOrder._个数每小时;
+                    sheet1.Cells[rowIdx, 15].Value = curOrder._定值倍数;
+                    sheet1.Cells[rowIdx, 16].Value = curOrder._工资;
                     rowIdx++;
                 }
                 #endregion
 
+                #region 全部边框
+                {
+                    var endRow = sheet1.Dimension.End.Row;
+                    var endColumn = sheet1.Dimension.End.Column;
+                    using (var rng = sheet1.Cells[1, 1, endRow, endColumn])
+                    {
+                        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    }
+                }
+                #endregion
+
+                sheet1.Cells[sheet1.Dimension.Address].AutoFitColumns();
 
                 buffer = package.GetAsByteArray();
             }
@@ -577,6 +680,60 @@ namespace Gadget
                 }
             }
 
+            public bool _乱单 { get; set; }
+
+        }
+
+        [ExcelTable("_乱单")]
+        class _乱单
+        {
+            private string _Org商品明细;
+            private string _Org完整库位号;
+
+            [ExcelColumn("商品明细")]
+            public string _商品明细
+            {
+                get
+                {
+                    return _Org商品明细;
+                }
+                set
+                {
+                    _Org商品明细 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+
+            [ExcelColumn("库位号")]
+            public string _完整库位号
+            {
+                get
+                {
+                    return _Org完整库位号;
+                }
+                set
+                {
+                    _Org完整库位号 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+
+            public List<_拣货单> ToData()
+            {
+                var list = new List<_拣货单>();
+                var _明细Arr = _商品明细.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var _库位号Arr = _完整库位号.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (_明细Arr.Count == _库位号Arr.Count)
+                    for (int idx = 0, len = _明细Arr.Count; idx < len; idx++)
+                    {
+                        var model = new _拣货单();
+                        model._商品明细 = _明细Arr[idx] + ";";
+                        model._完整库位号 = _库位号Arr[idx] + ";";
+                        model._乱单 = true;
+                        list.Add(model);
+                    }
+
+
+                return list;
+            }
         }
 
         [ExcelTable("拣货时间表")]
@@ -719,11 +876,32 @@ namespace Gadget
         class _配货绩效结果
         {
             public string _业绩归属人 { get; set; }
-            public double _购买总数量 { get; set; }
-            public double _拣货单张数 { get; set; }
+            public double _购买总数量
+            {
+                get
+                {
+                    return _购买总数量_正常 + _购买总数量_乱单;
+                }
+            }
+            public double _拣货单张数
+            {
+                get
+                {
+                    return _拣货单张数_正常 + _拣货单张数_乱单;
+                }
+            }
+
+            public double _购买总数量_正常 { get; set; }
+            public double _购买总数量_乱单 { get; set; }
+            public double _拣货单张数_正常 { get; set; }
+            public double _拣货单张数_乱单 { get; set; }
+
             public string _总时长 { get; set; }
             public double _分钟 { get; set; }
-
+            public double _d张数定值 { get; set; }
+            public double _d张数占比 { get; set; }
+            public double _d数量定值 { get; set; }
+            public double _d数量占比 { get; set; }
 
             public double _拣货单效率
             {
@@ -773,7 +951,7 @@ namespace Gadget
                 {
                     //= 拣货单每小时 / 208 * 0.75 + 个数每小时 / 1186 * 0.25
 
-                    return Math.Round(_拣货单每小时 / 208 * 0.75 + _个数每小时 / 1186 * 0.25, 4);
+                    return Math.Round(_拣货单每小时 / _d张数定值 * _d张数占比 + _个数每小时 / _d数量定值 * _d数量占比, 4);
                 }
             }
 
@@ -794,6 +972,7 @@ namespace Gadget
         {
             public string SKU { get; set; }
             public double Amount { get; set; }
+            public bool _乱单 { get; set; }
         }
 
         class DateHelper
