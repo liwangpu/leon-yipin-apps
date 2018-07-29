@@ -60,10 +60,10 @@
             this.txt入库单号 = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btn产品等级 = new System.Windows.Forms.Button();
-            this.txt产品等级 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.txt产品等级 = new System.Windows.Forms.TextBox();
+            this.btn产品等级 = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -72,7 +72,7 @@
             // lkDecs
             // 
             this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(285, 240);
+            this.lkDecs.Location = new System.Drawing.Point(285, 223);
             this.lkDecs.Name = "lkDecs";
             this.lkDecs.Size = new System.Drawing.Size(53, 12);
             this.lkDecs.TabIndex = 23;
@@ -83,7 +83,7 @@
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(74, 240);
+            this.lbMsg.Location = new System.Drawing.Point(74, 223);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(65, 12);
             this.lbMsg.TabIndex = 22;
@@ -92,7 +92,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 240);
+            this.label3.Location = new System.Drawing.Point(8, 223);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 12);
             this.label3.TabIndex = 21;
@@ -145,7 +145,7 @@
             // 
             // btn处理
             // 
-            this.btn处理.Location = new System.Drawing.Point(267, 199);
+            this.btn处理.Location = new System.Drawing.Point(267, 182);
             this.btn处理.Name = "btn处理";
             this.btn处理.Size = new System.Drawing.Size(75, 23);
             this.btn处理.TabIndex = 8;
@@ -345,7 +345,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(356, 295);
+            this.tabControl1.Size = new System.Drawing.Size(356, 269);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -375,10 +375,37 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(348, 269);
+            this.tabPage1.Size = new System.Drawing.Size(348, 243);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "数据处理";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(11, 158);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(59, 12);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "产品等级:";
+            // 
+            // txt产品等级
+            // 
+            this.txt产品等级.Enabled = false;
+            this.txt产品等级.Location = new System.Drawing.Point(76, 155);
+            this.txt产品等级.Name = "txt产品等级";
+            this.txt产品等级.Size = new System.Drawing.Size(183, 21);
+            this.txt产品等级.TabIndex = 7;
+            // 
+            // btn产品等级
+            // 
+            this.btn产品等级.Location = new System.Drawing.Point(267, 153);
+            this.btn产品等级.Name = "btn产品等级";
+            this.btn产品等级.Size = new System.Drawing.Size(75, 23);
+            this.btn产品等级.TabIndex = 8;
+            this.btn产品等级.Text = "浏览";
+            this.btn产品等级.UseVisualStyleBackColor = true;
+            this.btn产品等级.Click += new System.EventHandler(this.btn产品等级_Click);
             // 
             // tabPage2
             // 
@@ -396,44 +423,19 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(348, 269);
+            this.tabPage2.Size = new System.Drawing.Size(348, 243);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "数据查询";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // btn产品等级
-            // 
-            this.btn产品等级.Location = new System.Drawing.Point(267, 153);
-            this.btn产品等级.Name = "btn产品等级";
-            this.btn产品等级.Size = new System.Drawing.Size(75, 23);
-            this.btn产品等级.TabIndex = 8;
-            this.btn产品等级.Text = "浏览";
-            this.btn产品等级.UseVisualStyleBackColor = true;
-            this.btn产品等级.Click += new System.EventHandler(this.btn产品等级_Click);
-            // 
-            // txt产品等级
-            // 
-            this.txt产品等级.Enabled = false;
-            this.txt产品等级.Location = new System.Drawing.Point(76, 155);
-            this.txt产品等级.Name = "txt产品等级";
-            this.txt产品等级.Size = new System.Drawing.Size(183, 21);
-            this.txt产品等级.TabIndex = 7;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(11, 158);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(59, 12);
-            this.label13.TabIndex = 9;
-            this.label13.Text = "产品等级:";
             // 
             // _点货绩效
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 316);
+            this.ClientSize = new System.Drawing.Size(377, 292);
             this.Controls.Add(this.tabControl1);
+            this.MaximumSize = new System.Drawing.Size(393, 331);
+            this.MinimumSize = new System.Drawing.Size(393, 331);
             this.Name = "_点货绩效";
             this.Text = "_点货绩效";
             this.Load += new System.EventHandler(this._点货绩效_Load);
