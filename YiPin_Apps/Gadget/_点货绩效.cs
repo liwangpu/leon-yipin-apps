@@ -16,9 +16,12 @@ namespace Gadget
     public partial class _点货绩效 : Form
     {
         const string _未指定人员 = "未指定人员";
+        //private List<_工号记录详细信息> _List近两个月历史点货记录 { get { return _List上个月历史点货记录.AddRange(_List当月历史点货记录); } }
+        List<_工号记录详细信息> _List上个月历史点货记录 = new List<_工号记录详细信息>();
         List<_工号记录详细信息> _List当月历史点货记录 = new List<_工号记录详细信息>();
         private string _CacheFolder { get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "缓存信息"); } }
         private string _当月历史点货记录信息Path { get { return Path.Combine(_CacheFolder, DateTime.Now.ToString("yyyy-MM") + ".json"); } }
+        private string _上月历史点货记录信息Path { get { return Path.Combine(_CacheFolder, DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + ".json"); } }
         public _点货绩效()
         {
             InitializeComponent();
@@ -40,6 +43,14 @@ namespace Gadget
                     var str = reader.ReadToEnd();
                     _List当月历史点货记录 = JsonConvert.DeserializeObject<List<_工号记录详细信息>>(str);
                 }
+
+            //if (File.Exists(_上月历史点货记录信息Path))
+            //    using (var fs = new FileStream(_上月历史点货记录信息Path, FileMode.Open))
+            //    using (var reader = new StreamReader(fs))
+            //    {
+            //        var str = reader.ReadToEnd();
+            //        _List上个月历史点货记录.AddRange(JsonConvert.DeserializeObject<List<_工号记录详细信息>>(str));
+            //    }
 
         }
 
@@ -83,7 +94,45 @@ namespace Gadget
         #region 上传工号记录
         private void btn上传工号记录_Click(object sender, EventArgs e)
         {
-            FormHelper.GetCSVPath(txt工号记录);
+            var strError = string.Empty;
+            FormHelper.GetCSVPath(txt工号记录, () =>
+            {
+                var list工号记录详细信息 = new List<_工号记录详细信息>();
+                var list工号记录 = new List<_工号记录表>();
+                ShowGongMsg("开始读取工号记录数据");
+                FormHelper.ReadCSVFile(txt工号记录.Text, ref list工号记录, ref strError);
+                for (int idx = 0, len = list工号记录.Count; idx < len; idx += 2)
+                {
+                    var model = new _工号记录详细信息();
+                    model._入库单号 = list工号记录[idx]._工号记录;
+                    model._工号 = list工号记录[idx + 1]._工号记录;
+                    model._操作日期 = DateTime.Now;
+                    list工号记录详细信息.Add(model);
+                }
+                ShowGongMsg("开始存储工号记录数据,请稍后");
+                //var msg = JsonConvert.SerializeObject(list工号记录详细信息);
+                #region 记录点货历史信息
+                {
+                    //var history = _List近两个月历史点货记录.Where(x => !list工号记录详细信息.Any(u => u._入库单号 == x._入库单号)).ToList();
+                    //list工号记录详细信息.AddRange(history);
+
+                    _List当月历史点货记录.AddRange(list工号记录详细信息);
+
+
+                    if (!Directory.Exists(_CacheFolder))
+                        Directory.CreateDirectory(_CacheFolder);
+
+                    using (var writer = new StreamWriter(_当月历史点货记录信息Path, false))
+                    {
+                        _List当月历史点货记录 = list工号记录详细信息.Where(x => !string.IsNullOrWhiteSpace(x._入库单号)).ToList();
+                        var str = JsonConvert.SerializeObject(_List当月历史点货记录);
+                        writer.Write(str);
+                    }
+                }
+                #endregion
+
+                ShowGongMsg("开始工号记录存储完毕");
+            });
         }
         #endregion
 
@@ -294,22 +343,22 @@ namespace Gadget
                 #endregion
 
                 #region 记录点货历史信息
-                {
-                    var history = _List当月历史点货记录.Where(x => !list工号记录详细信息.Any(u => u._入库单号 == x._入库单号)).ToList();
-                    list工号记录详细信息.AddRange(history);
+                //{
+                //    var history = _List近两个月历史点货记录.Where(x => !list工号记录详细信息.Any(u => u._入库单号 == x._入库单号)).ToList();
+                //    list工号记录详细信息.AddRange(history);
 
 
-                    if (!Directory.Exists(_CacheFolder))
-                        Directory.CreateDirectory(_CacheFolder);
+                //    if (!Directory.Exists(_CacheFolder))
+                //        Directory.CreateDirectory(_CacheFolder);
 
-                    using (var writer = new StreamWriter(_当月历史点货记录信息Path, false))
-                    {
-                        _List当月历史点货记录 = list工号记录详细信息.Where(x => !string.IsNullOrWhiteSpace(x._入库单号)).ToList();
-                        var str = JsonConvert.SerializeObject(_List当月历史点货记录);
-                        writer.Write(str);
-                    }
+                //    using (var writer = new StreamWriter(_当月历史点货记录信息Path, false))
+                //    {
+                //        _List近两个月历史点货记录 = list工号记录详细信息.Where(x => !string.IsNullOrWhiteSpace(x._入库单号)).ToList();
+                //        var str = JsonConvert.SerializeObject(_List近两个月历史点货记录);
+                //        writer.Write(str);
+                //    }
 
-                }
+                //}
                 #endregion
 
                 Export(list点货绩效.OrderByDescending(x => x._总积分).ToList(), list入库明细);
@@ -555,6 +604,25 @@ namespace Gadget
         }
         #endregion
 
+        #region ShowGongMsg 工号上传消息提示
+        /// <summary>
+        /// 消息提示
+        /// </summary>
+        /// <param name="strMsg"></param>
+        private void ShowGongMsg(string strMsg)
+        {
+            if (this.InvokeRequired)
+            {
+                var act = new Action<string>(ShowMsg);
+                this.Invoke(act, strMsg);
+            }
+            else
+            {
+                this.lbGongMsg.Text = strMsg;
+            }
+        }
+        #endregion
+
         #region InvokeMainForm 调用主线程
         protected void InvokeMainForm(Action act)
         {
@@ -663,7 +731,7 @@ namespace Gadget
             public decimal _采购数量 { get; set; }
         }
 
-        [ExcelTable("人员代号")]
+        [ExcelTable("人员工号")]
         class _人员代号Mapping
         {
             private string org姓名;
@@ -715,19 +783,10 @@ namespace Gadget
         [ExcelTable("工号记录")]
         class _工号记录表
         {
-            private string org工号记录;
-
             [ExcelColumn("工号记录")]
             public string _工号记录
             {
-                get
-                {
-                    return org工号记录;
-                }
-                set
-                {
-                    org工号记录 = value != null ? value.ToString().Trim() : "";
-                }
+                get; set;
             }
         }
 
@@ -756,6 +815,7 @@ namespace Gadget
             public string _入库单号 { get; set; }
             public string _工号 { get; set; }
             public string _员工姓名 { get; set; }
+            public DateTime _操作日期 { get; set; }
         }
 
         class _点货绩效Model
@@ -764,7 +824,6 @@ namespace Gadget
             public decimal _总积分 { get; set; }
             public int _入库单数 { get; set; }
         }
-
 
     }
 }

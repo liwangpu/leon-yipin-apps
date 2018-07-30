@@ -31,16 +31,13 @@
             this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btn处理 = new System.Windows.Forms.Button();
-            this.btn上传工号记录 = new System.Windows.Forms.Button();
             this.btn上传订单产品 = new System.Windows.Forms.Button();
             this.btn上传积分参数 = new System.Windows.Forms.Button();
-            this.txt工号记录 = new System.Windows.Forms.TextBox();
             this.btn上传人员代号 = new System.Windows.Forms.Button();
             this.txt产品订单 = new System.Windows.Forms.TextBox();
             this.txt积分参数 = new System.Windows.Forms.TextBox();
@@ -64,9 +61,16 @@
             this.txt产品等级 = new System.Windows.Forms.TextBox();
             this.btn产品等级 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txt工号记录 = new System.Windows.Forms.TextBox();
+            this.btn上传工号记录 = new System.Windows.Forms.Button();
+            this.lbGongMsg = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // lkDecs
@@ -98,15 +102,6 @@
             this.label3.TabIndex = 21;
             this.label3.Text = "操作消息:";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 131);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(59, 12);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "工号记录:";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -132,7 +127,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 12);
             this.label1.TabIndex = 9;
-            this.label1.Text = "人员代号:";
+            this.label1.Text = "人员工号:";
             // 
             // label4
             // 
@@ -145,23 +140,13 @@
             // 
             // btn处理
             // 
-            this.btn处理.Location = new System.Drawing.Point(267, 182);
+            this.btn处理.Location = new System.Drawing.Point(267, 157);
             this.btn处理.Name = "btn处理";
             this.btn处理.Size = new System.Drawing.Size(75, 23);
             this.btn处理.TabIndex = 8;
             this.btn处理.Text = "处理";
             this.btn处理.UseVisualStyleBackColor = true;
             this.btn处理.Click += new System.EventHandler(this.btn处理_Click);
-            // 
-            // btn上传工号记录
-            // 
-            this.btn上传工号记录.Location = new System.Drawing.Point(267, 126);
-            this.btn上传工号记录.Name = "btn上传工号记录";
-            this.btn上传工号记录.Size = new System.Drawing.Size(75, 23);
-            this.btn上传工号记录.TabIndex = 8;
-            this.btn上传工号记录.Text = "浏览";
-            this.btn上传工号记录.UseVisualStyleBackColor = true;
-            this.btn上传工号记录.Click += new System.EventHandler(this.btn上传工号记录_Click);
             // 
             // btn上传订单产品
             // 
@@ -182,14 +167,6 @@
             this.btn上传积分参数.Text = "浏览";
             this.btn上传积分参数.UseVisualStyleBackColor = true;
             this.btn上传积分参数.Click += new System.EventHandler(this.btn上传积分参数_Click);
-            // 
-            // txt工号记录
-            // 
-            this.txt工号记录.Enabled = false;
-            this.txt工号记录.Location = new System.Drawing.Point(76, 128);
-            this.txt工号记录.Name = "txt工号记录";
-            this.txt工号记录.Size = new System.Drawing.Size(183, 21);
-            this.txt工号记录.TabIndex = 7;
             // 
             // btn上传人员代号
             // 
@@ -342,6 +319,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -356,7 +334,6 @@
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.txt人员代号);
             this.tabPage1.Controls.Add(this.label13);
-            this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.btn上传入库明细);
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.txt积分参数);
@@ -366,11 +343,9 @@
             this.tabPage1.Controls.Add(this.btn上传人员代号);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.txt产品等级);
-            this.tabPage1.Controls.Add(this.txt工号记录);
             this.tabPage1.Controls.Add(this.btn处理);
             this.tabPage1.Controls.Add(this.btn产品等级);
             this.tabPage1.Controls.Add(this.btn上传积分参数);
-            this.tabPage1.Controls.Add(this.btn上传工号记录);
             this.tabPage1.Controls.Add(this.btn上传订单产品);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -383,7 +358,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(11, 158);
+            this.label13.Location = new System.Drawing.Point(11, 133);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(59, 12);
             this.label13.TabIndex = 9;
@@ -392,14 +367,14 @@
             // txt产品等级
             // 
             this.txt产品等级.Enabled = false;
-            this.txt产品等级.Location = new System.Drawing.Point(76, 155);
+            this.txt产品等级.Location = new System.Drawing.Point(76, 130);
             this.txt产品等级.Name = "txt产品等级";
             this.txt产品等级.Size = new System.Drawing.Size(183, 21);
             this.txt产品等级.TabIndex = 7;
             // 
             // btn产品等级
             // 
-            this.btn产品等级.Location = new System.Drawing.Point(267, 153);
+            this.btn产品等级.Location = new System.Drawing.Point(267, 128);
             this.btn产品等级.Name = "btn产品等级";
             this.btn产品等级.Size = new System.Drawing.Size(75, 23);
             this.btn产品等级.TabIndex = 8;
@@ -428,6 +403,65 @@
             this.tabPage2.Text = "数据查询";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.lbGongMsg);
+            this.tabPage3.Controls.Add(this.label15);
+            this.tabPage3.Controls.Add(this.label6);
+            this.tabPage3.Controls.Add(this.txt工号记录);
+            this.tabPage3.Controls.Add(this.btn上传工号记录);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(348, 243);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "工号记录";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(5, 20);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(59, 12);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "工号记录:";
+            // 
+            // txt工号记录
+            // 
+            this.txt工号记录.Enabled = false;
+            this.txt工号记录.Location = new System.Drawing.Point(70, 17);
+            this.txt工号记录.Name = "txt工号记录";
+            this.txt工号记录.Size = new System.Drawing.Size(183, 21);
+            this.txt工号记录.TabIndex = 10;
+            // 
+            // btn上传工号记录
+            // 
+            this.btn上传工号记录.Location = new System.Drawing.Point(261, 15);
+            this.btn上传工号记录.Name = "btn上传工号记录";
+            this.btn上传工号记录.Size = new System.Drawing.Size(75, 23);
+            this.btn上传工号记录.TabIndex = 11;
+            this.btn上传工号记录.Text = "上传";
+            this.btn上传工号记录.UseVisualStyleBackColor = true;
+            this.btn上传工号记录.Click += new System.EventHandler(this.btn上传工号记录_Click);
+            // 
+            // lbGongMsg
+            // 
+            this.lbGongMsg.AutoSize = true;
+            this.lbGongMsg.Location = new System.Drawing.Point(71, 220);
+            this.lbGongMsg.Name = "lbGongMsg";
+            this.lbGongMsg.Size = new System.Drawing.Size(17, 12);
+            this.lbGongMsg.TabIndex = 24;
+            this.lbGongMsg.Text = "--";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(5, 220);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(59, 12);
+            this.label15.TabIndex = 23;
+            this.label15.Text = "操作消息:";
+            // 
             // _点货绩效
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -444,6 +478,8 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -465,9 +501,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btn上传订单产品;
         private System.Windows.Forms.TextBox txt产品订单;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button btn上传工号记录;
-        private System.Windows.Forms.TextBox txt工号记录;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txt入库单号;
         private System.Windows.Forms.Label label8;
@@ -485,5 +518,11 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txt产品等级;
         private System.Windows.Forms.Button btn产品等级;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txt工号记录;
+        private System.Windows.Forms.Button btn上传工号记录;
+        private System.Windows.Forms.Label lbGongMsg;
+        private System.Windows.Forms.Label label15;
     }
 }
