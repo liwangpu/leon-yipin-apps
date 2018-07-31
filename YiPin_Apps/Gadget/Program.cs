@@ -23,7 +23,7 @@ namespace Gadget
             //Application.Run(new _排除侵权_订单分配());//排除侵权_订单分配
             //Application.Run(new _采购订单配货());//采购订单配货
             //Application.Run(new _整合供应商人员工资统计());//整合供应商人员工资统计
-            Application.Run(new _点货绩效());//点货绩效
+            //Application.Run(new _点货绩效());//点货绩效
             //Application.Run(new _库存积压详情());//库存积压详情统计
             //Application.Run(new _采购订单配货新());//采购订单配货新
             //Application.Run(new _配货绩效());//配货绩效
@@ -31,7 +31,7 @@ namespace Gadget
             //Application.Run(new _仓库加班考勤());//仓库加班考勤
             //Application.Run(new _紧急单统计());//_紧急单统计
             //Application.Run(new _批量生成采购订单());//_批量生成采购订单
-            //Application.Run(new _缺货订单跟踪());//_缺货订单跟踪
+            Application.Run(new _缺货订单跟踪());//_缺货订单跟踪
 
 
 

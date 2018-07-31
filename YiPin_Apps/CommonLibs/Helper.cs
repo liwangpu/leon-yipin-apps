@@ -45,6 +45,12 @@ namespace CommonLibs
             buyers.Add("王庆飞");
             buyers.Add("王微");
             buyers.Add("刘龙敏");
+            buyers.Add("蔡东玲");
+            buyers.Add("张秀秀");
+            buyers.Add("王腾飞");
+            buyers.Add("查文亮");
+            buyers.Add("张露玲");
+            buyers.Add("廖延鑫");
 
             return buyers;
         }
