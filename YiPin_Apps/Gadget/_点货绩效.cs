@@ -16,12 +16,16 @@ namespace Gadget
     public partial class _点货绩效 : Form
     {
         const string _未指定人员 = "未指定人员";
-        //private List<_工号记录详细信息> _List近两个月历史点货记录 { get { return _List上个月历史点货记录.AddRange(_List当月历史点货记录); } }
+
         List<_工号记录详细信息> _List上个月历史点货记录 = new List<_工号记录详细信息>();
         List<_工号记录详细信息> _List当月历史点货记录 = new List<_工号记录详细信息>();
         private string _CacheFolder { get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "缓存信息"); } }
         private string _当月历史点货记录信息Path { get { return Path.Combine(_CacheFolder, DateTime.Now.ToString("yyyy-MM") + ".json"); } }
         private string _上月历史点货记录信息Path { get { return Path.Combine(_CacheFolder, DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + ".json"); } }
+        private string _产品等级缓存Path { get { return Path.Combine(_CacheFolder, "产品等级.json"); } }
+
+
+
         public _点货绩效()
         {
             InitializeComponent();
@@ -36,6 +40,12 @@ namespace Gadget
             //txt工号记录.Text = @"C:\Users\Leon\Desktop\绩效\工号记录.csv";
             //txt产品等级.Text = @"C:\Users\Leon\Desktop\绩效\产品等级.csv";
 
+            txt工号记录.Text = @"C:\Users\Bamboo01\Desktop\点货记录.csv";
+
+
+            if (!Directory.Exists(_CacheFolder))
+                Directory.CreateDirectory(_CacheFolder);
+
             if (File.Exists(_当月历史点货记录信息Path))
                 using (var fs = new FileStream(_当月历史点货记录信息Path, FileMode.Open))
                 using (var reader = new StreamReader(fs))
@@ -44,13 +54,6 @@ namespace Gadget
                     _List当月历史点货记录 = JsonConvert.DeserializeObject<List<_工号记录详细信息>>(str);
                 }
 
-            //if (File.Exists(_上月历史点货记录信息Path))
-            //    using (var fs = new FileStream(_上月历史点货记录信息Path, FileMode.Open))
-            //    using (var reader = new StreamReader(fs))
-            //    {
-            //        var str = reader.ReadToEnd();
-            //        _List上个月历史点货记录.AddRange(JsonConvert.DeserializeObject<List<_工号记录详细信息>>(str));
-            //    }
 
         }
 
@@ -59,7 +62,7 @@ namespace Gadget
         #region 导出表格说明
         private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormHelper.GenerateTableDes(typeof(_入库明细Mapping), typeof(_人员代号Mapping), typeof(_积分参数Mapping), typeof(_工号记录表), typeof(_产品等级), typeof(_订单产品));
+            FormHelper.GenerateTableDes(typeof(_采购入库单), typeof(_人员代号Mapping), typeof(_积分参数Mapping), typeof(_工号记录表), typeof(_产品等级), typeof(_采购入库明细));
         }
         #endregion
 
@@ -84,55 +87,17 @@ namespace Gadget
         }
         #endregion
 
-        #region 上传热销订单
-        private void btn上传订单产品_Click(object sender, EventArgs e)
+        #region 上传采购入库单
+        private void btn上传采购入库单_Click(object sender, EventArgs e)
         {
-            FormHelper.GetCSVPath(txt产品订单);
+            FormHelper.GetCSVPath(txt采购入库单);
         }
         #endregion
 
         #region 上传工号记录
         private void btn上传工号记录_Click(object sender, EventArgs e)
         {
-            var strError = string.Empty;
-            FormHelper.GetCSVPath(txt工号记录, () =>
-            {
-                var list工号记录详细信息 = new List<_工号记录详细信息>();
-                var list工号记录 = new List<_工号记录表>();
-                ShowGongMsg("开始读取工号记录数据");
-                FormHelper.ReadCSVFile(txt工号记录.Text, ref list工号记录, ref strError);
-                for (int idx = 0, len = list工号记录.Count; idx < len; idx += 2)
-                {
-                    var model = new _工号记录详细信息();
-                    model._入库单号 = list工号记录[idx]._工号记录;
-                    model._工号 = list工号记录[idx + 1]._工号记录;
-                    model._操作日期 = DateTime.Now;
-                    list工号记录详细信息.Add(model);
-                }
-                ShowGongMsg("开始存储工号记录数据,请稍后");
-                //var msg = JsonConvert.SerializeObject(list工号记录详细信息);
-                #region 记录点货历史信息
-                {
-                    //var history = _List近两个月历史点货记录.Where(x => !list工号记录详细信息.Any(u => u._入库单号 == x._入库单号)).ToList();
-                    //list工号记录详细信息.AddRange(history);
-
-                    _List当月历史点货记录.AddRange(list工号记录详细信息);
-
-
-                    if (!Directory.Exists(_CacheFolder))
-                        Directory.CreateDirectory(_CacheFolder);
-
-                    using (var writer = new StreamWriter(_当月历史点货记录信息Path, false))
-                    {
-                        _List当月历史点货记录 = list工号记录详细信息.Where(x => !string.IsNullOrWhiteSpace(x._入库单号)).ToList();
-                        var str = JsonConvert.SerializeObject(_List当月历史点货记录);
-                        writer.Write(str);
-                    }
-                }
-                #endregion
-
-                ShowGongMsg("开始工号记录存储完毕");
-            });
+            FormHelper.GetCSVPath(txt工号记录);
         }
         #endregion
 
@@ -143,229 +108,320 @@ namespace Gadget
         }
         #endregion
 
+        #region 缓存工号记录信息
+        private void btn缓存工号记录_Click(object sender, EventArgs e)
+        {
+            btn缓存工号记录.Enabled = false;
+            ShowMsg("---");
+            var strError = string.Empty;
+            var list工号记录详细信息 = new List<_工号记录详细信息>();
+            var list工号记录 = new List<_工号记录表>();
+
+            //目前发现linqtoexcel的一个问题,column的列类型根据最后一行判断,不是自己设定的mapping类,所以需要在csv后尾自己拼接一行字符串
+            //但为了不改动原csv需要自己复制一份
+            #region 读取数据
+            var strTmpCsvFile = Path.Combine(_CacheFolder, Guid.NewGuid().ToString() + ".csv");
+            File.Copy(txt工号记录.Text, strTmpCsvFile);
+
+            ShowMsg("开始读取工号记录数据");
+            using (var writer = new StreamWriter(strTmpCsvFile, true))
+            {
+                writer.WriteLine("end row");
+            }
+
+            FormHelper.ReadCSVFile(strTmpCsvFile, ref list工号记录, ref strError);
+            for (int idx = 0, len = list工号记录.Count - 1; idx < len; idx += 2)
+            {
+                if (list工号记录[idx]._工号记录 != "end row")
+                {
+                    var model = new _工号记录详细信息();
+                    model._入库单号 = list工号记录[idx]._工号记录;
+                    model._工号 = list工号记录[idx + 1]._工号记录;
+                    model._操作日期 = DateTime.Now;
+                    list工号记录详细信息.Add(model);
+                }
+                else
+                    break;
+            }
+            if (File.Exists(strTmpCsvFile))
+                File.Delete(strTmpCsvFile);
+            #endregion
+
+            ShowMsg("开始存储工号记录数据,请稍后");
+            #region 记录点货历史信息
+            {
+                _List当月历史点货记录.AddRange(list工号记录详细信息);
+
+                if (!Directory.Exists(_CacheFolder))
+                    Directory.CreateDirectory(_CacheFolder);
+
+                using (var writer = new StreamWriter(_当月历史点货记录信息Path, false))
+                {
+                    var str = JsonConvert.SerializeObject(_List当月历史点货记录);
+                    writer.Write(str);
+                }
+            }
+            #endregion
+
+            ShowMsg("---");
+            MessageBox.Show("工号记录存储完毕", "温馨提示");
+            btn缓存工号记录.Enabled = true;
+            txt工号记录.Text = string.Empty;
+        }
+        #endregion
+
+        #region 缓存产品等级
+        private void btn缓存产品等级_Click(object sender, EventArgs e)
+        {
+            btn缓存产品等级.Enabled = false;
+            var strError = string.Empty;
+            var list产品等级 = new List<_产品等级>();
+            ShowMsg("开始读取产品等级数据");
+            FormHelper.ReadCSVFile(txt产品等级.Text, ref list产品等级, ref strError);
+
+            ShowMsg("开始存储产品等级数据,请稍后");
+            using (var writer = new StreamWriter(_产品等级缓存Path, true))
+            {
+                var str = JsonConvert.SerializeObject(list产品等级);
+                writer.Write(str);
+            }
+            ShowMsg("---");
+            MessageBox.Show("产品等级数据存储完毕", "温馨提示");
+            btn缓存产品等级.Enabled = true;
+            txt产品等级.Text = string.Empty;
+        }
+        #endregion
+
         #region 处理数据
         private void btn处理_Click(object sender, EventArgs e)
         {
-            btn处理.Enabled = false;
-            var list入库明细 = new List<_入库明细Mapping>();
-            var list订单产品 = new List<_订单产品>();
-            var list产品等级 = new List<_产品等级>();
-            var list人员代号 = new List<_人员代号Mapping>();
-            var list积分参数 = new List<_积分参数Mapping>();
-            var list点货绩效 = new List<_点货绩效Model>();
-            var list工号记录详细信息 = new List<_工号记录详细信息>();
-
-
-            #region 读取数据
-            var actReadData = new Action(() =>
+            _Check是否能进行绩效计算(() =>
             {
-                var strError = string.Empty;
+                btn处理.Enabled = false;
+                var list入库明细 = new List<_采购入库明细>();
+                var list采购入库单 = new List<_采购入库单>();
+                var list产品等级 = new List<_产品等级>();
+                var list人员代号 = new List<_人员代号Mapping>();
+                var list积分参数 = new List<_积分参数Mapping>();
+                var list点货绩效 = new List<_点货绩效Model>();
+                var list工号记录详细信息 = new List<_工号记录详细信息>();
 
-                ShowMsg("开始读取表格信息");
 
-                #region 读取入库明细
+                #region 读取数据
+                var actReadData = new Action(() =>
                 {
-                    ShowMsg("开始读取入库明细数据");
-                    FormHelper.ReadCSVFile(txt入库明细.Text, ref list入库明细, ref strError);
-                }
-                #endregion
+                    var strError = string.Empty;
 
-                #region 读取人员代号
-                {
-                    ShowMsg("开始读取人员代号数据");
-                    FormHelper.ReadCSVFile(txt人员代号.Text, ref list人员代号, ref strError);
-                }
-                #endregion
+                    ShowMsg("开始读取表格信息");
 
-                #region 读取积分参数
-                {
-                    ShowMsg("开始读取库积分参数数据");
-                    FormHelper.ReadCSVFile(txt积分参数.Text, ref list积分参数, ref strError);
-                }
-                #endregion
-
-                #region 读取订单产品
-                {
-                    ShowMsg("开始读取订单产品数据");
-                    FormHelper.ReadCSVFile(txt产品订单.Text, ref list订单产品, ref strError);
-                }
-                #endregion
-
-                #region 读取产品等级
-                {
-                    ShowMsg("开始读取产品等级数据");
-                    FormHelper.ReadCSVFile(txt产品等级.Text, ref list产品等级, ref strError);
-                }
-                #endregion
-
-                #region 读取工号记录
-                {
-                    var list工号记录 = new List<_工号记录表>();
-                    ShowMsg("开始读取工号记录数据");
-                    FormHelper.ReadCSVFile(txt工号记录.Text, ref list工号记录, ref strError);
-                    for (int idx = 0, len = list工号记录.Count; idx < len; idx += 2)
+                    #region 读取入库明细
                     {
-                        var model = new _工号记录详细信息();
-                        model._入库单号 = list工号记录[idx]._工号记录;
-                        model._工号 = list工号记录[idx + 1]._工号记录;
-                        var ref人员 = list人员代号.Where(x => x._代号 == model._工号).FirstOrDefault();
-                        if (ref人员 != null)
-                            model._员工姓名 = ref人员._姓名;
-                        list工号记录详细信息.Add(model);
+                        ShowMsg("开始读取入库明细数据");
+                        FormHelper.ReadCSVFile(txt入库明细.Text, ref list入库明细, ref strError);
                     }
-                }
+                    #endregion
+
+                    #region 读取人员代号
+                    {
+                        ShowMsg("开始读取人员代号数据");
+                        FormHelper.ReadCSVFile(txt人员代号.Text, ref list人员代号, ref strError);
+                    }
+                    #endregion
+
+                    #region 读取积分参数
+                    {
+                        ShowMsg("开始读取库积分参数数据");
+                        FormHelper.ReadCSVFile(txt积分参数.Text, ref list积分参数, ref strError);
+                    }
+                    #endregion
+
+                    #region 读取订单产品
+                    {
+                        ShowMsg("开始读取订单产品数据");
+                        FormHelper.ReadCSVFile(txt采购入库单.Text, ref list采购入库单, ref strError);
+                    }
+                    #endregion
+
+                    #region 读取产品等级
+                    {
+                        ShowMsg("开始读取产品等级数据");
+                        //FormHelper.ReadCSVFile(txt产品等级.Text, ref list产品等级, ref strError);
+                        using (var fs = new FileStream(_产品等级缓存Path, FileMode.Open))
+                        using (var reader = new StreamReader(fs))
+                        {
+                            var str = reader.ReadToEnd();
+                            list产品等级 = JsonConvert.DeserializeObject<List<_产品等级>>(str);
+                        }
+                    }
+                    #endregion
+
+                    #region 读取工号记录
+                    {
+                        //读取上个月的工号记录
+                        if (File.Exists(_上月历史点货记录信息Path))
+                            using (var fs = new FileStream(_上月历史点货记录信息Path, FileMode.Open))
+                            using (var reader = new StreamReader(fs))
+                            {
+                                var str = reader.ReadToEnd();
+                                _List上个月历史点货记录.AddRange(JsonConvert.DeserializeObject<List<_工号记录详细信息>>(str));
+                            }
+
+                        list工号记录详细信息.AddRange(_List上个月历史点货记录);
+                        list工号记录详细信息.AddRange(_List当月历史点货记录);
+                    }
+                    #endregion
+
+                });
                 #endregion
 
-            });
-            #endregion
-
-            #region 处理数据
-            actReadData.BeginInvoke((obj) =>
-            {
-                ShowMsg("开始处理数据");
-
-                #region 匹配人员信息
+                #region 处理数据
+                actReadData.BeginInvoke((obj) =>
                 {
-                    for (int idx = 0, len = list入库明细.Count; idx < len; idx++)
+                    ShowMsg("正在处理数据");
+
+                    #region 匹配人员信息
                     {
-                        var item = list入库明细[idx];
-
-                        //if (item._入库单退回单号== "RKD201807210725")
-                        //{
-
-                        //}
-
-                        if (!string.IsNullOrEmpty(item._人员代码))
+                        for (int idx = 0, len = list采购入库单.Count; idx < len; idx++)
                         {
-                            var ref人员 = list人员代号.Where(x => x._代号 == item._人员代码).FirstOrDefault();
-                            if (ref人员 != null)
-                            {
-                                item._人员姓名 = ref人员._姓名;
+                            var item = list采购入库单[idx];
 
-                                bool bExist = false;
-                                for (int ii = list工号记录详细信息.Count - 1; ii >= 0; ii--)
+                            //if (item._入库单退回单号== "RKD201807210725")
+                            //{
+
+                            //}
+
+                            if (!string.IsNullOrEmpty(item._人员代码))
+                            {
+                                var ref人员 = list人员代号.Where(x => x._代号 == item._人员代码).FirstOrDefault();
+                                if (ref人员 != null)
                                 {
-                                    var referIn工号记录详情 = list工号记录详细信息[ii];
-                                    if (referIn工号记录详情 != null)
+                                    item._人员姓名 = ref人员._姓名;
+
+                                    bool bExist = false;
+                                    for (int ii = list工号记录详细信息.Count - 1; ii >= 0; ii--)
+                                    {
+                                        var referIn工号记录详情 = list工号记录详细信息[ii];
+                                        if (referIn工号记录详情 != null)
+                                        {
+                                            var mm = new _工号记录详细信息();
+                                            mm._入库单号 = item._入库单退回单号;
+                                            mm._员工姓名 = ref人员._姓名;
+                                            mm._工号 = ref人员._代号;
+                                            list工号记录详细信息.Add(mm);
+                                            bExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!bExist)
                                     {
                                         var mm = new _工号记录详细信息();
                                         mm._入库单号 = item._入库单退回单号;
                                         mm._员工姓名 = ref人员._姓名;
                                         mm._工号 = ref人员._代号;
                                         list工号记录详细信息.Add(mm);
-                                        bExist = true;
-                                        break;
                                     }
                                 }
-                                if (!bExist)
-                                {
-                                    var mm = new _工号记录详细信息();
-                                    mm._入库单号 = item._入库单退回单号;
-                                    mm._员工姓名 = ref人员._姓名;
-                                    mm._工号 = ref人员._代号;
-                                    list工号记录详细信息.Add(mm);
-                                }
-                            }
-                            else
-                                item._人员姓名 = _未指定人员;
-                        }
-                        else
-                        {
-                            var ref人员 = list工号记录详细信息.Where(x => x._入库单号 == item._入库单退回单号).FirstOrDefault();
-                            if (ref人员 != null)
-                                item._人员姓名 = ref人员._员工姓名;
-                            else
-                                item._人员姓名 = _未指定人员;
-                        }
-                    }
-                }
-                #endregion
-
-                #region 匹配积分
-                {
-                    for (int idx = 0, len = list入库明细.Count; idx < len; idx++)
-                    {
-                        var item = list入库明细[idx];
-                        //找到明细的所有产品,再查产品对应等级的积分
-                        var refer产品 = list订单产品.Where(x => x._入库单号 == item._入库单退回单号).ToList();
-
-                        foreach (var referProduct in refer产品)
-                        {
-                            //查找对应等级
-                            var refer等级 = list产品等级.FirstOrDefault(x => x.SKU == referProduct.SKU);
-                            if (refer等级 != null)
-                            {
-                                var ref积分 = list积分参数.Where(x => x._等级.ToLower() == refer等级._等级.ToLower() && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
-                                if (ref积分 != null)
-                                {
-                                    item._盘点积分 += ref积分._积分;
-                                    item._积分详情 += string.Format("{0}-数量:{1},积分:{2};", referProduct.SKU, referProduct._采购数量, ref积分._积分);
-                                }
+                                else
+                                    item._人员姓名 = _未指定人员;
                             }
                             else
                             {
-                                var ref积分 = list积分参数.Where(x => x._等级.ToLower() == "d" && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
-                                if (ref积分 != null)
-                                {
-                                    item._盘点积分 += ref积分._积分;
-                                    item._积分详情 += string.Format("{0}-数量:{1},积分:{2};", referProduct.SKU, referProduct._采购数量, ref积分._积分);
-                                }
+                                var ref人员 = list工号记录详细信息.Where(x => x._入库单号 == item._入库单退回单号).FirstOrDefault();
+                                if (ref人员 != null)
+                                    item._人员姓名 = ref人员._员工姓名;
+                                else
+                                    item._人员姓名 = _未指定人员;
                             }
                         }
-
-
-
-
-                        //var ref积分 = list积分参数.Where(x => x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
-                        //if (ref积分 != null)
-                        //{
-                        //    item._盘点积分 = ref积分._积分;
-                        //}
-
-                        //item._是否热销订单 = list热销订单.Where(x => x._热销单号 == item._入库单退回单号).Count() > 0;
                     }
-                }
-                #endregion
+                    #endregion
 
-                #region 盘点绩效
-                {
-                    var inventors = list入库明细.Select(x => x._人员姓名).Distinct().ToList();
-                    inventors.ForEach(name =>
+                    #region 匹配积分
                     {
-                        var refList订单 = list入库明细.Where(x => x._人员姓名 == name).ToList();
-                        var model = new _点货绩效Model();
-                        model._点货人 = name;
-                        model._入库单数 = refList订单.Select(x => x._入库单退回单号).Distinct().Count();
-                        model._总积分 = refList订单.Select(x => x._盘点积分).Sum();
-                        list点货绩效.Add(model);
-                    });
-                }
+                        for (int idx = 0, len = list采购入库单.Count; idx < len; idx++)
+                        {
+                            var item = list采购入库单[idx];
+                            //找到明细的所有产品,再查产品对应等级的积分
+                            var refer产品 = list入库明细.Where(x => x._入库单号 == item._入库单退回单号).ToList();
+
+                            foreach (var referProduct in refer产品)
+                            {
+                                //查找对应等级
+                                var refer等级 = list产品等级.FirstOrDefault(x => x.SKU == referProduct.SKU);
+                                if (refer等级 != null)
+                                {
+                                    var ref积分 = list积分参数.Where(x => x._等级.ToLower() == refer等级._等级.ToLower() && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                                    if (ref积分 != null)
+                                    {
+                                        item._盘点积分 += ref积分._积分;
+                                        item._积分详情 += string.Format("{0}-数量:{1},积分:{2};", referProduct.SKU, referProduct._采购数量, ref积分._积分);
+                                    }
+                                }
+                                else
+                                {
+                                    var ref积分 = list积分参数.Where(x => x._等级.ToLower() == "d" && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                                    if (ref积分 != null)
+                                    {
+                                        item._盘点积分 += ref积分._积分;
+                                        item._积分详情 += string.Format("{0}-数量:{1},积分:{2};", referProduct.SKU, referProduct._采购数量, ref积分._积分);
+                                    }
+                                }
+                            }
+
+
+
+
+                            //var ref积分 = list积分参数.Where(x => x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                            //if (ref积分 != null)
+                            //{
+                            //    item._盘点积分 = ref积分._积分;
+                            //}
+
+                            //item._是否热销订单 = list热销订单.Where(x => x._热销单号 == item._入库单退回单号).Count() > 0;
+                        }
+                    }
+                    #endregion
+
+                    #region 盘点绩效
+                    {
+                        var inventors = list采购入库单.Select(x => x._人员姓名).Distinct().ToList();
+                        inventors.ForEach(name =>
+                        {
+                            var refList订单 = list采购入库单.Where(x => x._人员姓名 == name).ToList();
+                            var model = new _点货绩效Model();
+                            model._点货人 = name;
+                            model._入库单数 = refList订单.Select(x => x._入库单退回单号).Distinct().Count();
+                            model._总积分 = refList订单.Select(x => x._盘点积分).Sum();
+                            list点货绩效.Add(model);
+                        });
+                    }
+                    #endregion
+
+                    Export(list点货绩效.OrderByDescending(x => x._总积分).ToList(), list采购入库单);
+                }, null);
                 #endregion
 
-                #region 记录点货历史信息
-                //{
-                //    var history = _List近两个月历史点货记录.Where(x => !list工号记录详细信息.Any(u => u._入库单号 == x._入库单号)).ToList();
-                //    list工号记录详细信息.AddRange(history);
+            });//_Check是否能进行绩效计算
 
-
-                //    if (!Directory.Exists(_CacheFolder))
-                //        Directory.CreateDirectory(_CacheFolder);
-
-                //    using (var writer = new StreamWriter(_当月历史点货记录信息Path, false))
-                //    {
-                //        _List近两个月历史点货记录 = list工号记录详细信息.Where(x => !string.IsNullOrWhiteSpace(x._入库单号)).ToList();
-                //        var str = JsonConvert.SerializeObject(_List近两个月历史点货记录);
-                //        writer.Write(str);
-                //    }
-
-                //}
-                #endregion
-
-                Export(list点货绩效.OrderByDescending(x => x._总积分).ToList(), list入库明细);
-            }, null);
-            #endregion
         }
         #endregion
+
+        private void _Check是否能进行绩效计算(Action act)
+        {
+            if (!File.Exists(_产品等级缓存Path))
+            {
+                MessageBox.Show("请先上传产品等级信息", "温馨提示");
+                return;
+            }
+
+            if (!File.Exists(_当月历史点货记录信息Path) && !File.Exists(_上月历史点货记录信息Path))
+            {
+                MessageBox.Show("近两个月未上传工号记录信息", "温馨提示");
+                return;
+            }
+
+            act();
+        }
 
         #region 查询历史点货信息
         private void btn查询_Click(object sender, EventArgs e)
@@ -403,9 +459,17 @@ namespace Gadget
                 #region 处理数据
                 actReadData.BeginInvoke((obj) =>
                 {
-                    var refer = _h历史点货记录.FirstOrDefault(x => x._入库单号 == str入库单号);
-                    if (refer != null)
-                        ShowQueryResult(refer);
+                    var refers = _h历史点货记录.Where(x => x._入库单号 == str入库单号).ToList();
+                    if (refers.Count > 0)
+                    {
+                        if (refers.Count > 1)
+                        {
+                            var newlyOpTime = refers.Max(x => x._操作日期);
+                            ShowQueryResult(refers.Where(x => x._操作日期 == newlyOpTime).First());
+                        }
+                        else
+                            ShowQueryResult(refers[0]);
+                    }
                 }, null);
                 #endregion
             }
@@ -415,7 +479,7 @@ namespace Gadget
         /**************** common method ****************/
 
         #region 导出表格
-        private void Export(List<_点货绩效Model> resultList, List<_入库明细Mapping> detailList)
+        private void Export(List<_点货绩效Model> resultList, List<_采购入库单> detailList)
         {
             ShowMsg("开始生成表格");
             var buffer = new byte[0];
@@ -604,25 +668,6 @@ namespace Gadget
         }
         #endregion
 
-        #region ShowGongMsg 工号上传消息提示
-        /// <summary>
-        /// 消息提示
-        /// </summary>
-        /// <param name="strMsg"></param>
-        private void ShowGongMsg(string strMsg)
-        {
-            if (this.InvokeRequired)
-            {
-                var act = new Action<string>(ShowMsg);
-                this.Invoke(act, strMsg);
-            }
-            else
-            {
-                this.lbGongMsg.Text = strMsg;
-            }
-        }
-        #endregion
-
         #region InvokeMainForm 调用主线程
         protected void InvokeMainForm(Action act)
         {
@@ -650,8 +695,8 @@ namespace Gadget
 
         /**************** common class ****************/
 
-        [ExcelTable("入库明细")]
-        class _入库明细Mapping
+        [ExcelTable("采购入库单")]
+        class _采购入库单
         {
             private string org内部便签;
             private string org入库单退回单号;
@@ -709,8 +754,8 @@ namespace Gadget
             public string _积分详情 { get; set; }
         }
 
-        [ExcelTable("订单对应产品")]
-        class _订单产品
+        [ExcelTable("入库明细")]
+        class _采购入库明细
         {
             private string orgSKU;
             [ExcelColumn("入库单号")]
@@ -780,14 +825,11 @@ namespace Gadget
             public decimal _积分 { get; set; }
         }
 
-        [ExcelTable("工号记录")]
+        [ExcelTable("工号记录表")]
         class _工号记录表
         {
             [ExcelColumn("工号记录")]
-            public string _工号记录
-            {
-                get; set;
-            }
+            public string _工号记录 { get; set; }
         }
 
         [ExcelTable("产品等级")]
@@ -824,6 +866,7 @@ namespace Gadget
             public decimal _总积分 { get; set; }
             public int _入库单数 { get; set; }
         }
+
 
     }
 }
