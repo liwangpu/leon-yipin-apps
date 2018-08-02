@@ -33,6 +33,14 @@ namespace Gadget
             }
         }
 
+        private string Folder公共配置
+        {
+            get
+            {
+                return Path.Combine(CacheBasePath, BaseCacheFolder, "公共");
+            }
+        }
+
         private string Folder拣货绩效
         {
             get
@@ -49,6 +57,22 @@ namespace Gadget
             }
         }
 
+        private string FileName本月上班时间缓存文件
+        {
+            get
+            {
+                return Path.Combine(Folder公共配置, "本月上班时间信息.json");
+            }
+        }
+
+        private string FileName帮忙拣货时间缓存文件
+        {
+            get
+            {
+                return Path.Combine(Folder公共配置, "帮忙拣货时间.json");
+            }
+        }
+
         private string MonthFlag
         {
             get
@@ -60,7 +84,9 @@ namespace Gadget
 
         private DateTime CulcTime = new DateTime();
 
-        private List<_拣货人员配置信息> _人员负责库位信息;
+        private List<_拣货人员配置信息> _人员负责库位信息 = new List<_拣货人员配置信息>();
+        private List<_本月上班时间信息> _本月上班时间 = new List<_本月上班时间信息>();
+        private List<_帮忙点货时间> _本月帮忙拣货时间 = new List<_帮忙点货时间>();
 
         public _配货绩效()
         {
@@ -75,11 +101,13 @@ namespace Gadget
             //txt拣货时间.Text = @"C:\Users\Leon\Desktop\配货数量\拣货时间表.csv";
             //btn当天绩效.Enabled = true;
 
-            _人员负责库位信息 = new List<_拣货人员配置信息>();
             if (!Directory.Exists(Folder人员配置))
                 Directory.CreateDirectory(Folder人员配置);
             if (!Directory.Exists(Folder拣货绩效))
                 Directory.CreateDirectory(Folder拣货绩效);
+            if (!Directory.Exists(Folder公共配置))
+                Directory.CreateDirectory(Folder公共配置);
+
             //加载缓存人员配置文件
             if (File.Exists(FileName拣货人员配置缓存文件))
             {
@@ -89,7 +117,24 @@ namespace Gadget
                     _人员负责库位信息 = JsonConvert.DeserializeObject<List<_拣货人员配置信息>>(json);
                 }
             }
-            //
+            //加载本月上班时间信息
+            if (File.Exists(FileName本月上班时间缓存文件))
+            {
+                using (var fs = new StreamReader(FileName本月上班时间缓存文件, Encoding.UTF8))
+                {
+                    var json = fs.ReadToEnd();
+                    _本月上班时间 = JsonConvert.DeserializeObject<List<_本月上班时间信息>>(json);
+                }
+            }
+            //加载本月帮忙拣货时间信息
+            if (File.Exists(FileName帮忙拣货时间缓存文件))
+            {
+                using (var fs = new StreamReader(FileName帮忙拣货时间缓存文件, Encoding.UTF8))
+                {
+                    var json = fs.ReadToEnd();
+                    _本月帮忙拣货时间 = JsonConvert.DeserializeObject<List<_帮忙点货时间>>(json);
+                }
+            }
             RefreshCache();
         }
 
@@ -109,17 +154,44 @@ namespace Gadget
         }
         #endregion
 
-        #region 上传拣货时间
-        private void btn上传拣货时间_Click(object sender, EventArgs e)
+        #region 缓存帮忙点货
+        private void btn缓存帮忙拣货时间_Click(object sender, EventArgs e)
         {
-            FormHelper.GetCSVPath(txt拣货时间, () =>
-             {
-                 btn当天绩效.Enabled = true;
-             });
+
+            FormHelper.GetCSVPath(txt帮忙点货, (Action)(() =>
+            {
+                _本月帮忙拣货时间.Clear();
+                var strError = string.Empty;
+                ShowMsg("开始读取帮忙拣货时间数据");
+
+                #region 读取数据
+                var actReadData = new Action(() =>
+                {
+                    FormHelper.ReadCSVFile(txt帮忙点货.Text, ref _本月帮忙拣货时间, ref strError);
+                });
+                #endregion
+
+                #region 处理数据
+                actReadData.BeginInvoke((AsyncCallback)((obj) =>
+                {
+                    ShowMsg("帮忙拣货时间数据读取完毕");
+                    if (_本月帮忙拣货时间 != null && _本月帮忙拣货时间.Count > 0)
+                    {
+                        var json = JsonConvert.SerializeObject(_本月帮忙拣货时间);
+                        using (var fs = new StreamWriter(FileName帮忙拣货时间缓存文件, false, Encoding.UTF8))
+                        {
+                            fs.Write(json);
+                        }
+                        MessageBox.Show("帮忙拣货时间数据存储完毕", "温馨提示");
+                    }
+                    ShowMsg(strError);
+                }), null);
+                #endregion
+            }));
         }
         #endregion
 
-        #region 上传拣货人员配置
+        #region 缓存拣货人员配置
         private void btn库位人员配置_Click(object sender, EventArgs e)
         {
             FormHelper.GetCSVPath(txt拣货人员配置, () =>
@@ -158,12 +230,50 @@ namespace Gadget
                          //    _人员负责库位信息.Add(md);
                          //});
                          Cache拣货人员配置();
-                         ShowMsg("拣货人员配置数据存储完毕");
+
+                         MessageBox.Show("拣货人员配置数据存储完毕", "温馨提示");
                      }
                      ShowMsg(strError);
                  }, null);
                  #endregion
              });
+        }
+        #endregion
+
+        #region 缓存本月上班时间
+        private void btn缓存拣货时间_Click(object sender, EventArgs e)
+        {
+            FormHelper.GetCSVPath(txt本月上班时间, (Action)(() =>
+            {
+                _本月上班时间.Clear();
+                var strError = string.Empty;
+                ShowMsg("开始读取上班时间数据");
+
+                #region 读取数据
+                var actReadData = new Action(() =>
+                {
+                    FormHelper.ReadCSVFile(txt本月上班时间.Text, ref _本月上班时间, ref strError);
+                });
+                #endregion
+
+                #region 处理数据
+                actReadData.BeginInvoke((AsyncCallback)((obj) =>
+                {
+                    ShowMsg("上班时间数据读取完毕");
+                    if (_本月上班时间 != null && _本月上班时间.Count > 0)
+                    {
+                        var json = JsonConvert.SerializeObject(_本月上班时间);
+                        using (var fs = new StreamWriter(FileName本月上班时间缓存文件, false, Encoding.UTF8))
+                        {
+                            fs.Write(json);
+                        }
+
+                        MessageBox.Show("上班时间数据存储完毕", "温馨提示");
+                    }
+                    ShowMsg(strError);
+                }), null);
+                #endregion
+            }));
         }
         #endregion
 
@@ -185,7 +295,6 @@ namespace Gadget
                     var strError = string.Empty;
                     var list拣货单 = new List<_拣货单>();
                     var list乱单 = new List<_乱单>();
-                    var list拣货时间 = new List<_拣货时间>();
                     var list最终绩效 = new List<_配货绩效结果>();
                     #region 读取数据
                     var actReadData = new Action(() =>
@@ -193,7 +302,6 @@ namespace Gadget
                         ShowMsg("开始读取当天绩效相关信息");
                         FormHelper.ReadCSVFile(txt拣货单.Text, ref list拣货单, ref strError);
                         FormHelper.ReadCSVFile(txt乱单.Text, ref list乱单, ref strError);
-                        FormHelper.ReadCSVFile(txt拣货时间.Text, ref list拣货时间, ref strError);
 
                         //将乱单转换正常拣货单
                         foreach (var item乱单 in list乱单)
@@ -286,7 +394,8 @@ namespace Gadget
                                     var list订单详情数据_拣货单 = _订单详情数据.Where(x => x._乱单 == false).ToList();
                                     var list订单详情数据_乱单 = _订单详情数据.Where(x => x._乱单 == true).ToList();
 
-                                    var refTime = list拣货时间.Where(x => x._姓名 == name).FirstOrDefault();
+                                    var str_帮忙总时长 = "";
+                                    var refTime = calc计算上班时间(CulcTime, name, ref str_帮忙总时长);
                                     md._拣货单张数_正常 = list订单详情数据_拣货单.Select(x => x.SKU).Distinct().Count();
                                     md._购买总数量_正常 = list订单详情数据_拣货单.Select(x => x.Amount).Sum();
                                     md._拣货单张数_乱单 = list订单详情数据_乱单.Select(x => x.SKU).Distinct().Count();
@@ -295,14 +404,15 @@ namespace Gadget
 
                                     //md._拣货单张数 = _订单详情数据.Select(x => x.SKU).Distinct().Count();
                                     //md._购买总数量 = _订单详情数据.Select(x => x.Amount).Sum();
-                                    if (refTime != null)
-                                    {
-                                        refTime.CulcTime = CulcTime;
-                                        var mm = refTime._拣货总时间.TotalMinutes % 60;
-                                        var hh = (refTime._拣货总时间.TotalMinutes - mm) / 60;
-                                        md._总时长 = string.Format("{0}:{1}:00", hh > 9 ? "" + hh : "0" + hh, mm > 9 ? "" + mm : "0" + mm);
-                                        md._分钟 = refTime._拣货总时间.TotalMinutes;
-                                    }
+                                    //if (refTime != null)
+                                    //{
+                                    //refTime.CulcTime = CulcTime;
+                                    //var mm = refTime._拣货总时间.TotalMinutes % 60;
+                                    //var hh = (refTime._拣货总时间.TotalMinutes - mm) / 60;
+                                    md._总时长 = refTime.ToString();
+                                    md._帮忙总时长 = str_帮忙总时长;
+                                    md._分钟 = Convert.ToDouble(refTime * 60);
+                                    //}
 
                                     list最终绩效.Add(md);
                                 }
@@ -404,7 +514,7 @@ namespace Gadget
         #region 导出表格说明事件
         private void lkDecs_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FormHelper.GenerateTableDes(typeof(_拣货单), typeof(_乱单), typeof(_拣货时间), typeof(_拣货人员配置));
+            FormHelper.GenerateTableDes(typeof(_拣货单), typeof(_乱单), typeof(_帮忙点货时间), typeof(_拣货人员配置), typeof(_本月上班时间信息));
         }
         #endregion
 
@@ -416,6 +526,134 @@ namespace Gadget
         #endregion
 
         /**************** common method ****************/
+
+        #region 计算绩效日期上班和帮忙时间
+        private decimal calc计算上班时间(DateTime d绩效日期, string str姓名, ref string str帮忙时间)
+        {
+            if (str姓名 == "顾洁")
+            {
+
+            }
+            d绩效日期 = d绩效日期.Date;
+            if (_本月上班时间 != null && _本月上班时间.Count > 0)
+            {
+                var refer工作时间 = _本月上班时间.Where(x => x._姓名 == str姓名).FirstOrDefault();
+                var refer帮忙时间 = _本月帮忙拣货时间.Where(x => x._姓名 == str姓名 && x._日期 == d绩效日期).FirstOrDefault();
+                if (refer工作时间 != null)
+                {
+                    decimal d上班时间 = 0;
+                    decimal d帮忙时间 = 0;
+                    if (refer帮忙时间 != null && refer帮忙时间._帮忙总时间 != null)
+                    {
+                        var h = ((TimeSpan)refer帮忙时间._帮忙总时间).Hours;
+                        var mh = Math.Round(((TimeSpan)refer帮忙时间._帮忙总时间).Minutes / 60m, 1);
+                        d帮忙时间 = h + mh;
+                    }
+                    str帮忙时间 = d帮忙时间.ToString();
+                    switch (d绩效日期.Day)
+                    {
+                        case 1:
+                            d上班时间 = refer工作时间._1号;
+                            break;
+                        case 2:
+                            d上班时间 = refer工作时间._2号;
+                            break;
+                        case 3:
+                            d上班时间 = refer工作时间._3号;
+                            break;
+                        case 4:
+                            d上班时间 = refer工作时间._4号;
+                            break;
+                        case 5:
+                            d上班时间 = refer工作时间._5号;
+                            break;
+                        case 6:
+                            d上班时间 = refer工作时间._6号;
+                            break;
+                        case 7:
+                            d上班时间 = refer工作时间._7号;
+                            break;
+                        case 8:
+                            d上班时间 = refer工作时间._8号;
+                            break;
+                        case 9:
+                            d上班时间 = refer工作时间._9号;
+                            break;
+                        case 10:
+                            d上班时间 = refer工作时间._10号;
+                            break;
+                        case 11:
+                            d上班时间 = refer工作时间._11号;
+                            break;
+                        case 12:
+                            d上班时间 = refer工作时间._12号;
+                            break;
+                        case 13:
+                            d上班时间 = refer工作时间._13号;
+                            break;
+                        case 14:
+                            d上班时间 = refer工作时间._14号;
+                            break;
+                        case 15:
+                            d上班时间 = refer工作时间._15号;
+                            break;
+                        case 16:
+                            d上班时间 = refer工作时间._16号;
+                            break;
+                        case 17:
+                            d上班时间 = refer工作时间._17号;
+                            break;
+                        case 18:
+                            d上班时间 = refer工作时间._18号;
+                            break;
+                        case 19:
+                            d上班时间 = refer工作时间._19号;
+                            break;
+                        case 20:
+                            d上班时间 = refer工作时间._20号;
+                            break;
+                        case 21:
+                            d上班时间 = refer工作时间._21号;
+                            break;
+                        case 22:
+                            d上班时间 = refer工作时间._22号;
+                            break;
+                        case 23:
+                            d上班时间 = refer工作时间._23号;
+                            break;
+                        case 24:
+                            d上班时间 = refer工作时间._24号;
+                            break;
+                        case 25:
+                            d上班时间 = refer工作时间._25号;
+                            break;
+                        case 26:
+                            d上班时间 = refer工作时间._26号;
+                            break;
+                        case 27:
+                            d上班时间 = refer工作时间._27号;
+                            break;
+                        case 28:
+                            d上班时间 = refer工作时间._28号;
+                            break;
+                        case 29:
+                            d上班时间 = refer工作时间._29号;
+                            break;
+                        case 30:
+                            d上班时间 = refer工作时间._30号;
+                            break;
+                        case 31:
+                            d上班时间 = refer工作时间._31号;
+                            break;
+                        default:
+                            break;
+                    }
+                    return d上班时间 - d帮忙时间;
+                }
+            }
+            return 0;
+        }
+        #endregion
 
         #region 导出表格
         private void ExportExcel(List<_配货绩效结果> list拣货绩效)
@@ -438,15 +676,16 @@ namespace Gadget
                 sheet1.Cells[1, 5].Value = "拣货单张数";
                 sheet1.Cells[1, 6].Value = "乱单张数";
                 sheet1.Cells[1, 7].Value = "总张数";
-                sheet1.Cells[1, 8].Value = "总时长";
-                sheet1.Cells[1, 9].Value = "分钟";
-                sheet1.Cells[1, 10].Value = "拣货单效率";
-                sheet1.Cells[1, 11].Value = "购买数量效率";
-                sheet1.Cells[1, 12].Value = "小时";
-                sheet1.Cells[1, 13].Value = "拣货单每小时";
-                sheet1.Cells[1, 14].Value = "个数每小时";
-                sheet1.Cells[1, 15].Value = "定值倍数";
-                sheet1.Cells[1, 16].Value = "工资";
+                sheet1.Cells[1, 8].Value = "帮忙总时长";
+                sheet1.Cells[1, 9].Value = "工作总时长";
+                sheet1.Cells[1, 10].Value = "分钟";
+                sheet1.Cells[1, 11].Value = "拣货单效率";
+                sheet1.Cells[1, 12].Value = "购买数量效率";
+                sheet1.Cells[1, 13].Value = "小时";
+                sheet1.Cells[1, 14].Value = "拣货单每小时";
+                sheet1.Cells[1, 15].Value = "个数每小时";
+                sheet1.Cells[1, 16].Value = "定值倍数";
+                sheet1.Cells[1, 17].Value = "工资";
 
                 #endregion
 
@@ -461,15 +700,16 @@ namespace Gadget
                     sheet1.Cells[rowIdx, 5].Value = curOrder._拣货单张数_正常;
                     sheet1.Cells[rowIdx, 6].Value = curOrder._拣货单张数_乱单;
                     sheet1.Cells[rowIdx, 7].Value = curOrder._拣货单张数;
-                    sheet1.Cells[rowIdx, 8].Value = curOrder._总时长;
-                    sheet1.Cells[rowIdx, 9].Value = curOrder._分钟;
-                    sheet1.Cells[rowIdx, 10].Value = curOrder._拣货单效率;
-                    sheet1.Cells[rowIdx, 11].Value = curOrder._购买数量效率;
-                    sheet1.Cells[rowIdx, 12].Value = curOrder._小时;
-                    sheet1.Cells[rowIdx, 13].Value = curOrder._拣货单每小时;
-                    sheet1.Cells[rowIdx, 14].Value = curOrder._个数每小时;
-                    sheet1.Cells[rowIdx, 15].Value = curOrder._定值倍数;
-                    sheet1.Cells[rowIdx, 16].Value = curOrder._工资;
+                    sheet1.Cells[rowIdx, 8].Value = curOrder._帮忙总时长;
+                    sheet1.Cells[rowIdx, 9].Value = curOrder._总时长;
+                    sheet1.Cells[rowIdx, 10].Value = curOrder._分钟;
+                    sheet1.Cells[rowIdx, 11].Value = curOrder._拣货单效率;
+                    sheet1.Cells[rowIdx, 12].Value = curOrder._购买数量效率;
+                    sheet1.Cells[rowIdx, 13].Value = curOrder._小时;
+                    sheet1.Cells[rowIdx, 14].Value = curOrder._拣货单每小时;
+                    sheet1.Cells[rowIdx, 15].Value = curOrder._个数每小时;
+                    sheet1.Cells[rowIdx, 16].Value = curOrder._定值倍数;
+                    sheet1.Cells[rowIdx, 17].Value = curOrder._工资;
                     rowIdx++;
                 }
                 #endregion
@@ -741,101 +981,6 @@ namespace Gadget
             }
         }
 
-        [ExcelTable("拣货时间表")]
-        class _拣货时间
-        {
-            private string _Org姓名;
-            private string _Org拣货单开始时间;
-            private string _Org拣货单结束时间;
-
-            [ExcelColumn("姓名")]
-            public string _姓名
-            {
-                get
-                {
-                    return _Org姓名;
-                }
-                set
-                {
-                    _Org姓名 = value != null ? value.ToString().Trim() : "";
-                }
-            }
-
-            [ExcelColumn("拣货单开始时间")]
-            public string _Str拣货单开始时间
-            {
-                get
-                {
-                    return _Org拣货单开始时间;
-                }
-                set
-                {
-                    _Org拣货单开始时间 = value != null ? value.ToString().Trim() : "";
-                }
-            }
-
-            [ExcelColumn("拣货单结束时间")]
-            public string _Str拣货单结束时间
-            {
-                get
-                {
-                    return _Org拣货单结束时间;
-                }
-                set
-                {
-                    _Org拣货单结束时间 = value != null ? value.ToString().Trim() : "";
-                }
-            }
-
-            public DateTime _拣货单开始时间
-            {
-                get
-                {
-                    var dtString = _Str拣货单开始时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
-
-                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (arr.Length > 0)
-                    {
-                        var ct = CulcTime;
-                        return new DateTime(ct.Year, ct.Month, ct.Day, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
-                    }
-                    return DateTime.MinValue;
-                }
-            }
-
-            public DateTime _拣货单结束时间
-            {
-                get
-                {
-                    var dtString = _Str拣货单结束时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
-                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (arr.Length > 0)
-                    {
-                        var ct = CulcTime;
-                        return new DateTime(ct.Year, ct.Month, ct.Day, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
-                    }
-                    return DateTime.MinValue;
-                }
-            }
-
-            public TimeSpan _拣货总时间
-            {
-                get
-                {
-                    var _吃饭一小时 = new TimeSpan(1, 0, 0);
-                    var _吃饭起始时间 = new DateTime(CulcTime.Year, CulcTime.Month, CulcTime.Day, 12, 0, 0);
-                    var _吃饭结束时间 = new DateTime(CulcTime.Year, CulcTime.Month, CulcTime.Day, 13, 0, 0);
-                    if (_拣货单开始时间 < _吃饭起始时间 && _拣货单结束时间 > _吃饭结束时间)
-                    {
-                        return _拣货单结束时间 - _拣货单开始时间 - _吃饭一小时;
-                    }
-                    return _拣货单结束时间 - _拣货单开始时间;
-                }
-            }
-
-            public DateTime CulcTime { get; set; }
-        }
-
         [ExcelTable("拣货人员配置表")]
         class _拣货人员配置
         {
@@ -865,6 +1010,196 @@ namespace Gadget
                 set
                 {
                     _Org配货人员 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+        }
+
+        [ExcelTable("本月上班时间信息")]
+        class _本月上班时间信息
+        {
+            [ExcelColumn("姓名")]
+            public string _姓名 { get; set; }
+
+            [ExcelColumn("1号")]
+            public decimal _1号 { get; set; }
+
+            [ExcelColumn("2号")]
+            public decimal _2号 { get; set; }
+
+            [ExcelColumn("3号")]
+            public decimal _3号 { get; set; }
+
+            [ExcelColumn("4号")]
+            public decimal _4号 { get; set; }
+
+            [ExcelColumn("5号")]
+            public decimal _5号 { get; set; }
+
+            [ExcelColumn("6号")]
+            public decimal _6号 { get; set; }
+
+            [ExcelColumn("7号")]
+            public decimal _7号 { get; set; }
+
+            [ExcelColumn("8号")]
+            public decimal _8号 { get; set; }
+
+            [ExcelColumn("9号")]
+            public decimal _9号 { get; set; }
+
+            [ExcelColumn("10号")]
+            public decimal _10号 { get; set; }
+
+            [ExcelColumn("11号")]
+            public decimal _11号 { get; set; }
+
+            [ExcelColumn("12号")]
+            public decimal _12号 { get; set; }
+
+            [ExcelColumn("13号")]
+            public decimal _13号 { get; set; }
+
+            [ExcelColumn("14号")]
+            public decimal _14号 { get; set; }
+
+            [ExcelColumn("15号")]
+            public decimal _15号 { get; set; }
+
+            [ExcelColumn("16号")]
+            public decimal _16号 { get; set; }
+
+            [ExcelColumn("17号")]
+            public decimal _17号 { get; set; }
+
+            [ExcelColumn("18号")]
+            public decimal _18号 { get; set; }
+
+            [ExcelColumn("19号")]
+            public decimal _19号 { get; set; }
+
+            [ExcelColumn("20号")]
+            public decimal _20号 { get; set; }
+
+            [ExcelColumn("21号")]
+            public decimal _21号 { get; set; }
+
+            [ExcelColumn("22号")]
+            public decimal _22号 { get; set; }
+
+            [ExcelColumn("23号")]
+            public decimal _23号 { get; set; }
+
+            [ExcelColumn("24号")]
+            public decimal _24号 { get; set; }
+
+            [ExcelColumn("25号")]
+            public decimal _25号 { get; set; }
+
+            [ExcelColumn("26号")]
+            public decimal _26号 { get; set; }
+
+            [ExcelColumn("27号")]
+            public decimal _27号 { get; set; }
+
+            [ExcelColumn("28号")]
+            public decimal _28号 { get; set; }
+
+            [ExcelColumn("29号")]
+            public decimal _29号 { get; set; }
+
+            [ExcelColumn("30号")]
+            public decimal _30号 { get; set; }
+
+            [ExcelColumn("31号")]
+            public decimal _31号 { get; set; }
+
+        }
+
+        [ExcelTable("帮忙点货时间")]
+        class _帮忙点货时间
+        {
+            private string _Org姓名;
+            private string _Org帮忙开始时间;
+            private string _Org帮忙结束时间;
+
+            [ExcelColumn("姓名")]
+            public string _姓名
+            {
+                get
+                {
+                    return _Org姓名;
+                }
+                set
+                {
+                    _Org姓名 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+
+            [ExcelColumn("日期")]
+            public DateTime _日期 { get; set; }
+
+            [ExcelColumn("上班打卡时间")]
+            public string _Str帮忙开始时间
+            {
+                get
+                {
+                    return _Org帮忙开始时间;
+                }
+                set
+                {
+                    _Org帮忙开始时间 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+
+            [ExcelColumn("下班打卡时间")]
+            public string _Str帮忙结束时间
+            {
+                get
+                {
+                    return _Org帮忙结束时间;
+                }
+                set
+                {
+                    _Org帮忙结束时间 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+
+            public DateTime _帮忙开始时间
+            {
+                get
+                {
+                    var dtString = _Str帮忙开始时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
+
+                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (arr.Length > 0)
+                    {
+                        return new DateTime(2018, 1, 1, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
+                    }
+                    return DateTime.MinValue;
+                }
+            }
+
+            public DateTime _帮忙结束时间
+            {
+                get
+                {
+                    var dtString = _Str帮忙结束时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
+                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (arr.Length > 0)
+                    {
+                        return new DateTime(2018, 1, 1, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
+                    }
+                    return DateTime.MinValue;
+                }
+            }
+
+            public TimeSpan? _帮忙总时间
+            {
+                get
+                {
+                    if (string.IsNullOrWhiteSpace(_Str帮忙开始时间) || string.IsNullOrWhiteSpace(_Str帮忙结束时间))
+                        return null;
+                    return _帮忙结束时间 - _帮忙开始时间;
                 }
             }
         }
@@ -902,6 +1237,7 @@ namespace Gadget
             public double _拣货单张数_乱单 { get; set; }
 
             public string _总时长 { get; set; }
+            public string _帮忙总时长 { get; set; }
             public double _分钟 { get; set; }
             public double _d张数定值 { get; set; }
             public double _d张数占比 { get; set; }

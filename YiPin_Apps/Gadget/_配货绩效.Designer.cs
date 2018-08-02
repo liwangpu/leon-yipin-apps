@@ -31,9 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.nup数量占比 = new System.Windows.Forms.NumericUpDown();
+            this.txt本月上班时间 = new System.Windows.Forms.TextBox();
             this.nup张数占比 = new System.Windows.Forms.NumericUpDown();
             this.nup数量定值 = new System.Windows.Forms.NumericUpDown();
             this.nup张数定值 = new System.Windows.Forms.NumericUpDown();
+            this.btn缓存帮忙拣货时间 = new System.Windows.Forms.Button();
+            this.btn缓存拣货时间 = new System.Windows.Forms.Button();
             this.dtp绩效时间 = new System.Windows.Forms.DateTimePicker();
             this.lbMsg = new System.Windows.Forms.Label();
             this.lkDecs = new System.Windows.Forms.LinkLabel();
@@ -47,13 +50,11 @@
             this.btn当天绩效 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btn上传拣货时间 = new System.Windows.Forms.Button();
-            this.txt拣货时间 = new System.Windows.Forms.TextBox();
             this.btn上传乱单 = new System.Windows.Forms.Button();
             this.btn上传拣货单 = new System.Windows.Forms.Button();
+            this.txt帮忙点货 = new System.Windows.Forms.TextBox();
             this.txt乱单 = new System.Windows.Forms.TextBox();
             this.txt拣货单 = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -73,9 +74,12 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.nup数量占比);
+            this.groupBox1.Controls.Add(this.txt本月上班时间);
             this.groupBox1.Controls.Add(this.nup张数占比);
             this.groupBox1.Controls.Add(this.nup数量定值);
             this.groupBox1.Controls.Add(this.nup张数定值);
+            this.groupBox1.Controls.Add(this.btn缓存帮忙拣货时间);
+            this.groupBox1.Controls.Add(this.btn缓存拣货时间);
             this.groupBox1.Controls.Add(this.dtp绩效时间);
             this.groupBox1.Controls.Add(this.lbMsg);
             this.groupBox1.Controls.Add(this.lkDecs);
@@ -89,18 +93,16 @@
             this.groupBox1.Controls.Add(this.btn当天绩效);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.btn上传拣货时间);
-            this.groupBox1.Controls.Add(this.txt拣货时间);
             this.groupBox1.Controls.Add(this.btn上传乱单);
             this.groupBox1.Controls.Add(this.btn上传拣货单);
+            this.groupBox1.Controls.Add(this.txt帮忙点货);
             this.groupBox1.Controls.Add(this.txt乱单);
             this.groupBox1.Controls.Add(this.txt拣货单);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(497, 218);
+            this.groupBox1.Size = new System.Drawing.Size(527, 220);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
@@ -108,7 +110,7 @@
             // nup数量占比
             // 
             this.nup数量占比.DecimalPlaces = 2;
-            this.nup数量占比.Location = new System.Drawing.Point(290, 160);
+            this.nup数量占比.Location = new System.Drawing.Point(291, 161);
             this.nup数量占比.Maximum = new decimal(new int[] {
             9999999,
             0,
@@ -123,10 +125,18 @@
             0,
             131072});
             // 
+            // txt本月上班时间
+            // 
+            this.txt本月上班时间.Location = new System.Drawing.Point(463, -9);
+            this.txt本月上班时间.Name = "txt本月上班时间";
+            this.txt本月上班时间.Size = new System.Drawing.Size(14, 21);
+            this.txt本月上班时间.TabIndex = 9;
+            this.txt本月上班时间.Visible = false;
+            // 
             // nup张数占比
             // 
             this.nup张数占比.DecimalPlaces = 2;
-            this.nup张数占比.Location = new System.Drawing.Point(69, 157);
+            this.nup张数占比.Location = new System.Drawing.Point(70, 158);
             this.nup张数占比.Maximum = new decimal(new int[] {
             9999999,
             0,
@@ -144,7 +154,7 @@
             // nup数量定值
             // 
             this.nup数量定值.DecimalPlaces = 2;
-            this.nup数量定值.Location = new System.Drawing.Point(290, 133);
+            this.nup数量定值.Location = new System.Drawing.Point(291, 134);
             this.nup数量定值.Maximum = new decimal(new int[] {
             9999999,
             0,
@@ -162,7 +172,7 @@
             // nup张数定值
             // 
             this.nup张数定值.DecimalPlaces = 2;
-            this.nup张数定值.Location = new System.Drawing.Point(69, 130);
+            this.nup张数定值.Location = new System.Drawing.Point(70, 131);
             this.nup张数定值.Maximum = new decimal(new int[] {
             9999999,
             0,
@@ -177,9 +187,29 @@
             0,
             0});
             // 
+            // btn缓存帮忙拣货时间
+            // 
+            this.btn缓存帮忙拣货时间.Location = new System.Drawing.Point(429, 73);
+            this.btn缓存帮忙拣货时间.Name = "btn缓存帮忙拣货时间";
+            this.btn缓存帮忙拣货时间.Size = new System.Drawing.Size(88, 23);
+            this.btn缓存帮忙拣货时间.TabIndex = 1;
+            this.btn缓存帮忙拣货时间.Text = "帮忙拣货时间";
+            this.btn缓存帮忙拣货时间.UseVisualStyleBackColor = true;
+            this.btn缓存帮忙拣货时间.Click += new System.EventHandler(this.btn缓存帮忙拣货时间_Click);
+            // 
+            // btn缓存拣货时间
+            // 
+            this.btn缓存拣货时间.Location = new System.Drawing.Point(336, 73);
+            this.btn缓存拣货时间.Name = "btn缓存拣货时间";
+            this.btn缓存拣货时间.Size = new System.Drawing.Size(88, 23);
+            this.btn缓存拣货时间.TabIndex = 1;
+            this.btn缓存拣货时间.Text = "月上班时间";
+            this.btn缓存拣货时间.UseVisualStyleBackColor = true;
+            this.btn缓存拣货时间.Click += new System.EventHandler(this.btn缓存拣货时间_Click);
+            // 
             // dtp绩效时间
             // 
-            this.dtp绩效时间.Location = new System.Drawing.Point(69, 102);
+            this.dtp绩效时间.Location = new System.Drawing.Point(70, 75);
             this.dtp绩效时间.Name = "dtp绩效时间";
             this.dtp绩效时间.Size = new System.Drawing.Size(166, 21);
             this.dtp绩效时间.TabIndex = 14;
@@ -187,7 +217,7 @@
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(70, 192);
+            this.lbMsg.Location = new System.Drawing.Point(71, 193);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(65, 12);
             this.lbMsg.TabIndex = 13;
@@ -196,7 +226,7 @@
             // lkDecs
             // 
             this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(439, 192);
+            this.lkDecs.Location = new System.Drawing.Point(440, 193);
             this.lkDecs.Name = "lkDecs";
             this.lkDecs.Size = new System.Drawing.Size(53, 12);
             this.lkDecs.TabIndex = 11;
@@ -207,7 +237,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 192);
+            this.label3.Location = new System.Drawing.Point(6, 193);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 12);
             this.label3.TabIndex = 12;
@@ -215,7 +245,7 @@
             // 
             // btn库位人员配置
             // 
-            this.btn库位人员配置.Location = new System.Drawing.Point(241, 100);
+            this.btn库位人员配置.Location = new System.Drawing.Point(242, 73);
             this.btn库位人员配置.Name = "btn库位人员配置";
             this.btn库位人员配置.Size = new System.Drawing.Size(88, 23);
             this.btn库位人员配置.TabIndex = 3;
@@ -225,7 +255,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(416, 131);
+            this.btnRefresh.Location = new System.Drawing.Point(417, 132);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnRefresh.TabIndex = 3;
@@ -236,7 +266,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(227, 163);
+            this.label8.Location = new System.Drawing.Point(228, 164);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(59, 12);
             this.label8.TabIndex = 2;
@@ -244,7 +274,7 @@
             // 
             // btn全月绩效
             // 
-            this.btn全月绩效.Location = new System.Drawing.Point(335, 100);
+            this.btn全月绩效.Location = new System.Drawing.Point(361, 102);
             this.btn全月绩效.Name = "btn全月绩效";
             this.btn全月绩效.Size = new System.Drawing.Size(75, 23);
             this.btn全月绩效.TabIndex = 3;
@@ -255,7 +285,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 160);
+            this.label6.Location = new System.Drawing.Point(7, 161);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(59, 12);
             this.label6.TabIndex = 2;
@@ -264,7 +294,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(227, 136);
+            this.label7.Location = new System.Drawing.Point(228, 137);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(59, 12);
             this.label7.TabIndex = 2;
@@ -272,8 +302,7 @@
             // 
             // btn当天绩效
             // 
-            this.btn当天绩效.Enabled = false;
-            this.btn当天绩效.Location = new System.Drawing.Point(416, 100);
+            this.btn当天绩效.Location = new System.Drawing.Point(442, 102);
             this.btn当天绩效.Name = "btn当天绩效";
             this.btn当天绩效.Size = new System.Drawing.Size(75, 23);
             this.btn当天绩效.TabIndex = 3;
@@ -284,7 +313,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 133);
+            this.label5.Location = new System.Drawing.Point(7, 134);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 12);
             this.label5.TabIndex = 2;
@@ -293,20 +322,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 108);
+            this.label4.Location = new System.Drawing.Point(7, 81);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(59, 12);
             this.label4.TabIndex = 2;
             this.label4.Text = "绩效日期:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 76);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 12);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "拣货时间:";
             // 
             // label9
             // 
@@ -326,27 +346,9 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "拣货单:";
             // 
-            // btn上传拣货时间
-            // 
-            this.btn上传拣货时间.Location = new System.Drawing.Point(416, 71);
-            this.btn上传拣货时间.Name = "btn上传拣货时间";
-            this.btn上传拣货时间.Size = new System.Drawing.Size(75, 23);
-            this.btn上传拣货时间.TabIndex = 1;
-            this.btn上传拣货时间.Text = "浏览";
-            this.btn上传拣货时间.UseVisualStyleBackColor = true;
-            this.btn上传拣货时间.Click += new System.EventHandler(this.btn上传拣货时间_Click);
-            // 
-            // txt拣货时间
-            // 
-            this.txt拣货时间.Enabled = false;
-            this.txt拣货时间.Location = new System.Drawing.Point(71, 73);
-            this.txt拣货时间.Name = "txt拣货时间";
-            this.txt拣货时间.Size = new System.Drawing.Size(339, 21);
-            this.txt拣货时间.TabIndex = 0;
-            // 
             // btn上传乱单
             // 
-            this.btn上传乱单.Location = new System.Drawing.Point(416, 44);
+            this.btn上传乱单.Location = new System.Drawing.Point(439, 43);
             this.btn上传乱单.Name = "btn上传乱单";
             this.btn上传乱单.Size = new System.Drawing.Size(75, 23);
             this.btn上传乱单.TabIndex = 1;
@@ -356,7 +358,7 @@
             // 
             // btn上传拣货单
             // 
-            this.btn上传拣货单.Location = new System.Drawing.Point(416, 18);
+            this.btn上传拣货单.Location = new System.Drawing.Point(439, 18);
             this.btn上传拣货单.Name = "btn上传拣货单";
             this.btn上传拣货单.Size = new System.Drawing.Size(75, 23);
             this.btn上传拣货单.TabIndex = 1;
@@ -364,12 +366,21 @@
             this.btn上传拣货单.UseVisualStyleBackColor = true;
             this.btn上传拣货单.Click += new System.EventHandler(this.btn上传拣货单_Click);
             // 
+            // txt帮忙点货
+            // 
+            this.txt帮忙点货.Enabled = false;
+            this.txt帮忙点货.Location = new System.Drawing.Point(483, -9);
+            this.txt帮忙点货.Name = "txt帮忙点货";
+            this.txt帮忙点货.Size = new System.Drawing.Size(16, 21);
+            this.txt帮忙点货.TabIndex = 0;
+            this.txt帮忙点货.Visible = false;
+            // 
             // txt乱单
             // 
             this.txt乱单.Enabled = false;
             this.txt乱单.Location = new System.Drawing.Point(71, 46);
             this.txt乱单.Name = "txt乱单";
-            this.txt乱单.Size = new System.Drawing.Size(339, 21);
+            this.txt乱单.Size = new System.Drawing.Size(362, 21);
             this.txt乱单.TabIndex = 0;
             // 
             // txt拣货单
@@ -377,15 +388,15 @@
             this.txt拣货单.Enabled = false;
             this.txt拣货单.Location = new System.Drawing.Point(71, 20);
             this.txt拣货单.Name = "txt拣货单";
-            this.txt拣货单.Size = new System.Drawing.Size(339, 21);
+            this.txt拣货单.Size = new System.Drawing.Size(362, 21);
             this.txt拣货单.TabIndex = 0;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.lsbCache);
-            this.groupBox2.Location = new System.Drawing.Point(12, 236);
+            this.groupBox2.Location = new System.Drawing.Point(12, 238);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(497, 204);
+            this.groupBox2.Size = new System.Drawing.Size(527, 204);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "缓存信息";
@@ -397,7 +408,7 @@
             this.lsbCache.ItemHeight = 12;
             this.lsbCache.Location = new System.Drawing.Point(6, 20);
             this.lsbCache.Name = "lsbCache";
-            this.lsbCache.Size = new System.Drawing.Size(485, 172);
+            this.lsbCache.Size = new System.Drawing.Size(511, 172);
             this.lsbCache.TabIndex = 0;
             // 
             // cmn下载缓存
@@ -427,13 +438,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(519, 445);
+            this.ClientSize = new System.Drawing.Size(551, 449);
             this.Controls.Add(this.txt拣货人员配置);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(535, 484);
-            this.MinimumSize = new System.Drawing.Size(535, 484);
             this.Name = "_配货绩效";
             this.Text = "配货绩效";
             this.Load += new System.EventHandler(this._配货绩效_Load);
@@ -461,9 +470,7 @@
         private System.Windows.Forms.Button btn当天绩效;
         private System.Windows.Forms.Button btn全月绩效;
         private System.Windows.Forms.Button btn库位人员配置;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btn上传拣货时间;
-        private System.Windows.Forms.TextBox txt拣货时间;
+        private System.Windows.Forms.Button btn缓存拣货时间;
         private System.Windows.Forms.LinkLabel lkDecs;
         private System.Windows.Forms.TextBox txt拣货人员配置;
         private System.Windows.Forms.Label lbMsg;
@@ -484,5 +491,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button btn上传乱单;
         private System.Windows.Forms.TextBox txt乱单;
+        private System.Windows.Forms.TextBox txt本月上班时间;
+        private System.Windows.Forms.Button btn缓存帮忙拣货时间;
+        private System.Windows.Forms.TextBox txt帮忙点货;
     }
 }
