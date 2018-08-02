@@ -530,10 +530,10 @@ namespace Gadget
         #region 计算绩效日期上班和帮忙时间
         private decimal calc计算上班时间(DateTime d绩效日期, string str姓名, ref string str帮忙时间)
         {
-            if (str姓名 == "顾洁")
-            {
+            //if (str姓名 == "顾洁")
+            //{
 
-            }
+            //}
             d绩效日期 = d绩效日期.Date;
             if (_本月上班时间 != null && _本月上班时间.Count > 0)
             {
@@ -1197,6 +1197,7 @@ namespace Gadget
             {
                 get
                 {
+                    //var aa = new TimeSpan();
                     if (string.IsNullOrWhiteSpace(_Str帮忙开始时间) || string.IsNullOrWhiteSpace(_Str帮忙结束时间))
                         return null;
                     return _帮忙结束时间 - _帮忙开始时间;
