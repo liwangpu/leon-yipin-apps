@@ -482,9 +482,11 @@ namespace Gadget
                         md._拣货单张数_乱单 = list.Where(x => x._业绩归属人 == n).Select(x => x._拣货单张数_乱单).Sum();
 
                         md._分钟 = list.Where(x => x._业绩归属人 == n).Select(x => x._分钟).Sum();
-                        var mm = md._分钟 % 60;
-                        var hh = (md._分钟 - mm) / 60;
-                        md._总时长 = string.Format("{0}:{1}:00", hh > 9 ? "" + hh : "0" + hh, mm > 9 ? "" + mm : "0" + mm);
+                        md._总时长 = list.Where(x => x._业绩归属人 == n).Select(x => x._小时).Sum().ToString();
+                        md._帮忙总时长 = list.Where(x => x._业绩归属人 == n).Select(x => Convert.ToDecimal(x._帮忙总时长)).Sum().ToString();
+                        //var mm = md._分钟 % 60;
+                        //var hh = (md._分钟 - mm) / 60;
+                        //md._总时长 = string.Format("{0}:{1}:00", hh > 9 ? "" + hh : "0" + hh, mm > 9 ? "" + mm : "0" + mm);
                         datas.Add(md);
                     }
                 });
@@ -545,8 +547,8 @@ namespace Gadget
                     decimal d帮忙时间 = 0;
                     if (refer帮忙时间 != null && refer帮忙时间._帮忙总时间 != null)
                     {
-                        var h = ((TimeSpan)refer帮忙时间._帮忙总时间).Hours;
-                        var mh = Math.Round(((TimeSpan)refer帮忙时间._帮忙总时间).Minutes / 60m, 1);
+                        var h = (refer帮忙时间._帮忙总时间).Hours;
+                        var mh = Math.Round((refer帮忙时间._帮忙总时间).Minutes / 60m, 1);
                         d帮忙时间 = h + mh;
                     }
                     str帮忙时间 = d帮忙时间.ToString();
@@ -648,6 +650,8 @@ namespace Gadget
                         default:
                             break;
                     }
+                    if (d上班时间 <= 0)
+                        return 0;
                     return d上班时间 - d帮忙时间;
                 }
             }
@@ -904,6 +908,8 @@ namespace Gadget
                     if (arr.Count() > 0)
                     {
                         var first = arr[0];
+                        if (first.Length < 3)
+                            return string.Empty;
                         return first.Substring(0, 3).ToUpper();
                     }
                     return "";
@@ -1119,8 +1125,6 @@ namespace Gadget
         class _帮忙点货时间
         {
             private string _Org姓名;
-            private string _Org帮忙开始时间;
-            private string _Org帮忙结束时间;
 
             [ExcelColumn("姓名")]
             public string _姓名
@@ -1138,69 +1142,19 @@ namespace Gadget
             [ExcelColumn("日期")]
             public DateTime _日期 { get; set; }
 
-            [ExcelColumn("上班打卡时间")]
-            public string _Str帮忙开始时间
+            [ExcelColumn("工作时间")]
+            public DateTime _工作时间 { get; set; }
+
+            public TimeSpan _帮忙总时间
             {
                 get
                 {
-                    return _Org帮忙开始时间;
-                }
-                set
-                {
-                    _Org帮忙开始时间 = value != null ? value.ToString().Trim() : "";
-                }
-            }
-
-            [ExcelColumn("下班打卡时间")]
-            public string _Str帮忙结束时间
-            {
-                get
-                {
-                    return _Org帮忙结束时间;
-                }
-                set
-                {
-                    _Org帮忙结束时间 = value != null ? value.ToString().Trim() : "";
-                }
-            }
-
-            public DateTime _帮忙开始时间
-            {
-                get
-                {
-                    var dtString = _Str帮忙开始时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
-
-                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (arr.Length > 0)
+                    if (_工作时间 != null)
                     {
-                        return new DateTime(2018, 1, 1, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
+                        return new TimeSpan(_工作时间.Hour, _工作时间.Minute, 0);
                     }
-                    return DateTime.MinValue;
-                }
-            }
 
-            public DateTime _帮忙结束时间
-            {
-                get
-                {
-                    var dtString = _Str帮忙结束时间.Replace("：", ":").Replace(";", ":").Replace("；", ":");
-                    var arr = DateHelper.GetPureTimeString(dtString).Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (arr.Length > 0)
-                    {
-                        return new DateTime(2018, 1, 1, Convert.ToInt32(arr[0]), Convert.ToInt32(arr[1]), 0);
-                    }
-                    return DateTime.MinValue;
-                }
-            }
-
-            public TimeSpan? _帮忙总时间
-            {
-                get
-                {
-                    //var aa = new TimeSpan();
-                    if (string.IsNullOrWhiteSpace(_Str帮忙开始时间) || string.IsNullOrWhiteSpace(_Str帮忙结束时间))
-                        return null;
-                    return _帮忙结束时间 - _帮忙开始时间;
+                    return new TimeSpan(0, 0, 0);
                 }
             }
         }
@@ -1249,6 +1203,8 @@ namespace Gadget
             {
                 get
                 {
+                    if (_分钟 <= 0)
+                        return 0;
                     return Math.Round(_拣货单张数 / _分钟, 4);
                 }
             }
@@ -1257,6 +1213,8 @@ namespace Gadget
             {
                 get
                 {
+                    if (_分钟 <= 0)
+                        return 0;
                     return Math.Round(_购买总数量 / _分钟, 4);
                 }
             }
@@ -1265,6 +1223,8 @@ namespace Gadget
             {
                 get
                 {
+                    if (_分钟 <= 0)
+                        return 0;
                     var mm = _分钟 % 60;
                     var hh = (_分钟 - mm) / 60;
                     return hh + Math.Round(mm / 60, 4);
@@ -1275,6 +1235,8 @@ namespace Gadget
             {
                 get
                 {
+                    if (_小时 <= 0)
+                        return 0;
                     return Math.Round(_拣货单张数 / _小时, 4);
                 }
             }
@@ -1283,6 +1245,8 @@ namespace Gadget
             {
                 get
                 {
+                    if (_小时 <= 0)
+                        return 0;
                     return Math.Round(_购买总数量 / _小时, 4);
                 }
             }
@@ -1301,6 +1265,8 @@ namespace Gadget
             {
                 get
                 {
+                    if (_小时 <= 0)
+                        return 0;
                     //=IF(定值倍数>1,(定值倍数-1)*3000,0)
                     if (_定值倍数 > 1)
                         return Math.Round((_定值倍数 - 1) * 3000, 2);
