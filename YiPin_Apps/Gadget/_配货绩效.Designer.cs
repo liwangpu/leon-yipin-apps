@@ -443,8 +443,6 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(567, 488);
-            this.MinimumSize = new System.Drawing.Size(567, 488);
             this.Name = "_配货绩效";
             this.Text = "配货绩效";
             this.Load += new System.EventHandler(this._配货绩效_Load);

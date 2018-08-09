@@ -33,16 +33,14 @@ namespace Gadget
 
         private void _点货绩效_Load(object sender, EventArgs e)
         {
-            txt入库明细.Text = @"C:\Users\Bamboo01\Desktop\7月点货数据\7月采购入库明细表.csv";
-            txt采购入库单.Text = @"C:\Users\Bamboo01\Desktop\7月点货数据\7月份采购入库单2.csv";
-            txt人员代号.Text= @"C:\Users\Bamboo01\Desktop\7月点货数据\人员代号(1).csv";
-            txt积分参数.Text = @"C:\Users\Bamboo01\Desktop\7月点货数据\积分参数新.csv";
+            //txt入库明细.Text = @"C:\Users\Leon\Desktop\绩效\采购入库单号-对应工号7月份.csv";
+            //txt产品订单.Text = @"C:\Users\Leon\Desktop\绩效\采购入库明细表7月份.csv";
             //txt人员代号.Text = @"C:\Users\Leon\Desktop\绩效\人员代号.csv";
             //txt积分参数.Text = @"C:\Users\Leon\Desktop\绩效\积分参数.csv";
             //txt工号记录.Text = @"C:\Users\Leon\Desktop\绩效\工号记录.csv";
             //txt产品等级.Text = @"C:\Users\Leon\Desktop\绩效\产品等级.csv";
 
-            //txt工号记录.Text = @"C:\Users\Bamboo01\Desktop\点货记录.csv";
+            txt工号记录.Text = @"C:\Users\Bamboo01\Desktop\点货记录.csv";
 
 
             if (!Directory.Exists(_CacheFolder))
@@ -343,13 +341,6 @@ namespace Gadget
                         for (int idx = 0, len = list采购入库单.Count; idx < len; idx++)
                         {
                             var item = list采购入库单[idx];
-
-                            if (item._入库单退回单号 == "RKD201806294262")
-                            {
-
-                            }
-
-
                             //找到明细的所有产品,再查产品对应等级的积分
                             var refer产品 = list入库明细.Where(x => x._入库单号 == item._入库单退回单号).ToList();
 
@@ -368,7 +359,7 @@ namespace Gadget
                                 }
                                 else
                                 {
-                                    var ref积分 = list积分参数.Where(x => x._等级.ToLower() == "b" && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                                    var ref积分 = list积分参数.Where(x => x._等级.ToLower() == "d" && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
                                     if (ref积分 != null)
                                     {
                                         item._盘点积分 += ref积分._积分;
@@ -423,11 +414,11 @@ namespace Gadget
                 return;
             }
 
-            //if (!File.Exists(_当月历史点货记录信息Path) && !File.Exists(_上月历史点货记录信息Path))
-            //{
-            //    MessageBox.Show("近两个月未上传工号记录信息", "温馨提示");
-            //    return;
-            //}
+            if (!File.Exists(_当月历史点货记录信息Path) && !File.Exists(_上月历史点货记录信息Path))
+            {
+                MessageBox.Show("近两个月未上传工号记录信息", "温馨提示");
+                return;
+            }
 
             act();
         }
@@ -585,7 +576,7 @@ namespace Gadget
                     sheet1.Cells[1, 2].Value = "点货人";
                     sheet1.Cells[1, 3].Value = "数量";
                     sheet1.Cells[1, 4].Value = "积分";
-                    sheet1.Cells[1, 5].Value = "积分详情";
+                    sheet1.Cells[1, 4].Value = "积分详情";
 
                     #endregion
 

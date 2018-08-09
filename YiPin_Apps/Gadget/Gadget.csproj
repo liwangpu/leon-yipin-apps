@@ -94,17 +94,11 @@
     <Compile Include="Tests\FormCore.Designer.cs">
       <DependentUpon>FormCore.cs</DependentUpon>
     </Compile>
-    <Compile Include="_点货绩效.cs">
+    <Compile Include="_退款汇总表格合并.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_点货绩效.Designer.cs">
-      <DependentUpon>_点货绩效.cs</DependentUpon>
-    </Compile>
-    <Compile Include="_配货绩效.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="_配货绩效.Designer.cs">
-      <DependentUpon>_配货绩效.cs</DependentUpon>
+    <Compile Include="_退款汇总表格合并.Designer.cs">
+      <DependentUpon>_退款汇总表格合并.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -119,11 +113,8 @@
     <EmbeddedResource Include="Tests\FormCore.resx">
       <DependentUpon>FormCore.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="_点货绩效.resx">
-      <DependentUpon>_点货绩效.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="_配货绩效.resx">
-      <DependentUpon>_配货绩效.cs</DependentUpon>
+    <EmbeddedResource Include="_退款汇总表格合并.resx">
+      <DependentUpon>_退款汇总表格合并.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
