@@ -31,6 +31,8 @@
             this.btn浏览 = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btn合并 = new System.Windows.Forms.Button();
+            this.lbMsg = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btn浏览
@@ -48,6 +50,7 @@
             this.txtPath.Location = new System.Drawing.Point(12, 12);
             this.txtPath.Multiline = true;
             this.txtPath.Name = "txtPath";
+            this.txtPath.ReadOnly = true;
             this.txtPath.Size = new System.Drawing.Size(218, 70);
             this.txtPath.TabIndex = 1;
             // 
@@ -57,22 +60,43 @@
             this.btn合并.Name = "btn合并";
             this.btn合并.Size = new System.Drawing.Size(75, 23);
             this.btn合并.TabIndex = 2;
-            this.btn合并.Text = "合并";
+            this.btn合并.Text = "处理";
             this.btn合并.UseVisualStyleBackColor = true;
             this.btn合并.Click += new System.EventHandler(this.btn合并_Click);
+            // 
+            // lbMsg
+            // 
+            this.lbMsg.AutoSize = true;
+            this.lbMsg.Location = new System.Drawing.Point(53, 121);
+            this.lbMsg.Name = "lbMsg";
+            this.lbMsg.Size = new System.Drawing.Size(65, 12);
+            this.lbMsg.TabIndex = 3;
+            this.lbMsg.Text = "待上传文件";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 121);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "状态:";
             // 
             // _退款汇总表格合并
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(243, 121);
+            this.ClientSize = new System.Drawing.Size(243, 142);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbMsg);
             this.Controls.Add(this.btn合并);
             this.Controls.Add(this.txtPath);
             this.Controls.Add(this.btn浏览);
-            this.MaximumSize = new System.Drawing.Size(259, 159);
-            this.MinimumSize = new System.Drawing.Size(259, 159);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(259, 181);
+            this.MinimumSize = new System.Drawing.Size(259, 181);
             this.Name = "_退款汇总表格合并";
-            this.Text = "_退款汇总表格合并";
+            this.Text = "退款汇总表格合并";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,5 +107,7 @@
         private System.Windows.Forms.Button btn浏览;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Button btn合并;
+        private System.Windows.Forms.Label lbMsg;
+        private System.Windows.Forms.Label label1;
     }
 }

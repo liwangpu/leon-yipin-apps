@@ -1,15 +1,11 @@
-﻿using CommonLibs;
-using Gadget.Libs;
-using LinqToExcel;
+﻿using LinqToExcel;
 using LinqToExcel.Attributes;
-using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gadget
@@ -21,6 +17,24 @@ namespace Gadget
             InitializeComponent();
         }
 
+        #region 上传文件
+        private void btn浏览_Click(object sender, EventArgs e)
+        {
+            txtPath.Text = string.Empty;
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
+            OpenFileDialog1.Title = "CSV 文件";//设置标题
+            OpenFileDialog1.Multiselect = true;
+            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                txtPath.Text = string.Join(",", OpenFileDialog1.FileNames);
+                ShowMsg("待处理数据");
+            }
+        }
+        #endregion
+
+        #region 数据处理
         private void btn合并_Click(object sender, EventArgs e)
         {
             var pathStr = txtPath.Text;
@@ -31,14 +45,16 @@ namespace Gadget
                 var paths = pathStr.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                 var list = new List<_退款数据>();
                 var result = new List<_统计结果>();
+
                 #region 读取数据
                 var actReadData = new Action(() =>
                 {
+                    ShowMsg("正在读取数据,请稍等");
                     foreach (var path in paths)
                     {
                         using (var excel = new ExcelQueryFactory(path))
                         {
-                            var qs = from c in excel.Worksheet<_退款数据>(1)
+                            var qs = from c in excel.Worksheet<_退款数据>()
                                      select c;
                             list.AddRange(qs);
                         }
@@ -46,48 +62,48 @@ namespace Gadget
                 });
                 #endregion
 
+
                 #region 处理数据
                 actReadData.BeginInvoke((obj) =>
                 {
+                    ShowMsg("正在处理数据,请稍等");
                     var list卖家简称s = list.Select(x => x._卖家简称).Distinct().ToList();
                     var list物流方式s = list.Select(x => x._物流方式).Distinct().ToList();
                     var list月份s = list.Select(x => x._月份).Distinct().OrderBy(x => x).ToList();
+                    var list国家s = list.Select(x => x._交易国家).Distinct().OrderBy(x => x).ToList();
                     foreach (var _卖家简称s in list卖家简称s)
                     {
                         foreach (var _物流方式s in list物流方式s)
                         {
                             foreach (var _月份s in list月份s)
                             {
-                                var refers = list.Where(x => x._卖家简称 == _卖家简称s && x._物流方式 == _物流方式s && x._月份 == _月份s).ToList();
-                                var mode = new _统计结果();
-                                mode._卖家简称 = _卖家简称s;
-                                mode._物流方式 = _物流方式s;
-                                mode._月份 = _月份s;
-                                mode._发货 = refers.Count;
-                                mode._退款 = refers.Where(x => x._已退款 == 1).Count();
-                                result.Add(mode);
+                                foreach (var _国家s in list国家s)
+                                {
+                                    var refers = list.Where(x => x._卖家简称 == _卖家简称s && x._物流方式 == _物流方式s && x._月份 == _月份s && x._交易国家 == _国家s).ToList();
+                                    if (refers.Count > 0)
+                                    {
+                                        var mode = new _统计结果();
+                                        mode._卖家简称 = _卖家简称s;
+                                        mode._物流方式 = _物流方式s;
+                                        mode._月份 = _月份s;
+                                        mode._交易国家 = _国家s;
+                                        mode._发货 = refers.Count;
+                                        mode._退款 = refers.Where(x => x._已退款 == 1).Count();
+                                        result.Add(mode);
+                                    }
+                                }
                             }
                         }
                     }
+                    ShowMsg("即将导出表格");
                     Export(result);
                 }, null);
                 #endregion
             }
         }
+        #endregion
 
-        private void btn浏览_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
-            OpenFileDialog1.Title = "CSV 文件";//设置标题
-            OpenFileDialog1.Multiselect = true;
-            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
-            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
-            {
-                txtPath.Text = string.Join(",", OpenFileDialog1.FileNames);
-            }
-        }
-
+        #region 导出表格
         private void Export(List<_统计结果> list)
         {
             var buffer = new byte[0];
@@ -97,14 +113,14 @@ namespace Gadget
                 var workbox = package.Workbook;
                 var sheet1 = workbox.Worksheets.Add("Sheet1");
 
-
                 #region 标题行
                 sheet1.Cells[1, 1].Value = "卖家简称";
                 sheet1.Cells[1, 2].Value = "物流方式";
-                sheet1.Cells[1, 3].Value = "月份";
-                sheet1.Cells[1, 4].Value = "发货数量";
-                sheet1.Cells[1, 5].Value = "退货数量";
-                sheet1.Cells[1, 6].Value = "比例";
+                sheet1.Cells[1, 3].Value = "交易国家";
+                sheet1.Cells[1, 4].Value = "月份";
+                sheet1.Cells[1, 5].Value = "发货数量";
+                sheet1.Cells[1, 6].Value = "退货数量";
+                sheet1.Cells[1, 7].Value = "比例";
 
 
                 #endregion
@@ -115,10 +131,11 @@ namespace Gadget
                     var curOrder = list[idx];
                     sheet1.Cells[rowIdx, 1].Value = curOrder._卖家简称;
                     sheet1.Cells[rowIdx, 2].Value = curOrder._物流方式;
-                    sheet1.Cells[rowIdx, 3].Value = curOrder._月份;
-                    sheet1.Cells[rowIdx, 4].Value = curOrder._发货;
-                    sheet1.Cells[rowIdx, 5].Value = curOrder._退款;
-                    sheet1.Cells[rowIdx, 6].Value = curOrder._比例;
+                    sheet1.Cells[rowIdx, 3].Value = curOrder._交易国家;
+                    sheet1.Cells[rowIdx, 4].Value = curOrder._月份;
+                    sheet1.Cells[rowIdx, 5].Value = curOrder._发货;
+                    sheet1.Cells[rowIdx, 6].Value = curOrder._退款;
+                    sheet1.Cells[rowIdx, 7].Value = curOrder._比例;
 
                     rowIdx++;
                 }
@@ -165,6 +182,7 @@ namespace Gadget
                         {
                             fs.Write(buffer, 0, len);
                         }
+                        ShowMsg("表格导出完毕");
                     }
                     catch (Exception ex)
                     {
@@ -175,6 +193,7 @@ namespace Gadget
                 }
             }, null);
         }
+        #endregion
 
         #region InvokeMainForm 调用主线程
         protected void InvokeMainForm(Action act)
@@ -201,6 +220,25 @@ namespace Gadget
         }
         #endregion
 
+        #region ShowMsg 消息提示
+        /// <summary>
+        /// 消息提示
+        /// </summary>
+        /// <param name="strMsg"></param>
+        private void ShowMsg(string strMsg)
+        {
+            if (this.InvokeRequired)
+            {
+                var act = new Action<string>(ShowMsg);
+                this.Invoke(act, strMsg);
+            }
+            else
+            {
+                this.lbMsg.Text = strMsg;
+            }
+        }
+        #endregion
+
         class _退款数据
         {
             [ExcelColumn("内部便签")]
@@ -211,6 +249,8 @@ namespace Gadget
             public DateTime _交易时间 { get; set; }
             [ExcelColumn("物流方式")]
             public string _物流方式 { get; set; }
+            [ExcelColumn("收货人国家中文")]
+            public string _交易国家 { get; set; }
             public int _已退款
             {
                 get
@@ -234,6 +274,7 @@ namespace Gadget
             public string _卖家简称 { get; set; }
             public string _物流方式 { get; set; }
             public int _月份 { get; set; }
+            public string _交易国家 { get; set; }
             public int _发货 { get; set; }
             public int _退款 { get; set; }
             public decimal _比例
@@ -242,7 +283,7 @@ namespace Gadget
                 {
                     if (_发货 <= 0)
                         return 0;
-                    return Math.Round(_退款*1m / _发货 , 4);
+                    return Math.Round(_退款 * 1m / _发货, 4);
 
                 }
             }

@@ -32,7 +32,7 @@ namespace Gadget
             //Application.Run(new _紧急单统计());//_紧急单统计
             //Application.Run(new _批量生成采购订单());//_批量生成采购订单
             //Application.Run(new _缺货订单跟踪());//_缺货订单跟踪
-            Application.Run(new _退款汇总表格合并());//退款汇总表格合并
+            Application.Run(new _退款汇总表格合并());//退款汇总表格合并(切记西姣是64位表格引擎)
 
 
             //Application.Run(new Form1());
