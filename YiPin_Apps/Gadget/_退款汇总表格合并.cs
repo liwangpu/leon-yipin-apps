@@ -62,39 +62,69 @@ namespace Gadget
                 });
                 #endregion
 
-
                 #region 处理数据
                 actReadData.BeginInvoke((obj) =>
                 {
                     ShowMsg("正在处理数据,请稍等");
-                    var list卖家简称s = list.Select(x => x._卖家简称).Distinct().ToList();
-                    var list物流方式s = list.Select(x => x._物流方式).Distinct().ToList();
-                    var list月份s = list.Select(x => x._月份).Distinct().OrderBy(x => x).ToList();
-                    var list国家s = list.Select(x => x._交易国家).Distinct().OrderBy(x => x).ToList();
-                    foreach (var _卖家简称s in list卖家简称s)
+                    foreach (var item in list)
                     {
-                        foreach (var _物流方式s in list物流方式s)
+                        var bExist = false;
+                        for (int idx = result.Count - 1; idx >= 0; idx--)
                         {
-                            foreach (var _月份s in list月份s)
+                            var rsItem = result[idx];
+                            if (rsItem._卖家简称 == item._卖家简称 && rsItem._物流方式 == item._物流方式
+                            && rsItem._月份 == item._月份 && rsItem._交易国家 == item._交易国家)
                             {
-                                foreach (var _国家s in list国家s)
-                                {
-                                    var refers = list.Where(x => x._卖家简称 == _卖家简称s && x._物流方式 == _物流方式s && x._月份 == _月份s && x._交易国家 == _国家s).ToList();
-                                    if (refers.Count > 0)
-                                    {
-                                        var mode = new _统计结果();
-                                        mode._卖家简称 = _卖家简称s;
-                                        mode._物流方式 = _物流方式s;
-                                        mode._月份 = _月份s;
-                                        mode._交易国家 = _国家s;
-                                        mode._发货 = refers.Count;
-                                        mode._退款 = refers.Where(x => x._已退款 == 1).Count();
-                                        result.Add(mode);
-                                    }
-                                }
+                                rsItem._发货++;
+                                if (item._已退款)
+                                    rsItem._退款++;
+                                bExist = true;
+                                break;
                             }
                         }
+
+                        if (!bExist)
+                        {
+                            var mode = new _统计结果();
+                            mode._卖家简称 = item._卖家简称;
+                            mode._物流方式 = item._物流方式;
+                            mode._月份 = item._月份;
+                            mode._交易国家 = item._交易国家;
+                            mode._发货 = 1;
+                            mode._退款 = item._已退款 ? 1 : 0;
+                            result.Add(mode);
+                        }
                     }
+
+
+                    //var list卖家简称s = list.Select(x => x._卖家简称).Distinct().ToList();
+                    //var list物流方式s = list.Select(x => x._物流方式).Distinct().ToList();
+                    //var list月份s = list.Select(x => x._月份).Distinct().OrderBy(x => x).ToList();
+                    //var list国家s = list.Select(x => x._交易国家).Distinct().OrderBy(x => x).ToList();
+                    //foreach (var _卖家简称s in list卖家简称s)
+                    //{
+                    //    foreach (var _物流方式s in list物流方式s)
+                    //    {
+                    //        foreach (var _月份s in list月份s)
+                    //        {
+                    //            foreach (var _国家s in list国家s)
+                    //            {
+                    //                var refers = list.Where(x => x._卖家简称 == _卖家简称s && x._物流方式 == _物流方式s && x._月份 == _月份s && x._交易国家 == _国家s).ToList();
+                    //                if (refers.Count > 0)
+                    //                {
+                    //                    var mode = new _统计结果();
+                    //                    mode._卖家简称 = _卖家简称s;
+                    //                    mode._物流方式 = _物流方式s;
+                    //                    mode._月份 = _月份s;
+                    //                    mode._交易国家 = _国家s;
+                    //                    mode._发货 = refers.Count;
+                    //                    mode._退款 = refers.Where(x => x._已退款 == 1).Count();
+                    //                    result.Add(mode);
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     ShowMsg("即将导出表格");
                     Export(result);
                 }, null);
@@ -241,23 +271,57 @@ namespace Gadget
 
         class _退款数据
         {
+            private string org卖家简称;
+            private string org交易国家;
+            private string org物流方式;
+
             [ExcelColumn("内部便签")]
             public string _内部便签 { get; set; }
             [ExcelColumn("卖家简称")]
-            public string _卖家简称 { get; set; }
+            public string _卖家简称
+            {
+                get
+                {
+                    return org卖家简称;
+                }
+                set
+                {
+                    org卖家简称 = value != null ? value.ToString().Trim() : "";
+                }
+            }
             [ExcelColumn("交易时间(中国)")]
             public DateTime _交易时间 { get; set; }
             [ExcelColumn("物流方式")]
-            public string _物流方式 { get; set; }
+            public string _物流方式
+            {
+                get
+                {
+                    return org物流方式;
+                }
+                set
+                {
+                    org物流方式 = value != null ? value.ToString().Trim() : "";
+                }
+            }
             [ExcelColumn("收货人国家中文")]
-            public string _交易国家 { get; set; }
-            public int _已退款
+            public string _交易国家
+            {
+                get
+                {
+                    return org交易国家;
+                }
+                set
+                {
+                    org交易国家 = value != null ? value.ToString().Trim() : "";
+                }
+            }
+            public bool _已退款
             {
                 get
                 {
                     if (!string.IsNullOrWhiteSpace(_内部便签))
-                        return _内部便签.IndexOf("退款") > 0 ? 1 : 0;
-                    return 0;
+                        return _内部便签.IndexOf("已退款") > 0;
+                    return false;
                 }
             }
             public int _月份
