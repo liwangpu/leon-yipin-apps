@@ -66,6 +66,10 @@ namespace Gadget
             var list每月流水 = new List<_每月流水>();
             var list两表都有的SKUs = new List<string>();
             var list处理结果 = new List<_订单分配>();
+
+            var list7_9_11三段中位数 = new List<_库存预警_7_9_11_三段中位数>();
+            var list7_9_11三段平均数 = new List<_库存预警_7_9_11_三段平均数>();
+
             #region 读取数据
             var actReadData = new Action(() =>
             {
@@ -109,15 +113,35 @@ namespace Gadget
 
                         //}
 
-                        #region 近5天中位数
+                        #region 近5-15-30天中位数
                         {
                             curData._5天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(5).ToList(), 2);
                             curData._15天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(15).ToList(), 7);
                             var sorts = refer流水情况._月销量流水.OrderBy(x => x).ToList();
                             curData._30天中位数 = Math.Round((sorts[14] + sorts[15]) * 1m / 2, 2);
                         }
-
                         #endregion
+
+                        //#region 近7-9-11三段中位数
+                        //{
+                        //    var model = new _库存预警_7_9_11_三段中位数();
+                        //    model.SKU = curData.SKU;
+                        //    model._7天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(7).ToList(), 3);
+                        //    model._9天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(9).ToList(), 4);
+                        //    model._11天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(11).ToList(), 5);
+                        //    list7_9_11三段中位数.Add(model);
+                        //}
+                        //#endregion
+
+                        //#region 近7-9-11三段中日平均销量
+                        //{
+                        //    var model = new _库存预警_7_9_11_三段平均数();
+                        //    model._7天总销量 = refer流水情况._月销量流水.Take(7).Sum();
+                        //    model._9天总销量 = refer流水情况._月销量流水.Take(9).Sum();
+                        //    model._11天总销量 = refer流水情况._月销量流水.Take(11).Sum();
+                        //    list7_9_11三段平均数.Add(model);
+                        //}
+                        //#endregion
                     }
                 }
                 #endregion
@@ -138,13 +162,14 @@ namespace Gadget
                     foreach (var cmSKU in list两表都有的SKUs)
                     {
 
-                        //if (cmSKU == "LGDC1C03-1B")
+                        //if (cmSKU == "TDPB8B15")
                         //{
 
                         //}
 
                         var model = new _订单分配();
                         model._SKU = cmSKU;
+              
                         model._数据来源 = _Enum数据来源._两表共有;
 
                         var refer原预警表 = list库存预警原表.First(x => x.SKU == cmSKU);
@@ -153,21 +178,29 @@ namespace Gadget
                         model._计算后的建议采购数量_中位数表 = refer预警中位数表._原始建议采购数量;
                         model._原来表格导出的建议采购数量_原预警表 = refer原预警表._表格导出的原始建议采购;
                         model._原来表格导出的建议采购数量_中位数表 = refer预警中位数表._表格导出的原始建议采购;
+
+
+                        model._预警销售天数 = refer原预警表._预警销售天数;
+                        model._采购到货天数 = refer原预警表._采购到货天数;
+                        model._可用数量 = refer原预警表._可用数量;
+                        model._采购未入库 = refer原预警表._采购未入库;
+                        model._缺货及未派单数量 = refer原预警表._缺货及未派单数量;
+
                         /*
                         *（1）如果建议采购量 和 预计可用数量 一致或者差不多（建议采购量刚好够补缺货订单），那么建议采购最终数量 =
                         * （库存预警建议采购量 + 库存预警中位数建议采购量）/ 2
                         */
-                        if (refer原预警表._可用数量 < 0)
-                        {
-                            decimal culc = (refer原预警表._原始建议采购数量 + refer预警中位数表._原始建议采购数量) / 2;
-                            //if (refer原预警表._商品成本单价 >= 10)
-                            //    model._Qty = Math.Round(culc, 0);
-                            //else
-                            //    model._Qty = Helper.CalAmount(culc);
+                        //if (refer原预警表._可用数量 < 0)
+                        //{
+                        //    decimal culc = (refer原预警表._原始建议采购数量 + refer预警中位数表._原始建议采购数量) / 2;
+                        //    //if (refer原预警表._商品成本单价 >= 10)
+                        //    //    model._Qty = Math.Round(culc, 0);
+                        //    //else
+                        //    //    model._Qty = Helper.CalAmount(culc);
 
-                            model._Qty = Math.Round(culc, 0);
-                        }
-                        else
+                        //    model._Qty = Math.Round(culc, 0);
+                        //}
+                        //else
                         {
                             /*
                              * （2）当库存预警建议采购量<库存预警中位数建议采购量，以库存预警建议采购量为主
@@ -204,6 +237,14 @@ namespace Gadget
                         model._采购员 = refer原预警表._采购员;
                         model._含税单价 = refer原预警表._商品成本单价;
                         model._制单人 = refer原预警表._采购员;
+
+
+                        //model._计算后的建议采购数量_7_9_11三段中位数建议采购=
+                        //{
+                        //    var refer= list7_9_11三段中位数.Where(s=>s.SKU=)
+                        //}
+
+
                         list处理结果.Add(model);
 
 
@@ -245,6 +286,15 @@ namespace Gadget
 
                     model._是否紧急单 = item._是否紧急单;
                     model._数据来源 = _Enum数据来源._原建议采购表;
+
+
+
+                    model._预警销售天数 = item._预警销售天数;
+                    model._采购到货天数 = item._采购到货天数;
+                    model._可用数量 = item._可用数量;
+                    model._采购未入库 = item._采购未入库;
+                    model._缺货及未派单数量 = item._缺货及未派单数量;
+
                     list处理结果.Add(model);
                 }
                 #endregion
@@ -265,9 +315,65 @@ namespace Gadget
 
                     model._是否紧急单 = item._是否紧急单;
                     model._数据来源 = _Enum数据来源._中位数建议采购;
+
+
+                    model._预警销售天数 = item._预警销售天数;
+                    model._采购到货天数 = item._采购到货天数;
+                    model._可用数量 = item._可用数量;
+                    model._采购未入库 = item._采购未入库;
+                    model._缺货及未派单数量 = item._缺货及未派单数量;
+
                     list处理结果.Add(model);
                 }
                 #endregion
+
+                for (int idx = list处理结果.Count - 1; idx >= 0; idx--)
+                {
+                    var curData = list处理结果[idx];
+                    var refer流水情况 = list每月流水.FirstOrDefault(x => x.SKU == curData._SKU);
+                    if (refer流水情况 != null)
+                    {
+                        #region 近7-9-11三段中位数
+                        {
+                            var model = new _库存预警_7_9_11_三段中位数();
+                            model._预警销售天数 = curData._预警销售天数;
+                            model._采购到货天数 = curData._采购到货天数;
+                            model._可用数量 = curData._可用数量;
+                            model._采购未入库 = curData._采购未入库;
+                            model._缺货及未派单数量 = curData._缺货及未派单数量;
+
+                            model._7天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(7).ToList(), 3);
+                            model._9天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(9).ToList(), 4);
+                            model._11天中位数 = Calcu中位数(refer流水情况._月销量流水.Take(11).ToList(), 5);
+                            curData._计算后的建议采购数量_7_9_11三段中位数建议采购 = model._原始建议采购数量;
+                        }
+                        #endregion
+
+                        #region 近7-9-11三段中日平均销量
+                        {
+                            var model = new _库存预警_7_9_11_三段平均数();
+                            model._预警销售天数 = curData._预警销售天数;
+                            model._采购到货天数 = curData._采购到货天数;
+                            model._可用数量 = curData._可用数量;
+                            model._采购未入库 = curData._采购未入库;
+                            model._缺货及未派单数量 = curData._缺货及未派单数量;
+                            model._7天总销量 = refer流水情况._月销量流水.Take(7).Sum();
+                            model._9天总销量 = refer流水情况._月销量流水.Take(9).Sum();
+                            model._11天总销量 = refer流水情况._月销量流水.Take(11).Sum();
+                            curData._计算后的建议采购数量_7_9_11日平均建议采购= model._原始建议采购数量;
+                        }
+                        #endregion
+
+
+                //        get
+                //{
+                //            var _库存上限 = _预警销售天数 * _日平均销量;
+                //            var _库存下限 = _采购到货天数 * _日平均销量;
+                //            return _库存上限 + _库存下限 - _可用数量 - _采购未入库 + _缺货及未派单数量;
+                //        }
+
+                    }
+                }
 
                 ExportExcel(list处理结果.OrderByDescending(x => x._供应商).ToList());
 
@@ -355,8 +461,9 @@ namespace Gadget
                 sheet1.Cells[1, 17].Value = "表格导出建议采购(中位数预警)";
                 sheet1.Cells[1, 18].Value = "取整前建议采购(原预警)";
                 sheet1.Cells[1, 19].Value = "取整前建议采购(中位数预警)";
-                //原预警建议采购 中位数建议采购
 
+                sheet1.Cells[1, 20].Value = "7-9-11中位数采购建议";
+                sheet1.Cells[1, 21].Value = "7-9-11日平均采购建议";
                 #endregion
 
                 #region 数据行
@@ -382,6 +489,9 @@ namespace Gadget
                         sheet1.Cells[rowIdx, 17].Value = curOrder._原来表格导出的建议采购数量_中位数表;
                         sheet1.Cells[rowIdx, 18].Value = curOrder._计算后的建议采购数量_原预警表;
                         sheet1.Cells[rowIdx, 19].Value = curOrder._计算后的建议采购数量_中位数表;
+
+                        sheet1.Cells[rowIdx, 20].Value = curOrder._计算后的建议采购数量_7_9_11三段中位数建议采购;
+                        sheet1.Cells[rowIdx, 21].Value = curOrder._计算后的建议采购数量_7_9_11日平均建议采购;
                         rowIdx++;
                     }
                     else
@@ -454,6 +564,9 @@ namespace Gadget
                 sheet1.Cells[1, 17].Value = "表格导出建议采购(中位数预警)";
                 sheet1.Cells[1, 18].Value = "取整前建议采购(原预警)";
                 sheet1.Cells[1, 19].Value = "取整前建议采购(中位数预警)";
+
+                sheet1.Cells[1, 20].Value = "7-9-11中位数采购建议";
+                sheet1.Cells[1, 21].Value = "7-9-11日平均采购建议";
                 #endregion
 
                 #region 数据行
@@ -475,6 +588,9 @@ namespace Gadget
                     sheet1.Cells[rowIdx, 17].Value = curOrder._原来表格导出的建议采购数量_中位数表;
                     sheet1.Cells[rowIdx, 18].Value = curOrder._计算后的建议采购数量_原预警表;
                     sheet1.Cells[rowIdx, 19].Value = curOrder._计算后的建议采购数量_中位数表;
+
+                    sheet1.Cells[rowIdx, 20].Value = curOrder._计算后的建议采购数量_7_9_11三段中位数建议采购;
+                    sheet1.Cells[rowIdx, 21].Value = curOrder._计算后的建议采购数量_7_9_11日平均建议采购;
                 }
                 #endregion
 
@@ -741,6 +857,42 @@ namespace Gadget
             }
         }
 
+        class _库存预警_7_9_11_三段中位数 : _库存预警
+        {
+            public decimal _7天中位数 { get; set; }
+
+            public decimal _9天中位数 { get; set; }
+
+            public decimal _11天中位数 { get; set; }
+
+            public override decimal _日平均销量
+            {
+                get
+                {
+                    decimal vl = (_7天中位数 + _9天中位数 + _11天中位数) / 3;
+                    return Math.Round(vl, 2);
+                }
+            }
+        }
+
+        class _库存预警_7_9_11_三段平均数 : _库存预警
+        {
+            public decimal _7天总销量 { get; set; }
+
+            public decimal _9天总销量 { get; set; }
+
+            public decimal _11天总销量 { get; set; }
+
+            public override decimal _日平均销量
+            {
+                get
+                {
+                    decimal vl = (_7天总销量 / 7 + _9天总销量 / 9 + _11天总销量 / 11) / 3;
+                    return Math.Round(vl, 2);
+                }
+            }
+        }
+
         [ExcelTable("每月流水")]
         class _每月流水
         {
@@ -888,10 +1040,16 @@ namespace Gadget
             public decimal _原来表格导出的建议采购数量_中位数表 { get; set; }
             public decimal _计算后的建议采购数量_原预警表 { get; set; }
             public decimal _计算后的建议采购数量_中位数表 { get; set; }
-            //public double _计算出来的未经取整的建议采购数量 { get; set; }
+            public decimal _计算后的建议采购数量_7_9_11日平均建议采购 { get; set; }
+            public decimal _计算后的建议采购数量_7_9_11三段中位数建议采购 { get; set; }
             public _Enum数据来源 _数据来源 { get; set; }
 
 
+            public decimal _预警销售天数 { get; set; }
+            public decimal _采购到货天数 { get; set; }
+            public decimal _可用数量 { get; set; }
+            public decimal _采购未入库 { get; set; }
+            public decimal _缺货及未派单数量 { get; set; }
         }
 
         enum _Enum数据来源
