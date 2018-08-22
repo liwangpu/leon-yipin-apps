@@ -29,6 +29,13 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.nupDay3 = new System.Windows.Forms.NumericUpDown();
+            this.nupDay2 = new System.Windows.Forms.NumericUpDown();
+            this.nupDay1 = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.lbMsg = new System.Windows.Forms.Label();
             this.lkDecs = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
@@ -42,17 +49,10 @@
             this.txt每月流水 = new System.Windows.Forms.TextBox();
             this.txt库存预警中位数 = new System.Windows.Forms.TextBox();
             this.txt库存预警原表 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.nupDay1 = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.nupDay2 = new System.Windows.Forms.NumericUpDown();
-            this.nupDay3 = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nupDay1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nupDay2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nupDay3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nupDay2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nupDay1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -84,10 +84,112 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "数据上传";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(217, 168);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(35, 12);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "参数3";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(217, 141);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(35, 12);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "参数2";
+            // 
+            // nupDay3
+            // 
+            this.nupDay3.Location = new System.Drawing.Point(256, 166);
+            this.nupDay3.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.nupDay3.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nupDay3.Name = "nupDay3";
+            this.nupDay3.Size = new System.Drawing.Size(120, 21);
+            this.nupDay3.TabIndex = 15;
+            this.nupDay3.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            // 
+            // nupDay2
+            // 
+            this.nupDay2.Location = new System.Drawing.Point(256, 139);
+            this.nupDay2.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.nupDay2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nupDay2.Name = "nupDay2";
+            this.nupDay2.Size = new System.Drawing.Size(120, 21);
+            this.nupDay2.TabIndex = 15;
+            this.nupDay2.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // nupDay1
+            // 
+            this.nupDay1.Location = new System.Drawing.Point(256, 112);
+            this.nupDay1.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.nupDay1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nupDay1.Name = "nupDay1";
+            this.nupDay1.Size = new System.Drawing.Size(120, 21);
+            this.nupDay1.TabIndex = 15;
+            this.nupDay1.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(215, 114);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 12);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "参数1";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(15, 109);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(101, 12);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "数参数(由小到大)";
+            // 
             // lbMsg
             // 
             this.lbMsg.AutoSize = true;
-            this.lbMsg.Location = new System.Drawing.Point(70, 186);
+            this.lbMsg.Location = new System.Drawing.Point(70, 191);
             this.lbMsg.Name = "lbMsg";
             this.lbMsg.Size = new System.Drawing.Size(65, 12);
             this.lbMsg.TabIndex = 13;
@@ -96,7 +198,7 @@
             // lkDecs
             // 
             this.lkDecs.AutoSize = true;
-            this.lkDecs.Location = new System.Drawing.Point(404, 186);
+            this.lkDecs.Location = new System.Drawing.Point(404, 191);
             this.lkDecs.Name = "lkDecs";
             this.lkDecs.Size = new System.Drawing.Size(53, 12);
             this.lkDecs.TabIndex = 11;
@@ -107,7 +209,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 186);
+            this.label3.Location = new System.Drawing.Point(5, 191);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 12);
             this.label3.TabIndex = 12;
@@ -205,108 +307,6 @@
             this.txt库存预警原表.Size = new System.Drawing.Size(264, 21);
             this.txt库存预警原表.TabIndex = 0;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 109);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(101, 12);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "数参数(由小到大)";
-            // 
-            // nupDay1
-            // 
-            this.nupDay1.Location = new System.Drawing.Point(256, 112);
-            this.nupDay1.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.nupDay1.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nupDay1.Name = "nupDay1";
-            this.nupDay1.Size = new System.Drawing.Size(120, 21);
-            this.nupDay1.TabIndex = 15;
-            this.nupDay1.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(215, 114);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 12);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "参数1";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(217, 141);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(35, 12);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "参数2";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(217, 168);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(35, 12);
-            this.label8.TabIndex = 14;
-            this.label8.Text = "参数3";
-            // 
-            // nupDay2
-            // 
-            this.nupDay2.Location = new System.Drawing.Point(256, 139);
-            this.nupDay2.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.nupDay2.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nupDay2.Name = "nupDay2";
-            this.nupDay2.Size = new System.Drawing.Size(120, 21);
-            this.nupDay2.TabIndex = 15;
-            this.nupDay2.Value = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            // 
-            // nupDay3
-            // 
-            this.nupDay3.Location = new System.Drawing.Point(256, 166);
-            this.nupDay3.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.nupDay3.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nupDay3.Name = "nupDay3";
-            this.nupDay3.Size = new System.Drawing.Size(120, 21);
-            this.nupDay3.TabIndex = 15;
-            this.nupDay3.Value = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-            // 
             // _批量生成采购订单_参数可调
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -321,9 +321,9 @@
             this.Load += new System.EventHandler(this._批量生成采购订单_参数可调_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nupDay1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nupDay2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nupDay3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nupDay2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nupDay1)).EndInit();
             this.ResumeLayout(false);
 
         }
