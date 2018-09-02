@@ -33,7 +33,10 @@ namespace Gadget
             //Application.Run(new _批量生成采购订单());//批量生成采购订单
             //Application.Run(new _缺货订单跟踪());//_缺货订单跟踪
             //Application.Run(new _退款汇总表格合并());//退款汇总表格合并
-            Application.Run(new _批量生成采购订单_参数可调());//批量生成采购订单
+            //Application.Run(new _批量生成采购订单_参数可调());//批量生成采购订单
+            Application.Run(new _日平均销量正态分布对比());//日平均销量正态分布对比
+
+
 
             //Application.Run(new Form1());
             //Application.Run(new _测试());//
