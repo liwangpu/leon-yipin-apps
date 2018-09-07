@@ -33,14 +33,14 @@ namespace Gadget
 
         private void _点货绩效_Load(object sender, EventArgs e)
         {
-            //txt入库明细.Text = @"C:\Users\Leon\Desktop\绩效\采购入库单号-对应工号7月份.csv";
-            //txt产品订单.Text = @"C:\Users\Leon\Desktop\绩效\采购入库明细表7月份.csv";
-            //txt人员代号.Text = @"C:\Users\Leon\Desktop\绩效\人员代号.csv";
-            //txt积分参数.Text = @"C:\Users\Leon\Desktop\绩效\积分参数.csv";
-            //txt工号记录.Text = @"C:\Users\Leon\Desktop\绩效\工号记录.csv";
-            //txt产品等级.Text = @"C:\Users\Leon\Desktop\绩效\产品等级.csv";
+            txt入库明细.Text = @"C:\Users\Bamboo01\Desktop\点货数据\采购入库明细表9月5号.csv";
+            txt采购入库单.Text = @"C:\Users\Bamboo01\Desktop\点货数据\采购入库单.csv";
+            txt人员代号.Text = @"C:\Users\Bamboo01\Desktop\点货数据\人员代号.csv";
+            txt积分参数.Text = @"C:\Users\Bamboo01\Desktop\点货数据\积分参数.csv";
+            txt工号记录.Text = @"C:\Users\Bamboo01\Desktop\点货数据\8月份工号记录.csv";
+            txt产品等级.Text = @"C:\Users\Bamboo01\Desktop\点货数据\产品等级.csv";
 
-            txt工号记录.Text = @"C:\Users\Bamboo01\Desktop\点货记录.csv";
+
 
 
             if (!Directory.Exists(_CacheFolder))
@@ -137,6 +137,14 @@ namespace Gadget
                     var model = new _工号记录详细信息();
                     model._入库单号 = list工号记录[idx]._工号记录;
                     model._工号 = list工号记录[idx + 1]._工号记录;
+
+                    if (model._工号.Length >= 5)
+                    {
+                        MessageBox.Show(string.Format("检测到工号记录有错行,在第{0}行附近,请先排除后在上传.", idx), "数据异常");
+                        ShowMsg("---");
+                        return;
+                    }
+
                     model._操作日期 = DateTime.Now;
                     list工号记录详细信息.Add(model);
                 }
@@ -285,50 +293,57 @@ namespace Gadget
                         {
                             var item = list采购入库单[idx];
 
-                            //if (item._入库单退回单号== "RKD201807210725")
+                            //if (item._入库单退回单号 == "RKD201808221755")
                             //{
 
                             //}
 
-                            if (!string.IsNullOrEmpty(item._人员代码))
+                            //if (!string.IsNullOrEmpty(item._人员代码))
+                            //{
+                            //    var ref人员 = list人员代号.Where(x => x._代号 == item._人员代码).FirstOrDefault();
+                            //    if (ref人员 != null)
+                            //    {
+                            //        item._人员姓名 = ref人员._姓名;
+
+                            //        bool bExist = false;
+                            //        for (int ii = list工号记录详细信息.Count - 1; ii >= 0; ii--)
+                            //        {
+                            //            var referIn工号记录详情 = list工号记录详细信息[ii];
+                            //            if (referIn工号记录详情 != null)
+                            //            {
+                            //                var mm = new _工号记录详细信息();
+                            //                mm._入库单号 = item._入库单退回单号;
+                            //                mm._员工姓名 = ref人员._姓名;
+                            //                mm._工号 = ref人员._代号;
+                            //                list工号记录详细信息.Add(mm);
+                            //                bExist = true;
+                            //                break;
+                            //            }
+                            //        }
+                            //        if (!bExist)
+                            //        {
+                            //            var mm = new _工号记录详细信息();
+                            //            mm._入库单号 = item._入库单退回单号;
+                            //            mm._员工姓名 = ref人员._姓名;
+                            //            mm._工号 = ref人员._代号;
+                            //            list工号记录详细信息.Add(mm);
+                            //        }
+                            //    }
+                            //    else
+                            //        item._人员姓名 = _未指定人员;
+                            //}
+                            //else
                             {
-                                var ref人员 = list人员代号.Where(x => x._代号 == item._人员代码).FirstOrDefault();
+                                var ref人员 = list工号记录详细信息.Where(x => x._入库单号.Trim() == item._入库单退回单号).FirstOrDefault();
                                 if (ref人员 != null)
                                 {
-                                    item._人员姓名 = ref人员._姓名;
-
-                                    bool bExist = false;
-                                    for (int ii = list工号记录详细信息.Count - 1; ii >= 0; ii--)
-                                    {
-                                        var referIn工号记录详情 = list工号记录详细信息[ii];
-                                        if (referIn工号记录详情 != null)
-                                        {
-                                            var mm = new _工号记录详细信息();
-                                            mm._入库单号 = item._入库单退回单号;
-                                            mm._员工姓名 = ref人员._姓名;
-                                            mm._工号 = ref人员._代号;
-                                            list工号记录详细信息.Add(mm);
-                                            bExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!bExist)
-                                    {
-                                        var mm = new _工号记录详细信息();
-                                        mm._入库单号 = item._入库单退回单号;
-                                        mm._员工姓名 = ref人员._姓名;
-                                        mm._工号 = ref人员._代号;
-                                        list工号记录详细信息.Add(mm);
-                                    }
+                                    var user = list人员代号.Where(x => x._代号 == ref人员._工号).FirstOrDefault();
+                                    if (user != null)
+                                        item._人员姓名 = user._姓名;
+                                    else
+                                        item._人员姓名 = _未指定人员;
                                 }
-                                else
-                                    item._人员姓名 = _未指定人员;
-                            }
-                            else
-                            {
-                                var ref人员 = list工号记录详细信息.Where(x => x._入库单号 == item._入库单退回单号).FirstOrDefault();
-                                if (ref人员 != null)
-                                    item._人员姓名 = ref人员._员工姓名;
+
                                 else
                                     item._人员姓名 = _未指定人员;
                             }
