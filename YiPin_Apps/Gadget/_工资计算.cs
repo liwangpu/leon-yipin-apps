@@ -2511,7 +2511,7 @@ namespace Gadget
             public string org库存周转天数 { get; set; }
             [ExcelColumn("采购人")]
             public string org采购人 { get; set; }
-            [ExcelColumn("总金额")]
+            [ExcelColumn("库存金额")]
             public string org总金额 { get; set; }
 
             public string _采购人
