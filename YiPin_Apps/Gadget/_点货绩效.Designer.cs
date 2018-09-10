@@ -56,6 +56,7 @@
             this.txt入库单号 = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btn上传采购入库单 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
@@ -67,7 +68,8 @@
             this.label13 = new System.Windows.Forms.Label();
             this.txt产品等级 = new System.Windows.Forms.TextBox();
             this.btn产品等级 = new System.Windows.Forms.Button();
-            this.btn上传采购入库单 = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.cb等级 = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -321,6 +323,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cb等级);
+            this.tabPage1.Controls.Add(this.label14);
             this.tabPage1.Controls.Add(this.txt入库明细);
             this.tabPage1.Controls.Add(this.txt人员代号);
             this.tabPage1.Controls.Add(this.btn上传入库明细);
@@ -341,6 +345,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "数据处理";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btn上传采购入库单
+            // 
+            this.btn上传采购入库单.Location = new System.Drawing.Point(267, 45);
+            this.btn上传采购入库单.Name = "btn上传采购入库单";
+            this.btn上传采购入库单.Size = new System.Drawing.Size(75, 23);
+            this.btn上传采购入库单.TabIndex = 8;
+            this.btn上传采购入库单.Text = "浏览";
+            this.btn上传采购入库单.UseVisualStyleBackColor = true;
+            this.btn上传采购入库单.Click += new System.EventHandler(this.btn上传采购入库单_Click);
             // 
             // tabPage2
             // 
@@ -463,15 +477,27 @@
             this.btn产品等级.UseVisualStyleBackColor = true;
             this.btn产品等级.Click += new System.EventHandler(this.btn产品等级_Click);
             // 
-            // btn上传采购入库单
+            // label14
             // 
-            this.btn上传采购入库单.Location = new System.Drawing.Point(267, 45);
-            this.btn上传采购入库单.Name = "btn上传采购入库单";
-            this.btn上传采购入库单.Size = new System.Drawing.Size(75, 23);
-            this.btn上传采购入库单.TabIndex = 8;
-            this.btn上传采购入库单.Text = "浏览";
-            this.btn上传采购入库单.UseVisualStyleBackColor = true;
-            this.btn上传采购入库单.Click += new System.EventHandler(this.btn上传采购入库单_Click);
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(11, 133);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(59, 12);
+            this.label14.TabIndex = 10;
+            this.label14.Text = "默认等级:";
+            // 
+            // cb等级
+            // 
+            this.cb等级.FormattingEnabled = true;
+            this.cb等级.Items.AddRange(new object[] {
+            "A",
+            "B",
+            "C",
+            "D"});
+            this.cb等级.Location = new System.Drawing.Point(76, 128);
+            this.cb等级.Name = "cb等级";
+            this.cb等级.Size = new System.Drawing.Size(183, 20);
+            this.cb等级.TabIndex = 11;
             // 
             // _点货绩效
             // 
@@ -482,6 +508,8 @@
             this.Controls.Add(this.lbMsg);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.label3);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(393, 305);
             this.Name = "_点货绩效";
             this.Text = "_点货绩效";
             this.Load += new System.EventHandler(this._点货绩效_Load);
@@ -540,5 +568,7 @@
         private System.Windows.Forms.Button btn产品等级;
         private System.Windows.Forms.Button btn缓存产品等级;
         private System.Windows.Forms.Button btn上传采购入库单;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ComboBox cb等级;
     }
 }

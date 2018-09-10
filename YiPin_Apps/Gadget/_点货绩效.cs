@@ -53,7 +53,7 @@ namespace Gadget
                     var str = reader.ReadToEnd();
                     _List当月历史点货记录 = JsonConvert.DeserializeObject<List<_工号记录详细信息>>(str);
                 }
-
+            cb等级.SelectedItem = "B";
 
         }
 
@@ -214,6 +214,7 @@ namespace Gadget
                 var list点货绩效 = new List<_点货绩效Model>();
                 var list工号记录详细信息 = new List<_工号记录详细信息>();
 
+                var defaultGrade = cb等级.SelectedItem.ToString().ToLower();
 
                 #region 读取数据
                 var actReadData = new Action(() =>
@@ -293,7 +294,7 @@ namespace Gadget
                         {
                             var item = list采购入库单[idx];
 
-                            //if (item._入库单退回单号 == "RKD201808221755")
+                            //if (item._入库单退回单号 == "RKD201808291297")
                             //{
 
                             //}
@@ -356,6 +357,12 @@ namespace Gadget
                         for (int idx = 0, len = list采购入库单.Count; idx < len; idx++)
                         {
                             var item = list采购入库单[idx];
+                            //if (item._入库单退回单号 == "RKD201808291297")
+                            //{
+
+                            //}
+
+
                             //找到明细的所有产品,再查产品对应等级的积分
                             var refer产品 = list入库明细.Where(x => x._入库单号 == item._入库单退回单号).ToList();
 
@@ -374,7 +381,7 @@ namespace Gadget
                                 }
                                 else
                                 {
-                                    var ref积分 = list积分参数.Where(x => x._等级.ToLower() == "d" && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
+                                    var ref积分 = list积分参数.Where(x => x._等级.ToLower() == defaultGrade && x._左区间 < item._总数量 && x._右区间 >= item._总数量).FirstOrDefault();
                                     if (ref积分 != null)
                                     {
                                         item._盘点积分 += ref积分._积分;
