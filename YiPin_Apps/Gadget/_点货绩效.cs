@@ -33,12 +33,12 @@ namespace Gadget
 
         private void _点货绩效_Load(object sender, EventArgs e)
         {
-            txt入库明细.Text = @"C:\Users\Bamboo01\Desktop\点货数据\采购入库明细表9月5号.csv";
-            txt采购入库单.Text = @"C:\Users\Bamboo01\Desktop\点货数据\采购入库单.csv";
-            txt人员代号.Text = @"C:\Users\Bamboo01\Desktop\点货数据\人员代号.csv";
-            txt积分参数.Text = @"C:\Users\Bamboo01\Desktop\点货数据\积分参数.csv";
-            txt工号记录.Text = @"C:\Users\Bamboo01\Desktop\点货数据\8月份工号记录.csv";
-            txt产品等级.Text = @"C:\Users\Bamboo01\Desktop\点货数据\产品等级.csv";
+            //txt入库明细.Text = @"C:\Users\Bamboo01\Desktop\点货数据\采购入库明细表9月5号.csv";
+            //txt采购入库单.Text = @"C:\Users\Bamboo01\Desktop\点货数据\采购入库单.csv";
+            //txt人员代号.Text = @"C:\Users\Bamboo01\Desktop\点货数据\人员代号.csv";
+            //txt积分参数.Text = @"C:\Users\Bamboo01\Desktop\点货数据\积分参数.csv";
+            //txt工号记录.Text = @"C:\Users\Bamboo01\Desktop\点货数据\8月份工号记录.csv";
+            //txt产品等级.Text = @"C:\Users\Bamboo01\Desktop\点货数据\产品等级.csv";
 
 
 
