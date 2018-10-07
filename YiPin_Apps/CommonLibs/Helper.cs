@@ -51,6 +51,12 @@ namespace CommonLibs
             buyers.Add("查文亮");
             buyers.Add("张露玲");
             buyers.Add("廖延鑫");
+            buyers.Add("严江燕");
+            buyers.Add("张军");
+            buyers.Add("李涛");
+            buyers.Add("芦智超");
+            buyers.Add("徐文敏");
+            buyers.Add("任红洁");
 
             return buyers;
         }
@@ -80,6 +86,7 @@ namespace CommonLibs
             buyers.Add("徐周红");
             buyers.Add("陈春梦");
             buyers.Add("张莉萍");
+            buyers.Add("胡雅萍");
 
             return buyers;
         }
