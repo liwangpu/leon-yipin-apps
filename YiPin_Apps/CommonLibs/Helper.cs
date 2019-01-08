@@ -38,7 +38,7 @@ namespace CommonLibs
             buyers.Add("侯春喜");
             buyers.Add("苏苗雨");
             buyers.Add("唐汉成");
-            buyers.Add("江峰");
+            buyers.Add("欧阳逸苒");
             buyers.Add("袁国梁");
             buyers.Add("李倩倩");
             buyers.Add("韩丽敏");
@@ -46,7 +46,7 @@ namespace CommonLibs
             buyers.Add("王微");
             buyers.Add("刘龙敏");
             buyers.Add("蔡东玲");
-            buyers.Add("张秀秀");
+            buyers.Add("吴碧净");
             buyers.Add("王腾飞");
             buyers.Add("查文亮");
             buyers.Add("张露玲");
@@ -81,11 +81,8 @@ namespace CommonLibs
             buyers.Add("蔡怡雯");
             buyers.Add("秦荧");
             buyers.Add("邹晓玲");
-            buyers.Add("邵羽");
             buyers.Add("何萧雪");
             buyers.Add("徐周红");
-            buyers.Add("陈春梦");
-            buyers.Add("张莉萍");
             buyers.Add("胡雅萍");
 
             return buyers;
