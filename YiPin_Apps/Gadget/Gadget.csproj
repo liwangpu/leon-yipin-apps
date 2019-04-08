@@ -94,6 +94,12 @@
     <Compile Include="Tests\FormCore.Designer.cs">
       <DependentUpon>FormCore.cs</DependentUpon>
     </Compile>
+    <Compile Include="_批量生成采购订单_参数可调.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_批量生成采购订单_参数可调.Designer.cs">
+      <DependentUpon>_批量生成采购订单_参数可调.cs</DependentUpon>
+    </Compile>
     <Compile Include="_点货绩效.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +118,9 @@
     </Compile>
     <EmbeddedResource Include="Tests\FormCore.resx">
       <DependentUpon>FormCore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_批量生成采购订单_参数可调.resx">
+      <DependentUpon>_批量生成采购订单_参数可调.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_点货绩效.resx">
       <DependentUpon>_点货绩效.cs</DependentUpon>
