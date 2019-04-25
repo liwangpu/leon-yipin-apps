@@ -19,8 +19,8 @@ namespace Gadget
 
         private void _仓库加班考勤_Load(object sender, EventArgs e)
         {
-            //txt考勤.Text = @"C:\Users\Leon\Desktop\1_标准报表 - 有异常 - 副本.xlsx";
-            //btn计算考勤.Enabled = true;
+            txt考勤.Text = @"C:\Users\Leon\Desktop\aaa\1_标准报表.xlsx";
+            btn计算考勤.Enabled = true;
         }
 
         /**************** button event ****************/
@@ -49,7 +49,7 @@ namespace Gadget
             var strError = string.Empty;
             var list考勤数据 = new List<_考勤数据>();
             var list加班绩效 = new List<_加班绩效>();
-
+            var list异常情况 = new List<_考勤异常>();
             #region 读取数据
             var actReadData = new Action(() =>
             {
@@ -88,10 +88,10 @@ namespace Gadget
                     md._员工序号 = cur._员工序号;
                     md._姓名 = cur._姓名;
 
-                    //if (md._姓名 == "赵燕宁")
-                    //{
+                    if (md._姓名 == "曹雷")
+                    {
 
-                    //}
+                    }
                     var list = new List<double>();
                     var _list打卡情况 = new List<string>();
                     var _list打卡异常情况 = new List<string>();
@@ -100,65 +100,100 @@ namespace Gadget
                         var timeStr = !string.IsNullOrWhiteSpace(cur._加班信息[nnn]) ? cur._加班信息[nnn].Trim() : "";
                         if (!string.IsNullOrWhiteSpace(timeStr))
                         {
-                            var bLackClock = false;
-                            double total = 0;
-                            var d上班时间 = Convert.ToDateTime("2018-08-08 09:00:00");
-                            var d下班时间 = Convert.ToDateTime("2018-08-08 17:30:00");
-                            //上班时间加班
-                            {
-                                var aaa = timeStr.Substring(0, 5);
-                                var startStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(0, 5));
-                                var startTime = Convert.ToDateTime(startStr);
-                                var timespan = (d上班时间 - startTime).TotalMinutes;
-                                if (timespan >= 55)
-                                {
-                                    var mm = timespan % 60;
-                                    var hh = (timespan - mm) / 60;
-                                    total += hh;
-                                    if (mm >= 55)
-                                        total += 1;
-                                }
+                            var err = new _考勤异常();
+                            err._姓名 = md._姓名;
+                            err._异常日期 = nnn + 1;
 
-                                if (startTime > Convert.ToDateTime("2018-08-08 12:00:00"))
-                                    bLackClock = true;
-                            }
-                            //bLackClock = false;
-                            //下班时间加班
+                            //一天打卡一次
+                            if (timeStr.Length <= 4)
                             {
-                                if (timeStr.Length >= 5)
-                                {
-                                    var _d包饭时间 = Convert.ToDateTime("2018-08-08 21:00:00");
-                                    //var endStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(5, 5));
-                                    var endStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(timeStr.Length - 5, 5));
-                                    var endTime = Convert.ToDateTime(endStr);
-                                    var timespan = (endTime - d下班时间).TotalMinutes;
-                                    if (timespan >= 55)
-                                    {
-                                        var mm = timespan % 60;
-                                        var hh = (timespan - mm) / 60;
-                                        total += hh;
-                                        if (mm >= 55)
-                                            total += 1;
-                                        if (mm >= 30 && mm < 55)
-                                            total += 0.5;
-
-                                        if (endTime >= _d包饭时间)
-                                            total -= 0.5;
-                                    }
-                                    if (endTime < Convert.ToDateTime("2018-08-08 17:29:00"))
-                                        bLackClock = true;
-                                }
+                                err._异常情况 = "只打卡一次";
+                                list异常情况.Add(err);
+                                continue;
                             }
-                            list.Add(total);
-                            _list打卡情况.Add("已打卡");
-                            _list打卡异常情况.Add(bLackClock ? "异常" : string.Empty);
+
+
+                            var d上班时间 = Convert.ToDateTime(string.Format("2018-08-08 {0}:00", timeStr.Substring(0, 5)));
+                            var d下班时间 = Convert.ToDateTime(string.Format("2018-08-08 {0}:00", timeStr.Substring(timeStr.Length - 5, 5)));
+
+                            var timespan = (d下班时间 - d上班时间).TotalMinutes;
+                            var remain = timespan % 30;
+                            var halfHours = (timespan- remain)/30;
+
+
+
                         }
-                        else
-                        {
-                            _list打卡情况.Add("未打卡");
-                            _list打卡异常情况.Add(string.Empty);
-                            list.Add(0);
-                        }
+                        //else
+                        //{
+                        //    _list打卡情况.Add("未打卡");
+                        //    _list打卡异常情况.Add(string.Empty);
+                        //    list.Add(0);
+                        //}
+
+
+
+
+                        //if (!string.IsNullOrWhiteSpace(timeStr))
+                        //{
+                        //    var bLackClock = false;
+                        //    double total = 0;
+                        //    var d上班时间 = Convert.ToDateTime("2018-08-08 09:00:00");
+                        //    var d下班时间 = Convert.ToDateTime("2018-08-08 17:30:00");
+                        //    //上班时间加班
+                        //    {
+                        //        var aaa = timeStr.Substring(0, 5);
+                        //        var startStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(0, 5));
+                        //        var startTime = Convert.ToDateTime(startStr);
+                        //        var timespan = (d上班时间 - startTime).TotalMinutes;
+                        //        if (timespan >= 55)
+                        //        {
+                        //            var mm = timespan % 60;
+                        //            var hh = (timespan - mm) / 60;
+                        //            total += hh;
+                        //            if (mm >= 55)
+                        //                total += 1;
+                        //        }
+
+                        //        if (startTime > Convert.ToDateTime("2018-08-08 12:00:00"))
+                        //            bLackClock = true;
+                        //    }
+                        //    //bLackClock = false;
+                        //    //下班时间加班
+                        //    {
+                        //        if (timeStr.Length >= 5)
+                        //        {
+                        //            var _d包饭时间 = Convert.ToDateTime("2018-08-08 21:00:00");
+                        //            //var endStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(5, 5));
+                        //            var endStr = string.Format("2018-08-08 {0}:00", timeStr.Substring(timeStr.Length - 5, 5));
+                        //            var endTime = Convert.ToDateTime(endStr);
+                        //            var timespan = (endTime - d下班时间).TotalMinutes;
+                        //            if (timespan >= 55)
+                        //            {
+                        //                var mm = timespan % 60;
+                        //                var hh = (timespan - mm) / 60;
+                        //                total += hh;
+                        //                if (mm >= 55)
+                        //                    total += 1;
+                        //                if (mm >= 30 && mm < 55)
+                        //                    total += 0.5;
+
+                        //                if (endTime >= _d包饭时间)
+                        //                    total -= 0.5;
+                        //            }
+                        //            if (endTime < Convert.ToDateTime("2018-08-08 17:29:00"))
+                        //                bLackClock = true;
+                        //        }
+                        //    }
+                        //    list.Add(total);
+                        //    _list打卡情况.Add("已打卡");
+                        //    _list打卡异常情况.Add(bLackClock ? "异常" : string.Empty);
+                        //}
+                        //else
+                        //{
+                        //    _list打卡情况.Add("未打卡");
+                        //    _list打卡异常情况.Add(string.Empty);
+                        //    list.Add(0);
+                        //}
                     }
                     md._加班时长 = list;
                     md._打卡情况 = _list打卡情况;
@@ -308,7 +343,7 @@ namespace Gadget
                             sheet1.Cells[rowIdx + 2, 3 + nnn].Value = curOrder._加班时长[nnn];
 
 
-                        if (curOrder._打卡情况异常情况[nnn] == "异常"&& sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日")
+                        if (curOrder._打卡情况异常情况[nnn] == "异常" && sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日")
                         {
                             sheet1.Cells[rowIdx + 2, 3 + nnn].Style.Fill.PatternType = ExcelFillStyle.Solid;
                             sheet1.Cells[rowIdx + 2, 3 + nnn].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
@@ -434,6 +469,14 @@ namespace Gadget
             public List<double> _加班时长 { get; set; }
             public List<string> _打卡情况 { get; set; }
             public List<string> _打卡情况异常情况 { get; set; }
+        }
+
+        class _考勤异常
+        {
+            public string _姓名 { get; set; }
+            public int _异常日期 { get; set; }
+            public string _异常情况 { get; set; }
+            public string _原始数据 { get; set; }
         }
 
     }
