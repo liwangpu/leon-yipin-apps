@@ -88,10 +88,10 @@ namespace Gadget
                     md._员工序号 = cur._员工序号;
                     md._姓名 = cur._姓名;
 
-                    if (md._姓名 == "曹雷")
-                    {
+                    //if (md._姓名 == "曹雷")
+                    //{
 
-                    }
+                    //}
                     var _list加班时长 = new List<double>();
                     var _list出勤时长 = new List<double>();
                     var _list打卡异常 = new List<bool>();
@@ -299,7 +299,7 @@ namespace Gadget
                             sheet1.Cells[rowIdx + 1, 3 + nnn].Value = 0;
                         }
                         //判断是否请假
-                        if (curOrder._出勤时长[nnn] == 0 && sheet1.Cells[1, 3 + nnn].Value != null && sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日")
+                        if (curOrder._出勤时长[nnn] == 0 && curOrder._打卡出现异常[nnn] != true && sheet1.Cells[1, 3 + nnn].Value != null && sheet1.Cells[1, 3 + nnn].Value.ToString() != "周日")
                         {
                             _i请假总计++;
                             sheet1.Cells[rowIdx + 1, 3 + nnn].Value = 1;

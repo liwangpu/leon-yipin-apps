@@ -1,6 +1,5 @@
 ﻿using CommonLibs;
 using Gadget.Libs;
-using LinqToExcel;
 using LinqToExcel.Attributes;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -22,8 +21,8 @@ namespace Gadget
 
         private void _商品信息统计_Load(object sender, EventArgs e)
         {
-            //txt商品明细.Text = @"C:\Users\Leon\Desktop\yyy\aaa.csv";
-            //txt商品明细.Text = @"C:\Users\Leon\Desktop\yyy\aaa.xlsx";
+            //txt商品明细.Text = @"C:\Users\Leon\Desktop\aaaa\在售产品1.csv";
+            //txt商品明细.Text = @"C:\Users\Leon\Desktop\aaaa\aaa.xlsx";
         }
 
         /**************** button event ****************/
