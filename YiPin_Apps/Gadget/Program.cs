@@ -15,7 +15,7 @@ namespace Gadget
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new _库存盘点());//库存盘点
             //Application.Run(new _工资计算());//工资计算
-            Application.Run(new _商品信息统计());//商品信息统计
+            //Application.Run(new _商品信息统计());//商品信息统计
             //Application.Run(new _分库盘点());//分库盘点
             //Application.Run(new _移库());//移库
             //Application.Run(new _产品销量统计());//产品销量统计
@@ -36,7 +36,7 @@ namespace Gadget
             //Application.Run(new _批量生成采购订单_参数可调());//批量生成采购订单
             //Application.Run(new _日平均销量正态分布对比());//日平均销量正态分布对比
 
-
+            Application.Run(new _快速提取不同库位子SKU());//快速提取不同库位子SKU
 
             //Application.Run(new Form1());
             //Application.Run(new _测试());//

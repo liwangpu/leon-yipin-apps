@@ -100,6 +100,12 @@
     <Compile Include="_商品信息统计.Designer.cs">
       <DependentUpon>_商品信息统计.cs</DependentUpon>
     </Compile>
+    <Compile Include="_快速提取不同库位子SKU.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_快速提取不同库位子SKU.Designer.cs">
+      <DependentUpon>_快速提取不同库位子SKU.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -115,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_商品信息统计.resx">
       <DependentUpon>_商品信息统计.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_快速提取不同库位子SKU.resx">
+      <DependentUpon>_快速提取不同库位子SKU.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
