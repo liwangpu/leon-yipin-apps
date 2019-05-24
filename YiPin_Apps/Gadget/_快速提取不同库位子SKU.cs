@@ -19,12 +19,13 @@ namespace Gadget
 
         private void _快速提取不同库位子SKU_Load(object sender, EventArgs e)
         {
-            //txtFile.Text = @"C:\Users\Leon\Desktop\在售SKU5月24号.csv";
+            txtFile.Text = @"C:\Users\Leon\Desktop\在售SKU5月24号.csv";
+            txtFloor.Text = @"C:\Users\Leon\Desktop\区域对应楼层.csv";
         }
 
         /**************** button event ****************/
 
-        #region 上传数据
+        #region 上传SKU数据
         private void BtnUpload_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
@@ -47,9 +48,33 @@ namespace Gadget
         }
         #endregion
 
+        #region 上传楼层数据
+        private void BtnUploadFloor_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            OpenFileDialog1.Filter = "CSV 文件|*.csv";//设置文件类型
+            OpenFileDialog1.Title = "CSV 文件";//设置标题
+            OpenFileDialog1.Multiselect = false;
+            OpenFileDialog1.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+            {
+                if (Helper.CheckCSVFileName(OpenFileDialog1.FileName))
+                {
+                    txtFloor.Text = OpenFileDialog1.FileName;
+
+                }
+                else
+                {
+                    MessageBox.Show("csv文件名称不规范,请去掉文件名称中的特殊字符如\".\"等", "温馨提示");
+                }
+            }
+        }
+        #endregion
+
         #region 处理按钮事件
         private void BtnCalcu_Click(object sender, EventArgs e)
         {
+            var _list楼层区域 = new List<_楼层区域表Mapping>();
             var _list在售SKU = new List<_在售SKUMapping>();
             var _list异常在售SKU = new List<_在售SKUMapping>();
 
@@ -58,23 +83,49 @@ namespace Gadget
             #region 读取数据
             var actReadData = new Action(() =>
             {
-                var strCsvPath = txtFile.Text;
-                if (!string.IsNullOrEmpty(strCsvPath))
+                #region 读取SKU
                 {
-                    using (var csv = new ExcelQueryFactory(strCsvPath))
+                    var strCsvPath = txtFile.Text;
+                    if (!string.IsNullOrEmpty(strCsvPath))
                     {
-                        try
+                        using (var csv = new ExcelQueryFactory(strCsvPath))
                         {
-                            var tmp = from c in csv.Worksheet<_在售SKUMapping>()
-                                      select c;
-                            _list在售SKU.AddRange(tmp);
-                        }
-                        catch (Exception ex)
-                        {
-                            ShowMsg(ex.Message);
+                            try
+                            {
+                                var tmp = from c in csv.Worksheet<_在售SKUMapping>()
+                                          select c;
+                                _list在售SKU.AddRange(tmp);
+                            }
+                            catch (Exception ex)
+                            {
+                                ShowMsg(ex.Message);
+                            }
                         }
                     }
                 }
+                #endregion
+
+                #region 读取楼层
+                {
+                    var strCsvPath = txtFloor.Text;
+                    if (!string.IsNullOrEmpty(strCsvPath))
+                    {
+                        using (var csv = new ExcelQueryFactory(strCsvPath))
+                        {
+                            try
+                            {
+                                var tmp = from c in csv.Worksheet<_楼层区域表Mapping>()
+                                          select c;
+                                _list楼层区域.AddRange(tmp);
+                            }
+                            catch (Exception ex)
+                            {
+                                ShowMsg(ex.Message);
+                            }
+                        }
+                    }
+                }
+                #endregion
             });
             #endregion
 
@@ -88,7 +139,10 @@ namespace Gadget
                 {
                     var childSKUs = _list在售SKU.Where(x => x.ParentSKU == parentSKU).ToList();
                     if (childSKUs.Select(x => x.Area).Distinct().Count() > 1)
+                    {
                         _list异常在售SKU.AddRange(childSKUs);
+                    }
+                       
                 }
                 Export(_list异常在售SKU);
             }, null);
@@ -100,7 +154,7 @@ namespace Gadget
         #region 导出表格说明
         private void LkDecs_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var strDesc = XlsxHelper.GetDecsipt(typeof(_在售SKUMapping));
+            var strDesc = XlsxHelper.GetDecsipt(typeof(_在售SKUMapping), typeof(_楼层区域表Mapping));
 
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "记事本|*.txt";//设置文件类型
@@ -159,13 +213,13 @@ namespace Gadget
             {
                 SaveFileDialog saveFile = new SaveFileDialog();
                 saveFile.Filter = "Excel 工作簿|*.xlsx";//设置文件类型
-                    saveFile.Title = "导出数据";//设置标题
-                    saveFile.AddExtension = true;//是否自动增加所辍名
-                    saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
-                    if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
-                    {
+                saveFile.Title = "导出数据";//设置标题
+                saveFile.AddExtension = true;//是否自动增加所辍名
+                saveFile.AutoUpgradeEnabled = true;//是否随系统升级而升级外观
+                if (saveFile.ShowDialog() == DialogResult.OK)//如果点的是确定就得到文件路径
+                {
                     var FileName = saveFile.FileName;//得到文件路径   
-                        var saveFilName = Path.GetFileNameWithoutExtension(FileName);
+                    var saveFilName = Path.GetFileNameWithoutExtension(FileName);
                     var len = buffer1.Length;
                     using (var fs = File.Create(FileName, len))
                     {
@@ -316,6 +370,15 @@ namespace Gadget
                     return string.Empty;
                 }
             }
+        }
+
+        [ExcelTable("楼层区域表")]
+        class _楼层区域表Mapping
+        {
+            [ExcelColumn("区域")]
+            public string Area { get; set; }
+            [ExcelColumn("楼层")]
+            public string Floor { get; set; }
         }
 
     }
