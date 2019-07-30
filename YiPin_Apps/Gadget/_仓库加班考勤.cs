@@ -18,7 +18,7 @@ namespace Gadget
 
         private void _仓库加班考勤_Load(object sender, EventArgs e)
         {
-            //txt考勤.Text = @"C:\Users\Leon\Desktop\1_标准报表.xlsx";
+            //txt考勤.Text = @"C:\Users\Leon\Desktop\aaa.xlsx";
             //btn计算考勤.Enabled = true;
         }
 
@@ -55,18 +55,18 @@ namespace Gadget
                 ShowMsg("开始读取当天考勤信息");
                 using (var package = new ExcelPackage(new FileInfo(txt考勤.Text)))
                 {
-                    var worksheet = package.Workbook.Worksheets["考勤记录"];//创建worksheet
+                    var worksheet = package.Workbook.Worksheets["打卡时间"];//创建worksheet
                     var endRow = worksheet.Dimension.End.Row;
                     var endColumn = worksheet.Dimension.End.Column;
-                    for (int idx = 5; idx <= endRow; idx = idx + 2)
+                    for (int idx = 4; idx <= endRow; idx = idx + 2)
                     {
                         var md = new _考勤数据();
-                        md._姓名 = worksheet.Cells[idx, 11].Value.ToString();
+                        md._姓名 = worksheet.Cells[idx, 1].Value.ToString();
                         md._员工序号 = Convert.ToInt32(worksheet.Cells[idx, 3].Value);
                         var list = new List<string>();
-                        for (int cll = 1; cll <= endColumn; cll++)
+                        for (int cll = 6; cll <= endColumn; cll++)
                         {
-                            var vl = worksheet.Cells[idx + 1, cll].Value != null ? worksheet.Cells[idx + 1, cll].Value.ToString() : "";
+                            var vl = worksheet.Cells[idx, cll].Value != null ? worksheet.Cells[idx, cll].Value.ToString().Trim().Replace("\r\n","").Replace(" ","") : "";
                             list.Add(vl);
                         }
                         md._加班信息 = list;
