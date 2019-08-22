@@ -100,6 +100,12 @@
     <Compile Include="_仓库加班考勤.Designer.cs">
       <DependentUpon>_仓库加班考勤.cs</DependentUpon>
     </Compile>
+    <Compile Include="_库位号订单提取.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_库位号订单提取.Designer.cs">
+      <DependentUpon>_库位号订单提取.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -115,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_仓库加班考勤.resx">
       <DependentUpon>_仓库加班考勤.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_库位号订单提取.resx">
+      <DependentUpon>_库位号订单提取.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
