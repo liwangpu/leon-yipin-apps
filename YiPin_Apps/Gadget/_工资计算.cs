@@ -1,6 +1,5 @@
 ﻿using CommonLibs;
-using LinqToExcel;
-using LinqToExcel.Attributes;
+using EpplusHelper;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -990,23 +989,11 @@ namespace Gadget
 
                     if (!string.IsNullOrEmpty(txtPurchaseOrg.Text))
                     {
-                        using (var excel = new ExcelQueryFactory(txtPurchaseOrg.Text))
+                        using (var package = new ExcelPackage(new FileInfo(txtPurchaseOrg.Text)))
                         {
                             var list = new List<_采购流水Mapping>();
-                            var sheetNames = excel.GetWorksheetNames().ToList();
-                            sheetNames.ForEach(s =>
-                            {
-                                try
-                                {
-                                    var tmp = from c in excel.Worksheet<_采购流水Mapping>(s)
-                                              select c;
-                                    list.AddRange(tmp);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ShowMsg(ex.Message);
-                                }
-                            });
+                            var worksheet = package.Workbook.Worksheets[1];
+                            list = SheetReader<_采购流水Mapping>.From(worksheet);
 
                             //为了解决效率,实体转换
                             if (list.Count > 0)
@@ -1091,24 +1078,29 @@ namespace Gadget
                     var str库存周转率 = txt库存周转率.Text;
                     if (!string.IsNullOrEmpty(str库存周转率))
                     {
-                        using (var excel = new ExcelQueryFactory(str库存周转率))
+                        using (var package = new ExcelPackage(new FileInfo(str库存周转率)))
                         {
-                            var sheetNames = excel.GetWorksheetNames().ToList();
-                            sheetNames.ForEach(s =>
-                            {
-                                try
-                                {
-                                    var tmp = from c in excel.Worksheet<_库存周转率Mapping>(s)
-                                              select c;
-                                    _库存周转率Mappings.AddRange(tmp.ToList());
-                                }
-                                catch (Exception ex)
-                                {
-                                    ShowMsg(ex.Message);
-                                }
-                            });
+                            var worksheet = package.Workbook.Worksheets[1];
+                            _库存周转率Mappings = SheetReader<_库存周转率Mapping>.From(worksheet);
+                            //using (var excel = new ExcelQueryFactory(str库存周转率))
+                            //{
+                            //    var sheetNames = excel.GetWorksheetNames().ToList();
+                            //    sheetNames.ForEach(s =>
+                            //    {
+                            //        try
+                            //        {
+                            //            var tmp = from c in excel.Worksheet<_库存周转率Mapping>(s)
+                            //                      select c;
+                            //            _库存周转率Mappings.AddRange(tmp.ToList());
+                            //        }
+                            //        catch (Exception ex)
+                            //        {
+                            //            ShowMsg(ex.Message);
+                            //        }
+                            //    });
+                            //}
                         }
-                    }
+                        }
                 }
                 #endregion
 
@@ -1119,24 +1111,29 @@ namespace Gadget
                     var str缺货率 = txt缺货信息.Text;
                     if (!string.IsNullOrEmpty(str缺货率))
                     {
-                        using (var excel = new ExcelQueryFactory(str缺货率))
+                        using (var package = new ExcelPackage(new FileInfo(str缺货率)))
                         {
-                            var sheetNames = excel.GetWorksheetNames().ToList();
-                            sheetNames.ForEach(s =>
-                            {
-                                try
-                                {
-                                    var tmp = from c in excel.Worksheet<_缺货率Mapping>(s)
-                                              select c;
-                                    _缺货率Mappings.AddRange(tmp.ToList());
-                                }
-                                catch (Exception ex)
-                                {
-                                    ShowMsg(ex.Message);
-                                }
-                            });
+                            var worksheet = package.Workbook.Worksheets[1];
+                            _缺货率Mappings = SheetReader<_缺货率Mapping>.From(worksheet);
                         }
-                    }
+                            //using (var excel = new ExcelQueryFactory(str缺货率))
+                            //{
+                            //    var sheetNames = excel.GetWorksheetNames().ToList();
+                            //    sheetNames.ForEach(s =>
+                            //    {
+                            //        try
+                            //        {
+                            //            var tmp = from c in excel.Worksheet<_缺货率Mapping>(s)
+                            //                      select c;
+                            //            _缺货率Mappings.AddRange(tmp.ToList());
+                            //        }
+                            //        catch (Exception ex)
+                            //        {
+                            //            ShowMsg(ex.Message);
+                            //        }
+                            //    });
+                            //}
+                        }
                 }
                 #endregion
 
@@ -1147,25 +1144,30 @@ namespace Gadget
                     var str议价奖励 = txt议价奖励.Text;
                     if (!string.IsNullOrEmpty(str议价奖励))
                     {
-                        using (var excel = new ExcelQueryFactory(str议价奖励))
+                        using (var package = new ExcelPackage(new FileInfo(str议价奖励)))
                         {
-
-                            try
-                            {
-                                var sheetNames = excel.GetWorksheetNames().ToList();
-                                sheetNames.ForEach(s =>
-                                {
-                                    var tmp = from c in excel.Worksheet<_议价奖励Mapping>(s)
-                                              select c;
-                                    _议价奖励appings.AddRange(tmp.ToList());
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowMsg(ex.Message);
-                            }
-
+                            var worksheet = package.Workbook.Worksheets[1];
+                            _议价奖励appings = SheetReader<_议价奖励Mapping>.From(worksheet);
                         }
+                        //using (var excel = new ExcelQueryFactory(str议价奖励))
+                        //{
+
+                        //    try
+                        //    {
+                        //        var sheetNames = excel.GetWorksheetNames().ToList();
+                        //        sheetNames.ForEach(s =>
+                        //        {
+                        //            var tmp = from c in excel.Worksheet<_议价奖励Mapping>(s)
+                        //                      select c;
+                        //            _议价奖励appings.AddRange(tmp.ToList());
+                        //        });
+                        //    }
+                        //    catch (Exception ex)
+                        //    {
+                        //        ShowMsg(ex.Message);
+                        //    }
+
+                        //}
                     }
                 }
                 #endregion
@@ -1177,23 +1179,28 @@ namespace Gadget
                     var str未入库 = txt未入库.Text;
                     if (!string.IsNullOrEmpty(str未入库))
                     {
-                        using (var excel = new ExcelQueryFactory(str未入库))
+                        using (var package = new ExcelPackage(new FileInfo(str未入库)))
                         {
-                            var sheetNames = excel.GetWorksheetNames().ToList();
-                            sheetNames.ForEach(s =>
-                            {
-                                try
-                                {
-                                    var tmp = from c in excel.Worksheet<_未入库Mapping>(s)
-                                              select c;
-                                    _未入库Mappings.AddRange(tmp.ToList());
-                                }
-                                catch (Exception ex)
-                                {
-                                    ShowMsg(ex.Message);
-                                }
-                            });
+                            var worksheet = package.Workbook.Worksheets[1];
+                            _未入库Mappings = SheetReader<_未入库Mapping>.From(worksheet);
                         }
+                        //using (var excel = new ExcelQueryFactory(str未入库))
+                        //{
+                        //    var sheetNames = excel.GetWorksheetNames().ToList();
+                        //    sheetNames.ForEach(s =>
+                        //    {
+                        //        try
+                        //        {
+                        //            var tmp = from c in excel.Worksheet<_未入库Mapping>(s)
+                        //                      select c;
+                        //            _未入库Mappings.AddRange(tmp.ToList());
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            ShowMsg(ex.Message);
+                        //        }
+                        //    });
+                        //}
                     }
                 }
                 #endregion
@@ -2483,9 +2490,9 @@ namespace Gadget
         {
             private string org采购员;
 
-            [ExcelColumn("采购sku数量")]
+            [ExcelColumn("sku种类")]
             public string _OrgSKU个数 { get; set; }
-            [ExcelColumn("总金额")]
+            [ExcelColumn("实付款")]
             public string _Org总金额 { get; set; }
 
             [ExcelColumn("采购员")]
@@ -2500,7 +2507,7 @@ namespace Gadget
                     org采购员 = !string.IsNullOrEmpty(value) ? value.ToString().Trim() : "";
                 }
             }
-            [ExcelColumn("制单人")]
+            [ExcelColumn("采购员")]
             public string _制单人 { get; set; }
         }
 

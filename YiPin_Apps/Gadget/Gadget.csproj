@@ -55,8 +55,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPPlus">
-      <HintPath>..\..\Thirdpart\EPPlus\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus, Version=4.5.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="LinqToExcel">
       <HintPath>..\..\Thirdpart\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
@@ -65,6 +65,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Thirdpart\NewtonsoftJson\4.5.6\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Remotion">
       <HintPath>..\..\Thirdpart\LinqToExcel.1.11.0\lib\Remotion.dll</HintPath>
     </Reference>
@@ -75,7 +76,9 @@
       <HintPath>..\..\Thirdpart\LinqToExcel.1.11.0\lib\Remotion.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -94,17 +97,11 @@
     <Compile Include="Tests\FormCore.Designer.cs">
       <DependentUpon>FormCore.cs</DependentUpon>
     </Compile>
-    <Compile Include="_仓库加班考勤.cs">
+    <Compile Include="_工资计算.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="_仓库加班考勤.Designer.cs">
-      <DependentUpon>_仓库加班考勤.cs</DependentUpon>
-    </Compile>
-    <Compile Include="_库位号订单提取.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="_库位号订单提取.Designer.cs">
-      <DependentUpon>_库位号订单提取.cs</DependentUpon>
+    <Compile Include="_工资计算.Designer.cs">
+      <DependentUpon>_工资计算.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -119,13 +116,11 @@
     <EmbeddedResource Include="Tests\FormCore.resx">
       <DependentUpon>FormCore.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="_仓库加班考勤.resx">
-      <DependentUpon>_仓库加班考勤.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="_库位号订单提取.resx">
-      <DependentUpon>_库位号订单提取.cs</DependentUpon>
+    <EmbeddedResource Include="_工资计算.resx">
+      <DependentUpon>_工资计算.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -140,6 +135,10 @@
     <ProjectReference Include="..\CommonLibs\CommonLibs.csproj">
       <Project>{a1249099-ae74-4c44-ae37-bf54e8875086}</Project>
       <Name>CommonLibs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EpplusHelper\EpplusHelper.csproj">
+      <Project>{cffb3050-f33a-4fff-b3f5-084e8ab2bc5a}</Project>
+      <Name>EpplusHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
